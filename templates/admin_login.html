@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin — Maker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --violet: #7c3aed;
+      --violet-clair: #a78bfa;
+      --noir: #0a0a0a;
+      --blanc: #f5f5f5;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--noir);
+      color: var(--blanc);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(124, 58, 237, 0.2) 0%, transparent 60%), #0a0a0a
+    }
+
+    .card {
+      background: #111827;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      border-radius: 20px;
+      padding: 2.5rem;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5)
+    }
+
+    .logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.5rem;
+      text-align: center;
+      margin-bottom: 0.3rem
+    }
+
+    .logo span {
+      color: var(--violet-clair)
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #6b7280;
+      font-size: 0.85rem;
+      margin-bottom: 2rem
+    }
+
+    .form-group {
+      margin-bottom: 1rem
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      color: #9ca3af;
+      margin-bottom: 0.4rem
+    }
+
+    input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      color: var(--blanc);
+      padding: 0.75rem 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.95rem;
+      transition: border-color 0.2s
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--violet);
+      background: rgba(124, 58, 237, 0.08)
+    }
+
+    button {
+      width: 100%;
+      background: var(--violet);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      padding: 0.85rem;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      margin-top: 0.5rem
+    }
+
+    button:hover {
+      background: #4c1d95;
+      transform: translateY(-1px)
+    }
+
+    .flash {
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      border-radius: 10px;
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem
+    }
+
+    .back {
+      text-align: center;
+      margin-top: 1.2rem;
+      font-size: 0.82rem;
+      color: #4b5563
+    }
+
+    .back a {
+      color: var(--violet-clair);
+      text-decoration: none
+    }
+  </style>
+</head>
+
+<body>
+  <div class="card">
+    <div class="logo">Maker<span>Mind</span></div>
+    <div class="subtitle">Espace Administrateur</div>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}{% for cat, msg in messages %}
+    <div class="flash">{{ msg }}</div>
+    {% endfor %}{% endif %}{% endwith %}
+    <form method="POST">
+      <div class="form-group">
+        <label>Identifiant</label>
+        <input type="text" name="username" placeholder="admin" required autofocus>
+      </div>
+      <div class="form-group">
+        <label>Mot de passe</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button type="submit">🔐 Connexion</button>
+    </form>
+    <div class="back"><a href="/">← Retour au site</a></div>
+  </div>
+</body>
+
+</html>
