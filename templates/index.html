@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Static Mind — Impression 3D</title>
+  <title>Static Mind — 3D Printing</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
     rel="stylesheet">
   <style>
+    /* (CSS identique, aucun changement nécessaire) */
     :root {
       --noir: #0a0a0a;
       --blanc: #f5f5f5;
@@ -49,7 +50,6 @@
       overflow-x: hidden;
     }
 
-    /* ── HEADER ── */
     header {
       position: sticky;
       top: 0;
@@ -131,7 +131,6 @@
       transform: scale(1.04);
     }
 
-    /* ── FLASH MESSAGES ── */
     .flash-zone {
       padding: 0.8rem 1.2rem;
     }
@@ -156,7 +155,6 @@
       color: #fca5a5;
     }
 
-    /* ── HERO ── */
     .hero {
       background: linear-gradient(135deg, #0a0a0a 0%, #1a0a3e 50%, #0f0a1e 100%);
       padding: 3.5rem 1.2rem 2.5rem;
@@ -286,7 +284,6 @@
       margin-top: 0.1rem;
     }
 
-    /* ── PRODUCTS SECTION ── */
     .section {
       padding: 2.5rem 1.2rem;
     }
@@ -335,7 +332,6 @@
       color: #fff;
     }
 
-    /* ── PRODUCT GRID ── */
     .product-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -486,7 +482,6 @@
       font-size: 1.1rem;
     }
 
-    /* ── COMMANDE SECTION ── */
     .commande-section {
       background: linear-gradient(135deg, #111827, #1a0a3e);
       border-radius: 20px;
@@ -590,7 +585,6 @@
       color: var(--violet-clair);
     }
 
-    /* ── SUIVI SECTION ── */
     .suivi-section {
       background: #111827;
       border-radius: 20px;
@@ -640,37 +634,36 @@
       font-weight: 500;
     }
 
-    .status-attente {
+    .status-pending {
       background: rgba(245, 158, 11, 0.15);
       color: #fbbf24;
     }
 
-    .status-accepte {
+    .status-accepted {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
     }
 
-    .status-refuse {
+    .status-rejected {
       background: rgba(239, 68, 68, 0.15);
       color: #f87171;
     }
 
-    .status-impression {
+    .status-printing {
       background: rgba(59, 130, 246, 0.15);
       color: #60a5fa;
     }
 
-    .status-termine {
+    .status-completed {
       background: rgba(124, 58, 237, 0.2);
       color: var(--violet-clair);
     }
 
-    .status-livraison {
+    .status-delivery {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399;
     }
 
-    /* ── FOOTER ── */
     footer {
       background: #050505;
       border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -685,7 +678,6 @@
       text-decoration: none;
     }
 
-    /* ── MODAL ── */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -738,7 +730,6 @@
       padding: 1.5rem;
     }
 
-    /* mobile nav hide labels */
     @media (max-width: 480px) {
       nav a {
         display: none;
@@ -756,11 +747,11 @@
       Static<span>Mind</span>
     </a>
     <nav>
-      <a href="#produits">Boutique</a>
-      <a href="#commande">Commander</a>
-      <a href="#suivi">Suivi</a>
-      <button class="btn-cart" onclick="document.getElementById('modal-commande').classList.add('open')">
-        ✦ Commande perso
+      <a href="#products">Shop</a>
+      <a href="#order">Order</a>
+      <a href="#track">Track</a>
+      <button class="btn-cart" onclick="document.getElementById('modal-order').classList.add('open')">
+        ✦ Custom Order
       </button>
     </nav>
   </header>
@@ -778,35 +769,33 @@
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-badge">✦ Impression 3D sur mesure · Liban</div>
-    <h1>Donne vie à<br>tes <em>idées en 3D</em></h1>
-    <p>Figurines, porte-clefs, trophées personnalisés. Envoie ton fichier, on s'occupe du reste.</p>
-    <div class="hero-cta">
-    </div>
+    <div class="hero-badge">✦ Custom 3D Printing · Lebanon</div>
+    <h1>Bring your<br><em>3D ideas</em> to life</h1>
+    <p>Figurines, keychains, custom trophies. Send your file, we handle the rest.</p>
+    <div class="hero-cta"></div>
     <div class="hero-stats">
       <div class="stat">
         <div class="stat-num">500+</div>
-        <div class="stat-label">Pièces imprimées</div>
+        <div class="stat-label">Parts printed</div>
       </div>
       <div class="stat">
         <div class="stat-num">48h</div>
-        <div class="stat-label">Délai moyen</div>
+        <div class="stat-label">Average turnaround</div>
       </div>
       <div class="stat">
         <div class="stat-num">100%</div>
-        <div class="stat-label">Personnalisable</div>
+        <div class="stat-label">Customizable</div>
       </div>
     </div>
   </section>
 
   <!-- PRODUCTS -->
-  <section class="section" id="produits">
+  <section class="section" id="products">
     <div class="section-header">
-      <h2 class="section-title">Notre <span>Boutique</span></h2>
+      <h2 class="section-title">Our <span>Shop</span></h2>
       <div class="filter-tabs">
-        <button class="filter-tab active" onclick="filterProducts('all', this)">Tout</button>
+        <button class="filter-tab active" onclick="filterProducts('all', this)">All</button>
         {% for cat in categories %}
-        <!-- On utilise cat.nom pour le texte ET pour le filtre -->
         <button class="filter-tab" onclick="filterProducts('{{ cat.nom }}', this)">{{ cat.nom }}</button>
         {% endfor %}
       </div>
@@ -821,7 +810,7 @@
           {% else %}
           <span class="placeholder">
             {% if p.categorie.nom == 'Figurines' %}🗿
-            {% elif p.categorie.nom == 'Porte-clefs' %}🔑
+            {% elif p.categorie.nom == 'Keychains' %}🔑
             {% else %}🏆{% endif %}
           </span>
           {% endif %}
@@ -832,7 +821,7 @@
           <div class="card-name">{{ p.nom }}</div>
           <div class="card-footer">
             <span class="card-price">{{ "%.0f"|format(p.prix) }} LBP</span>
-            <button class="btn-add" onclick="commanderProduit('{{ p.nom }}')">+</button>
+            <button class="btn-add" onclick="orderProduct('{{ p.nom }}')">+</button>
           </div>
         </div>
       </div>
@@ -840,61 +829,61 @@
       {% else %}
       <div class="empty-state">
         <div class="icon">📦</div>
-        <p>Aucun produit pour l'instant.<br>Revenez bientôt !</p>
+        <p>No products yet.<br>Check back soon!</p>
       </div>
       {% endif %}
     </div>
   </section>
 
-  <!-- COMMANDE PERSONNALISÉE -->
-  <div class="commande-section" id="commande">
-    <h2>📐 Commande Personnalisée</h2>
-    <p>Tu as un fichier 3D ou une idée ? Envoie-nous les détails et on te revient rapidement.</p>
-    <form action="/commande" method="POST" enctype="multipart/form-data">
+  <!-- CUSTOM ORDER -->
+  <div class="commande-section" id="order">
+    <h2>📐 Custom Order</h2>
+    <p>Have a 3D file or an idea? Send us the details and we'll get back to you quickly.</p>
+    <form action="/order" method="POST" enctype="multipart/form-data">
       <div class="form-row two-col" style="margin-bottom:0.75rem">
         <div class="form-group">
-          <label>Ton nom *</label>
-          <input type="text" name="nom" class="form-control" placeholder="Ex: Ahmad Khalil" required>
+          <label>Your name *</label>
+          <input type="text" name="nom" class="form-control" placeholder="e.g. Ahmad Khalil" required>
         </div>
         <div class="form-group">
-          <label>Email ou WhatsApp</label>
+          <label>Email or WhatsApp</label>
           <input type="text" name="email" class="form-control" placeholder="contact@email.com">
         </div>
       </div>
       <div class="form-row" style="margin-bottom:0.75rem">
         <div class="form-group">
-          <label>Description de ta commande *</label>
-          <textarea name="details" class="form-control" placeholder="Décris ta pièce : taille, couleur, quantité..."
+          <label>Order description *</label>
+          <textarea name="details" class="form-control" placeholder="Describe your part: size, color, quantity..."
             required></textarea>
         </div>
       </div>
       <div class="form-row" style="margin-bottom:1.2rem">
         <div class="form-group">
-          <label>Fichier 3D ou référence (optionnel)</label>
+          <label>3D file or reference (optional)</label>
           <label class="file-upload">
             <input type="file" name="fichier" accept=".stl,.obj,.png,.jpg,.pdf" id="file-input"
               onchange="updateFileName(this)">
             <div class="upload-icon">📎</div>
-            <p><span>Clique pour uploader</span> ou glisse ton fichier</p>
+            <p><span>Click to upload</span> or drag your file here</p>
             <p id="file-name" style="color:var(--violet-clair);font-size:0.82rem;margin-top:0.3rem"></p>
             <p>.STL, .OBJ, .PNG, .JPG, .PDF — Max 16MB</p>
           </label>
         </div>
       </div>
       <button type="submit" class="btn-primary" style="width:100%;justify-content:center">
-        🚀 Envoyer ma commande
+        🚀 Submit my order
       </button>
     </form>
   </div>
 
-  <!-- SUIVI -->
-  <div class="suivi-section" id="suivi">
-    <h2>🔍 Suivi de commande</h2>
-    <p>Entrez votre numéro de commande pour connaître son statut en temps réel.</p>
+  <!-- ORDER TRACKING -->
+  <div class="suivi-section" id="track">
+    <h2>🔍 Order Tracking</h2>
+    <p>Enter your order number to check its status in real time.</p>
     <div class="suivi-form">
-      <input type="number" id="suivi-id" class="form-control" placeholder="Numéro de commande (ex: 42)"
-        onkeydown="if(event.key==='Enter')suivreCommande()">
-      <button class="btn-primary" onclick="suivreCommande()">Vérifier</button>
+      <input type="number" id="suivi-id" class="form-control" placeholder="Order number (e.g. 42)"
+        onkeydown="if(event.key==='Enter')trackOrder()">
+      <button class="btn-primary" onclick="trackOrder()">Check</button>
     </div>
     <div id="suivi-result">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:0.6rem">
@@ -906,37 +895,36 @@
     </div>
   </div>
 
-  <!-- MODAL COMMANDE RAPIDE -->
-  <div class="modal-overlay" id="modal-commande" onclick="if(event.target===this)this.classList.remove('open')">
+  <!-- QUICK ORDER MODAL -->
+  <div class="modal-overlay" id="modal-order" onclick="if(event.target===this)this.classList.remove('open')">
     <div class="modal">
       <div class="modal-header">
-        <h3>✦ Commande rapide</h3>
-        <button class="modal-close"
-          onclick="document.getElementById('modal-commande').classList.remove('open')">✕</button>
+        <h3>✦ Quick Order</h3>
+        <button class="modal-close" onclick="document.getElementById('modal-order').classList.remove('open')">✕</button>
       </div>
       <div class="modal-body">
-        <form action="/commande" method="POST" enctype="multipart/form-data">
+        <form action="/order" method="POST" enctype="multipart/form-data">
           <div class="form-row" style="gap:0.75rem">
             <div class="form-group">
-              <label>Nom *</label>
-              <input type="text" name="nom" class="form-control" placeholder="Ton nom" required>
+              <label>Name *</label>
+              <input type="text" name="nom" class="form-control" placeholder="Your name" required>
             </div>
             <div class="form-group">
               <label>Contact</label>
               <input type="text" name="email" class="form-control" placeholder="Email / WhatsApp">
             </div>
             <div class="form-group">
-              <label>Détails *</label>
-              <textarea name="details" class="form-control" placeholder="Décris ta commande..." required></textarea>
+              <label>Details *</label>
+              <textarea name="details" class="form-control" placeholder="Describe your order..." required></textarea>
             </div>
             <div class="form-group">
-              <label>Fichier (optionnel)</label>
+              <label>File (optional)</label>
               <input type="file" name="fichier" class="form-control" style="padding:0.5rem"
                 accept=".stl,.obj,.png,.jpg,.pdf">
             </div>
           </div>
           <button type="submit" class="btn-primary" style="width:100%;justify-content:center;margin-top:1rem">
-            🚀 Envoyer
+            🚀 Send
           </button>
         </form>
       </div>
@@ -948,12 +936,11 @@
     <p style="font-family:'Syne',sans-serif;font-size:1rem;font-weight:700;color:var(--blanc);margin-bottom:0.5rem">
       Static<span style="color:var(--violet-clair)">Mind</span>
     </p>
-    <p>Impression 3D au Liban · <a href="/admin">Admin</a></p>
-    <p style="margin-top:0.5rem">© 2024 StaticMind — Tous droits réservés</p>
+    <p>3D Printing in Lebanon · <a href="/admin">Admin</a></p>
+    <p style="margin-top:0.5rem">© 2024 StaticMind — All rights reserved</p>
   </footer>
 
   <script>
-    // Filter products
     function filterProducts(cat, btn) {
       document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
       btn.classList.add('active');
@@ -962,20 +949,18 @@
       });
     }
 
-    // Commander un produit depuis la grille
-    function commanderProduit(nom) {
-      document.getElementById('modal-commande').classList.add('open');
+    function orderProduct(name) {
+      document.getElementById('modal-order').classList.add('open');
       setTimeout(() => {
-        const ta = document.querySelector('#modal-commande textarea[name="details"]');
-        if (ta) ta.value = `Je souhaite commander : ${nom}`;
+        const ta = document.querySelector('#modal-order textarea[name="details"]');
+        if (ta) ta.value = `I would like to order: ${name}`;
       }, 100);
     }
 
-    // Suivi de commande
-    async function suivreCommande() {
+    async function trackOrder() {
       const id = document.getElementById('suivi-id').value;
       if (!id) return;
-      const res = await fetch('/suivi', {
+      const res = await fetch('/track', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: `order_id=${id}`
@@ -985,25 +970,27 @@
       result.style.display = 'block';
       if (data.found) {
         const statusClass = {
-          'En attente': 'status-attente', 'Accepté': 'status-accepte',
-          'Refusé': 'status-refuse', 'En impression': 'status-impression', 'Terminé': 'status-termine',
-          'En livraison': 'status-livraison'
+          'Pending': 'status-pending',
+          'Accepted': 'status-accepted',
+          'Rejected': 'status-rejected',
+          'Printing': 'status-printing',
+          'Completed': 'status-completed',
+          'Out for Delivery': 'status-delivery'
         };
-        document.getElementById('suivi-nom').textContent = data.nom;
+        document.getElementById('suivi-nom').textContent = data.name;
         const st = document.getElementById('suivi-status');
-        st.textContent = data.statut;
-        st.className = 'suivi-status ' + (statusClass[data.statut] || '');
+        st.textContent = data.status;
+        st.className = 'suivi-status ' + (statusClass[data.status] || '');
         document.getElementById('suivi-details').textContent = data.details;
-        document.getElementById('suivi-id-display').textContent = `Commande #${data.id}`;
+        document.getElementById('suivi-id-display').textContent = `Order #${data.id}`;
       } else {
-        document.getElementById('suivi-nom').textContent = '❌ Commande introuvable';
+        document.getElementById('suivi-nom').textContent = '❌ Order not found';
         document.getElementById('suivi-status').textContent = '';
-        document.getElementById('suivi-details').textContent = `Aucune commande avec l'ID #${id}`;
+        document.getElementById('suivi-details').textContent = `No order found with ID #${id}`;
         document.getElementById('suivi-id-display').textContent = '';
       }
     }
 
-    // File name display
     function updateFileName(input) {
       const name = input.files[0]?.name || '';
       document.getElementById('file-name').textContent = name;

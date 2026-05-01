@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard Admin — Static Mind</title>
+  <title>Admin Dashboard — Static Mind</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link
     href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
@@ -200,7 +200,7 @@
       display: block
     }
 
-    /* STATS GRID */
+    /* STATS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -323,7 +323,7 @@
       background: rgba(124, 58, 237, 0.04)
     }
 
-    /* STATUS BADGES */
+    /* BADGES */
     .badge {
       display: inline-block;
       padding: 0.25rem 0.7rem;
@@ -332,29 +332,39 @@
       font-weight: 500
     }
 
-    .badge-attente {
+    .badge-pending {
       background: rgba(245, 158, 11, 0.15);
       color: #fbbf24
     }
 
-    .badge-accepte {
+    .badge-accepted {
       background: rgba(16, 185, 129, 0.15);
       color: #34d399
     }
 
-    .badge-refuse {
+    .badge-rejected {
       background: rgba(239, 68, 68, 0.15);
       color: #f87171
     }
 
-    .badge-impression {
+    .badge-printing {
       background: rgba(59, 130, 246, 0.15);
       color: #60a5fa
     }
 
-    .badge-termine {
+    .badge-completed {
       background: rgba(124, 58, 237, 0.2);
       color: var(--violet-clair)
+    }
+
+    .badge-delivery {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399
+    }
+
+    .badge-category {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa
     }
 
     /* ACTION BUTTONS */
@@ -379,42 +389,6 @@
       text-decoration: none;
     }
 
-    .btn-accept {
-      background: rgba(16, 185, 129, 0.15);
-      color: #34d399
-    }
-
-    .btn-accept:hover {
-      background: rgba(16, 185, 129, 0.3)
-    }
-
-    .btn-refuse {
-      background: rgba(239, 68, 68, 0.15);
-      color: #f87171
-    }
-
-    .btn-refuse:hover {
-      background: rgba(239, 68, 68, 0.3)
-    }
-
-    .btn-print {
-      background: rgba(59, 130, 246, 0.15);
-      color: #60a5fa
-    }
-
-    .btn-print:hover {
-      background: rgba(59, 130, 246, 0.3)
-    }
-
-    .btn-done {
-      background: rgba(124, 58, 237, 0.15);
-      color: var(--violet-clair)
-    }
-
-    .btn-done:hover {
-      background: rgba(124, 58, 237, 0.3)
-    }
-
     .btn-delete {
       background: rgba(239, 68, 68, 0.1);
       color: #f87171
@@ -424,7 +398,7 @@
       background: rgba(239, 68, 68, 0.25)
     }
 
-    /* PRODUCT FORM */
+    /* FORM */
     .form-card {
       background: var(--gris);
       border: 1px solid var(--border);
@@ -504,7 +478,7 @@
       transform: translateY(-1px)
     }
 
-    /* PRODUCT THUMBNAILS IN TABLE */
+    /* PRODUCT THUMB */
     .prod-thumb {
       width: 40px;
       height: 40px;
@@ -549,7 +523,7 @@
       color: #fca5a5
     }
 
-    /* EMPTY STATE */
+    /* EMPTY */
     .empty-row td {
       text-align: center;
       color: #4b5563;
@@ -557,7 +531,7 @@
       font-size: 0.9rem
     }
 
-    /* MOBILE SIDEBAR */
+    /* MOBILE */
     @media(max-width:768px) {
       .sidebar {
         transform: translateX(-100%);
@@ -595,46 +569,44 @@
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-logo">
       Static<span>Mind</span>
-      <small>Panneau d'administration</small>
+      <small>Admin Panel</small>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-section-label">Vue d'ensemble</div>
-      <button class="nav-item active" onclick="showPanel('orders',this)">
-        <span class="nav-icon">📋</span> Commandes
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPanel('orders', this)">
+        <span class="nav-icon">📋</span> Orders
       </button>
-      <button class="nav-item" onclick="showPanel('products',this)">
-        <span class="nav-icon">📦</span> Produits
+      <button class="nav-item" onclick="showPanel('products', this)">
+        <span class="nav-icon">📦</span> Products
       </button>
-      <div class="nav-section-label">Gestion</div>
-      <button class="nav-item" onclick="showPanel('add-product',this)">
-        <span class="nav-icon">➕</span> Ajouter un produit
+      <div class="nav-section-label">Management</div>
+      <button class="nav-item" onclick="showPanel('add-product', this)">
+        <span class="nav-icon">➕</span> Add a Product
       </button>
-      <button class="nav-item" onclick="showPanel('categories',this)">
-        <span class="nav-icon">🏷</span> Catégories
+      <button class="nav-item" onclick="showPanel('categories', this)">
+        <span class="nav-icon">🏷</span> Categories
       </button>
       <a class="nav-item" href="/" target="_blank">
-        <span class="nav-icon">🌐</span> Voir le site
+        <span class="nav-icon">🌐</span> View Site
       </a>
     </nav>
     <div class="sidebar-footer">
-      <a href="/admin/logout" class="logout-btn">🚪 Déconnexion</a>
+      <a href="/admin/logout" class="logout-btn">🚪 Log out</a>
     </div>
   </aside>
 
   <!-- MAIN -->
   <div class="main">
-    <!-- TOPBAR -->
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:0.75rem">
         <button class="mobile-menu-btn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
-        <h1 id="page-title">Commandes</h1>
+        <h1 id="page-title">Orders</h1>
       </div>
       <div class="topbar-right">
-        <span class="badge-admin">Admin connecté</span>
+        <span class="badge-admin">Admin logged in</span>
       </div>
     </div>
 
-    <!-- CONTENT -->
     <div class="content">
       <!-- FLASH -->
       {% with messages = get_flashed_messages(with_categories=true) %}
@@ -649,34 +621,32 @@
 
       <!-- ═══ PANEL: ORDERS ═══ -->
       <div class="panel active" id="panel-orders">
-        <!-- Stats -->
         <div class="stats-grid">
           <div class="stat-card violet">
             <div class="stat-num">{{ stats.total }}</div>
-            <div class="stat-label">Total commandes</div>
+            <div class="stat-label">Total orders</div>
           </div>
           <div class="stat-card orange">
-            <div class="stat-num">{{ stats.attente }}</div>
-            <div class="stat-label">En attente</div>
+            <div class="stat-num">{{ stats.pending }}</div>
+            <div class="stat-label">Pending</div>
           </div>
           <div class="stat-card bleu">
-            <div class="stat-num">{{ stats.impression }}</div>
-            <div class="stat-label">En impression</div>
+            <div class="stat-num">{{ stats.printing }}</div>
+            <div class="stat-label">Printing</div>
           </div>
           <div class="stat-card vert">
-            <div class="stat-num">{{ stats.accepte }}</div>
-            <div class="stat-label">Acceptées</div>
+            <div class="stat-num">{{ stats.accepted }}</div>
+            <div class="stat-label">Accepted</div>
           </div>
           <div class="stat-card bleu">
-            <div class="stat-num">{{ stats.livraison }}</div>
-            <div class="stat-label">En livraison</div>
+            <div class="stat-num">{{ stats.delivery }}</div>
+            <div class="stat-label">Out for Delivery</div>
           </div>
         </div>
 
-        <!-- Orders Table -->
         <div class="table-header">
-          <span class="table-title">Toutes les commandes</span>
-          <input class="search-input" placeholder="🔍 Rechercher..." oninput="filterTable(this,'orders-tbody')">
+          <span class="table-title">All Orders</span>
+          <input class="search-input" placeholder="🔍 Search..." oninput="filterTable(this,'orders-tbody')">
         </div>
         <div class="table-wrap">
           <div class="table-scroll">
@@ -684,11 +654,11 @@
               <thead>
                 <tr>
                   <th>#ID</th>
-                  <th>Client</th>
+                  <th>Customer</th>
                   <th>Email / WhatsApp</th>
-                  <th>Détails</th>
-                  <th>Fichier</th>
-                  <th>Statut</th>
+                  <th>Details</th>
+                  <th>File</th>
+                  <th>Status</th>
                   <th>Date</th>
                   <th>Actions</th>
                 </tr>
@@ -708,35 +678,41 @@
                     <a href="/static/uploads/{{ o.fichier }}" target="_blank"
                       style="color:var(--violet-clair);font-size:0.78rem;text-decoration:none">📎 {{ o.fichier[:15]
                       }}...</a>
-                    {% else %}<span style="color:#374151;font-size:0.8rem">Aucun</span>{% endif %}
+                    {% else %}<span style="color:#374151;font-size:0.8rem">None</span>{% endif %}
                   </td>
                   <td>
-                    {% set sc = {'En attente':'attente','Accepté':'accepte','Refusé':'refuse','En
-                    impression':'impression','Terminé':'termine'} %}
-                    <span class="badge badge-{{ sc.get(o.statut,'attente') }}">{{ o.statut }}</span>
+                    {% set sc = {
+                    'Pending': 'pending',
+                    'Accepted': 'accepted',
+                    'Rejected': 'rejected',
+                    'Printing': 'printing',
+                    'Completed': 'completed',
+                    'Out for Delivery': 'delivery'
+                    } %}
+                    <span class="badge badge-{{ sc.get(o.statut, 'pending') }}">{{ o.statut }}</span>
                   </td>
-                  <td style="color:#6b7280;font-size:0.78rem">{{ o.created_at.strftime('%d/%m %H:%M') }}</td>
+                  <td style="color:#6b7280;font-size:0.78rem">{{ o.created_at.strftime('%m/%d %H:%M') }}</td>
                   <td>
                     <div class="action-group">
-                      <select onchange="window.location.href='/admin/commande/{{ o.id }}/'+this.value"
+                      <select onchange="window.location.href='/admin/order/{{ o.id }}/'+this.value"
                         style="background:#1f2937;border:1px solid rgba(124,58,237,0.3);color:#a78bfa;padding:0.35rem 0.6rem;border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'DM Sans',sans-serif;">
                         <option value="" disabled selected>{{ o.statut }}</option>
-                        <option value="attente">⏳ En attente</option>
-                        <option value="accepter">✓ Accepté</option>
-                        <option value="imprimer">🖨 En impression</option>
-                        <option value="terminer">✦ Terminé</option>
-                        <option value="delivery">🚚 En livraison</option>
-                        <option value="refuser">✕ Refusé</option>
+                        <option value="pending">⏳ Pending</option>
+                        <option value="accept">✓ Accepted</option>
+                        <option value="print">🖨 Printing</option>
+                        <option value="complete">✦ Completed</option>
+                        <option value="delivery">🚚 Out for Delivery</option>
+                        <option value="reject">✕ Rejected</option>
                       </select>
-                      <a href="/admin/commande/{{ o.id }}/supprimer" class="btn-action btn-delete"
-                        onclick="return confirm('Supprimer cette commande ?')">🗑</a>
+                      <a href="/admin/order/{{ o.id }}/delete" class="btn-action btn-delete"
+                        onclick="return confirm('Delete this order?')">🗑</a>
                     </div>
                   </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr class="empty-row">
-                  <td colspan="8">📭 Aucune commande pour l'instant.</td>
+                  <td colspan="8">📭 No orders yet.</td>
                 </tr>
                 {% endif %}
               </tbody>
@@ -748,8 +724,8 @@
       <!-- ═══ PANEL: PRODUCTS ═══ -->
       <div class="panel" id="panel-products">
         <div class="table-header">
-          <span class="table-title">Catalogue produits</span>
-          <input class="search-input" placeholder="🔍 Rechercher..." oninput="filterTable(this,'products-tbody')">
+          <span class="table-title">Product Catalog</span>
+          <input class="search-input" placeholder="🔍 Search..." oninput="filterTable(this,'products-tbody')">
         </div>
         <div class="table-wrap">
           <div class="table-scroll">
@@ -757,10 +733,10 @@
               <thead>
                 <tr>
                   <th>Image</th>
-                  <th>Nom</th>
-                  <th>Catégorie</th>
-                  <th>Prix</th>
-                  <th>Ajouté le</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Added on</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -772,25 +748,29 @@
                     <div class="prod-thumb">
                       {% if p.image %}<img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}">
                       {% else %}
-                      {% if p.categorie == 'Figurines' %}🗿{% elif p.categorie == 'Porte-clefs' %}🔑{% else %}🏆{% endif
-                      %}
+                      {% if p.categorie == 'Figurines' %}🗿
+                      {% elif p.categorie == 'Keychains' %}🔑
+                      {% else %}🏆{% endif %}
                       {% endif %}
                     </div>
                   </td>
-                  <td><strong>{{ p.nom }}</strong>{% if p.description %}<br><span
-                      style="color:#6b7280;font-size:0.78rem">{{ p.description[:50] }}...</span>{% endif %}</td>
-                  <td><span class="badge badge-impression">{{ p.categorie }}</span></td>
-                  <td><strong style="color:var(--violet-clair)">{{ "%.0f"|format(p.prix) }} LBP</strong></td>
-                  <td style="color:#6b7280;font-size:0.78rem">{{ p.created_at.strftime('%d/%m/%Y') }}</td>
                   <td>
-                    <a href="/admin/produit/supprimer/{{ p.id }}" class="btn-action btn-delete"
-                      onclick="return confirm('Supprimer ce produit ?')">🗑 Supprimer</a>
+                    <strong>{{ p.nom }}</strong>
+                    {% if p.description %}<br><span style="color:#6b7280;font-size:0.78rem">{{ p.description[:50]
+                      }}...</span>{% endif %}
+                  </td>
+                  <td><span class="badge badge-category">{{ p.categorie }}</span></td>
+                  <td><strong style="color:var(--violet-clair)">{{ "%.0f"|format(p.prix) }} LBP</strong></td>
+                  <td style="color:#6b7280;font-size:0.78rem">{{ p.created_at.strftime('%m/%d/%Y') }}</td>
+                  <td>
+                    <a href="/admin/product/delete/{{ p.id }}" class="btn-action btn-delete"
+                      onclick="return confirm('Delete this product?')">🗑 Delete</a>
                   </td>
                 </tr>
                 {% endfor %}
                 {% else %}
                 <tr class="empty-row">
-                  <td colspan="6">📦 Aucun produit. Ajoutez-en un !</td>
+                  <td colspan="6">📦 No products yet. Add one!</td>
                 </tr>
                 {% endif %}
               </tbody>
@@ -802,21 +782,21 @@
       <!-- ═══ PANEL: ADD PRODUCT ═══ -->
       <div class="panel" id="panel-add-product">
         <div class="form-card">
-          <h3>➕ Ajouter un nouveau produit</h3>
-          <form action="/admin/produit/ajouter" method="POST" enctype="multipart/form-data">
+          <h3>➕ Add a New Product</h3>
+          <form action="/admin/product/add" method="POST" enctype="multipart/form-data">
             <div class="form-grid two" style="margin-bottom:1rem">
               <div class="form-group">
-                <label>Nom du produit *</label>
-                <input type="text" name="nom" class="form-control" placeholder="Ex: Figurine Dragon" required>
+                <label>Product name *</label>
+                <input type="text" name="nom" class="form-control" placeholder="e.g. Dragon Figurine" required>
               </div>
               <div class="form-group">
-                <label>Prix (LBP) *</label>
-                <input type="number" name="prix" class="form-control" placeholder="Ex: 50000" step="0.01" required>
+                <label>Price (LBP) *</label>
+                <input type="number" name="prix" class="form-control" placeholder="e.g. 50000" step="0.01" required>
               </div>
             </div>
             <div class="form-grid two" style="margin-bottom:1rem">
               <div class="form-group">
-                <label>Catégorie *</label>
+                <label>Category *</label>
                 <select name="categorie" class="form-control" required>
                   {% for cat in categories %}
                   <option value="{{ cat.nom }}">{{ cat.nom }}</option>
@@ -824,37 +804,40 @@
                 </select>
               </div>
               <div class="form-group">
-                <label>Image du produit</label>
+                <label>Product image</label>
                 <input type="file" name="image" class="form-control" accept=".png,.jpg,.jpeg,.gif"
                   style="padding:0.5rem">
               </div>
             </div>
             <div class="form-group" style="margin-bottom:1.2rem">
               <label>Description</label>
-              <input type="text" name="description" class="form-control" placeholder="Courte description du produit...">
+              <input type="text" name="description" class="form-control" placeholder="Short product description...">
             </div>
-            <button type="submit" class="btn-submit">✦ Publier le produit</button>
+            <button type="submit" class="btn-submit">✦ Publish Product</button>
           </form>
         </div>
 
-        <!-- PREVIEW of recently added -->
         {% if products %}
         <div style="margin-top:1.5rem">
-          <div class="table-title" style="margin-bottom:1rem">Derniers produits ajoutés</div>
+          <div class="table-title" style="margin-bottom:1rem">Recently Added Products</div>
           <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:0.75rem">
             {% for p in products[:6] %}
             <div style="background:var(--gris);border:1px solid var(--border);border-radius:12px;overflow:hidden">
               <div
                 style="height:100px;background:var(--gris2);display:flex;align-items:center;justify-content:center;font-size:2.5rem">
-                {% if p.image %}<img src="/static/uploads/{{ p.image }}" style="width:100%;height:100%;object-fit:cover"
-                  alt="">
-                {% else %}{% if p.categorie=='Figurines' %}🗿{% elif p.categorie=='Porte-clefs' %}🔑{% else %}🏆{% endif
-                %}{% endif %}
+                {% if p.image %}
+                <img src="/static/uploads/{{ p.image }}" style="width:100%;height:100%;object-fit:cover" alt="">
+                {% else %}
+                {% if p.categorie == 'Figurines' %}🗿
+                {% elif p.categorie == 'Keychains' %}🔑
+                {% else %}🏆{% endif %}
+                {% endif %}
               </div>
               <div style="padding:0.6rem">
                 <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.2rem">{{ p.nom }}</div>
                 <div style="color:var(--violet-clair);font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700">
-                  {{ "%.0f"|format(p.prix) }} LBP</div>
+                  {{ "%.0f"|format(p.prix) }} LBP
+                </div>
               </div>
             </div>
             {% endfor %}
@@ -862,21 +845,22 @@
         </div>
         {% endif %}
       </div>
+
       <!-- ═══ PANEL: CATEGORIES ═══ -->
       <div class="panel" id="panel-categories">
         <div class="form-card">
-          <h3>🏷 Ajouter une catégorie</h3>
-          <form action="/admin/categorie/ajouter" method="POST" style="display:flex;gap:0.75rem;flex-wrap:wrap">
-            <input type="text" name="nom" class="form-control" placeholder="Ex: Accessoires" required
+          <h3>🏷 Add a Category</h3>
+          <form action="/admin/category/add" method="POST" style="display:flex;gap:0.75rem;flex-wrap:wrap">
+            <input type="text" name="nom" class="form-control" placeholder="e.g. Accessories" required
               style="flex:1;min-width:200px">
-            <button type="submit" class="btn-submit">➕ Ajouter</button>
+            <button type="submit" class="btn-submit">➕ Add</button>
           </form>
         </div>
         <div class="table-wrap">
           <table>
             <thead>
               <tr>
-                <th>Nom</th>
+                <th>Name</th>
                 <th>Action</th>
               </tr>
             </thead>
@@ -885,8 +869,8 @@
               <tr>
                 <td><strong>{{ cat.nom }}</strong></td>
                 <td>
-                  <a href="/admin/categorie/supprimer/{{ cat.id }}" class="btn-action btn-delete"
-                    onclick="return confirm('Supprimer cette catégorie ?')">🗑 Supprimer</a>
+                  <a href="/admin/category/delete/{{ cat.id }}" class="btn-action btn-delete"
+                    onclick="return confirm('Delete this category?')">🗑 Delete</a>
                 </td>
               </tr>
               {% endfor %}
@@ -894,6 +878,7 @@
           </table>
         </div>
       </div>
+
     </div><!-- /content -->
   </div><!-- /main -->
 
@@ -903,9 +888,13 @@
       document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
       document.getElementById('panel-' + name).classList.add('active');
       btn.classList.add('active');
-      const titles = { orders: 'Commandes', products: 'Produits', 'add-product': 'Ajouter un produit' };
+      const titles = {
+        orders: 'Orders',
+        products: 'Products',
+        'add-product': 'Add a Product',
+        categories: 'Categories'
+      };
       document.getElementById('page-title').textContent = titles[name] || name;
-      // close mobile sidebar
       document.getElementById('sidebar').classList.remove('open');
     }
 
