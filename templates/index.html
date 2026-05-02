@@ -48,8 +48,6 @@
       color: var(--blanc);
       min-height: 100vh;
       overflow-x: hidden;
-      width: 100%;
-      max-width: 100vw;
     }
 
     header {
@@ -260,9 +258,9 @@
 
     .hero-stats {
       display: flex;
-      gap: 1rem;
+      gap: 2rem;
       justify-content: center;
-      flex-wrap: nowrap;
+      flex-wrap: wrap;
       margin-top: 2.5rem;
       padding-top: 2rem;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -805,14 +803,14 @@
     <div class="product-grid" id="product-grid">
       {% if products %}
       {% for p in products %}
-      <div class="product-card" data-cat="{{ p.categorie }}">
+      <div class="product-card" data-cat="{{ p.categorie.nom }}">
         <div class="card-img">
           {% if p.image %}
           <img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}">
           {% else %}
           <span class="placeholder">
-            {% if p.categorie == 'Figurines' %}🗿
-            {% elif p.categorie == 'Keychains' %}🔑
+            {% if p.categorie.nom == 'Figurines' %}🗿
+            {% elif p.categorie.nom == 'Keychains' %}🔑
             {% else %}🏆{% endif %}
           </span>
           {% endif %}
