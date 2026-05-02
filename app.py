@@ -196,5 +196,29 @@ def delete_category(cat_id):
     flash('Category deleted.', 'success')
     return redirect(url_for('admin_dashboard'))
 
+@app.route('/admin/product/edit/<int:product_id>', methods=['POST'])
+def edit_product(product_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    product = Product.query.get_or_404(product_id)
+    product.nom = request.form.get('nom')
+    product.prix = float(request.form.get('prix'))
+    product.description = request.form.get('description')
+    product.categorie = request.form.get('categorie')
+    product.notes = request.form.get('notes')
+    db.session.commit()
+    flash(f'Product updated!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/category/edit/<int:cat_id>', methods=['POST'])
+def edit_category(cat_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    cat = Categorie.query.get_or_404(cat_id)
+    cat.nom = request.form.get('nom')
+    db.session.commit()
+    flash('Category updated!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

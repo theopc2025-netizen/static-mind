@@ -11,6 +11,7 @@ class Product(db.Model):
     description = db.Column(db.Text, default='')
     categorie   = db.Column(db.String(100), default='Figurines')
     image       = db.Column(db.String(300), nullable=True)
+    notes       = db.Column(db.Text, default='')
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
