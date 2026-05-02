@@ -803,14 +803,14 @@
     <div class="product-grid" id="product-grid">
       {% if products %}
       {% for p in products %}
-      <div class="product-card" data-cat="{{ p.categorie.nom }}">
+      <div class="product-card" data-cat="{{ p.categorie }}">
         <div class="card-img">
           {% if p.image %}
           <img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}">
           {% else %}
           <span class="placeholder">
-            {% if p.categorie.nom == 'Figurines' %}🗿
-            {% elif p.categorie.nom == 'Keychains' %}🔑
+            {% if p.categorie == 'Figurines' %}🗿
+            {% elif p.categorie == 'Keychains' %}🔑
             {% else %}🏆{% endif %}
           </span>
           {% endif %}
