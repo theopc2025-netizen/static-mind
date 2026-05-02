@@ -5,7 +5,8 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'static_mind_secret_key_2026'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///makermind.db'
+import os
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///makermind.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
