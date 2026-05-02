@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from models import db, Product, Order, Categorie
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -17,6 +20,32 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
 ADMIN_USERNAME = 'Theo'
 ADMIN_PASSWORD = 'StaticMind2026'
+GMAIL_USER = 'staticmind012@gmail.com'
+GMAIL_PASSWORD = 'rrzk tqqh wazn tqfu'
+def send_notification(order_id, name, details, email):
+    try:
+        msg = MIMEMultipart()
+        msg['From'] = GMAIL_USER
+        msg['To'] = GMAIL_USER
+        msg['Subject'] = f'🖨 New Order #{order_id} — Static Mind'
+        body = f"""
+New order received!
+
+Order #{order_id}
+Customer: {name}
+Contact: {email or 'Not provided'}
+Details: {details}
+
+Go to admin: https://static-mind-production.up.railway.app/admin
+        """
+        msg.attach(MIMEText(body, 'plain'))
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login(GMAIL_USER, GMAIL_PASSWORD)
+        server.send_message(msg)
+        server.quit()
+    except Exception as e:
+        print(f'Email error: {e}')
 
 db.init_app(app)
 
@@ -65,6 +94,7 @@ def place_order():
     )
     db.session.add(order)
     db.session.commit()
+    send_notification(order.id, name, details, email)
     flash(f'Order #{order.id} submitted successfully!', 'success')
     return redirect(url_for('index'))
 
