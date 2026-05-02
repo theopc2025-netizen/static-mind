@@ -1154,6 +1154,13 @@
         const name = input.files[0]?.name || "";
         document.getElementById("file-name").textContent = name;
       }
+      document.querySelectorAll("form").forEach((form) => {
+        form.addEventListener("submit", () => {
+          document.querySelectorAll(".modal-overlay").forEach((m) => {
+            m.classList.remove("open");
+          });
+        });
+      });
     </script>
     <!-- WHATSAPP BUTTON -->
     <a
