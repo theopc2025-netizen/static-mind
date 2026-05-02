@@ -159,7 +159,8 @@ def add_product():
         prix=float(price),
         description=description,
         categorie=category,
-        image=image_path
+        image=image_path,
+        notes=request.form.get('notes', '')
     )
     db.session.add(product)
     db.session.commit()
