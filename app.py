@@ -27,6 +27,12 @@ def allowed_file(filename):
 def create_tables():
     db.create_all()
     os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+    try:
+        with db.engine.connect() as conn:
+            conn.execute(db.text("ALTER TABLE products ADD COLUMN notes TEXT DEFAULT ''"))
+            conn.commit()
+    except:
+        pass
 
 # ─── PUBLIC ROUTES ───────────────────────────────────────────────
 
