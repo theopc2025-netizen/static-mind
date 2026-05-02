@@ -760,7 +760,7 @@
                       }}...</span>{% endif %}
                   </td>
                   <td><span class="badge badge-category">{{ p.categorie }}</span></td>
-                  <td><strong style="color:var(--violet-clair)">{{ "%.0f"|format(p.prix) }} LBP</strong></td>
+                  <td><strong style="color:var(--violet-clair)">{{ "%.0f"|format(p.prix) }} USD</strong></td>
                   <td style="color:#6b7280;font-size:0.78rem">{{ p.created_at.strftime('%m/%d/%Y') }}</td>
                   <td>
                     <a href="/admin/product/delete/{{ p.id }}" class="btn-action btn-delete"
@@ -790,7 +790,7 @@
                 <input type="text" name="nom" class="form-control" placeholder="e.g. Dragon Figurine" required>
               </div>
               <div class="form-group">
-                <label>Price (LBP) *</label>
+                <label>Price (USD) *</label>
                 <input type="number" name="prix" class="form-control" placeholder="e.g. 50000" step="0.01" required>
               </div>
             </div>
@@ -836,7 +836,7 @@
               <div style="padding:0.6rem">
                 <div style="font-size:0.82rem;font-weight:700;margin-bottom:0.2rem">{{ p.nom }}</div>
                 <div style="color:var(--violet-clair);font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:700">
-                  {{ "%.0f"|format(p.prix) }} LBP
+                  {{ "%.0f"|format(p.prix) }} USD
                 </div>
               </div>
             </div>
