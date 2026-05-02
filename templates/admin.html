@@ -1161,10 +1161,11 @@
         document.getElementById("edit-nom").value = nom;
         document.getElementById("edit-prix").value = prix;
         document.getElementById("edit-categorie").value = categorie;
-        document.getElementById("edit-description").value = description;
-        document.getElementById("edit-notes").value = notes;
-        document.getElementById("form-edit-product").action =
-          "/admin/product/edit/" + id;
+        document.getElementById("edit-description").value = description || "";
+        document.getElementById("edit-notes").value = notes || "";
+        document
+          .getElementById("form-edit-product")
+          .setAttribute("action", "/admin/product/edit/" + id);
         document.getElementById("modal-product").classList.add("open");
       }
 
