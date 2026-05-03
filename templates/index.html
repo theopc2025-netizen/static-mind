@@ -1379,8 +1379,14 @@
             body: formData,
             headers: { "X-Requested-With": "XMLHttpRequest" },
           });
-          const data = await res.json();
-          if (data.order_id) orderNum = data.order_id;
+          const text = await res.text();
+          try {
+            const data = JSON.parse(text);
+            if (data.order_id) orderNum = data.order_id;
+          } catch (e2) {
+            const match = text.match(/Order #(\d+)/);
+            if (match) orderNum = match[1];
+          }
         } catch (e) {}
 
         cart = [];
