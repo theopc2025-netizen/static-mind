@@ -656,6 +656,19 @@
         <a class="nav-item" href="/" target="_blank">
           <span class="nav-icon">🌐</span> View Site
         </a>
+        <form
+          action="/admin/reset-orders"
+          method="POST"
+          onsubmit="return confirm('Delete ALL orders and reset to #1?');"
+        >
+          <button
+            type="submit"
+            class="nav-item"
+            style="color: #f87171; width: 100%"
+          >
+            <span class="nav-icon">🔄</span> Reset Orders
+          </button>
+        </form>
       </nav>
       <div class="sidebar-footer">
         <a href="/admin/logout" class="logout-btn">🚪 Log out</a>

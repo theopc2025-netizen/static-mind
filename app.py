@@ -257,5 +257,15 @@ def edit_category(cat_id):
     flash('Category updated!', 'success')
     return redirect(url_for('admin_dashboard'))
 
+@app.route('/admin/reset-orders', methods=['POST'])
+def reset_orders():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    Order.query.delete()
+    db.session.execute(db.text('ALTER SEQUENCE orders_id_seq RESTART WITH 1'))
+    db.session.commit()
+    flash('Orders reset! Counter back to #1.', 'success')
+    return redirect(url_for('admin_dashboard'))
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

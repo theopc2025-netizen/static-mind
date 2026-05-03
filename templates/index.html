@@ -1159,6 +1159,9 @@
           document.querySelectorAll(".modal-overlay").forEach((m) => {
             m.classList.remove("open");
           });
+          setTimeout(() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }, 100);
         });
       });
     </script>
