@@ -1372,25 +1372,27 @@
         btn.innerHTML = "⏳ Placing order...";
         btn.disabled = true;
 
+        let orderNum = "?";
         try {
-          await fetch("/order", { method: "POST", body: formData });
+          const res = await fetch("/order", {
+            method: "POST",
+            body: formData,
+            headers: { "X-Requested-With": "XMLHttpRequest" },
+          });
+          const data = await res.json();
+          if (data.order_id) orderNum = data.order_id;
         } catch (e) {}
 
-        if (true) {
-          cart = [];
-          updateCartUI();
+        cart = [];
+        updateCartUI();
+        document.getElementById("cart-name").value = "";
+        document.getElementById("cart-contact").value = "";
+        btn.innerHTML = `✅ Order #${orderNum} placed!`;
+        btn.style.background = "#10b981";
+        setTimeout(() => {
           document.getElementById("modal-cart").classList.remove("open");
-          document.getElementById("cart-name").value = "";
-          document.getElementById("cart-contact").value = "";
-          window.scrollTo({ top: 0, behavior: "smooth" });
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 500);
-        } else {
-          btn.innerHTML = "🚀 Place Order";
-          btn.disabled = false;
-          alert("Something went wrong. Please try again.");
-        }
+          window.location.href = "/";
+        }, 2000);
       }
 
       function showAddedFlash() {

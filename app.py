@@ -96,6 +96,8 @@ def place_order():
     db.session.commit()
     send_notification(order.id, name, details, email)
     flash(f'Order #{order.id} submitted successfully!', 'success')
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return jsonify({'order_id': order.id})
     return redirect(url_for('index'))
 
 @app.route('/track', methods=['POST'])
