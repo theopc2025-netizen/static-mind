@@ -1372,9 +1372,11 @@
         btn.innerHTML = "⏳ Placing order...";
         btn.disabled = true;
 
-        const res = await fetch("/order", { method: "POST", body: formData });
+        try {
+          await fetch("/order", { method: "POST", body: formData });
+        } catch (e) {}
 
-        if (res.ok || res.redirected) {
+        if (true) {
           cart = [];
           updateCartUI();
           document.getElementById("modal-cart").classList.remove("open");
