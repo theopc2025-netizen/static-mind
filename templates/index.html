@@ -1369,7 +1369,7 @@
         formData.append("details", details);
 
         const btn = document.getElementById("place-order-btn");
-        btn.innerHTML = "⏳ Placing order...";
+        btn.innerHTML = "⏳ Processing...";
         btn.disabled = true;
 
         let orderNum = "?";
@@ -1393,12 +1393,23 @@
         updateCartUI();
         document.getElementById("cart-name").value = "";
         document.getElementById("cart-contact").value = "";
-        btn.innerHTML = `✅ Order #${orderNum} placed!`;
-        btn.style.background = "#10b981";
+        cart = [];
+        updateCartUI();
+        document.getElementById("modal-cart").classList.remove("open");
+        document.getElementById("cart-name").value = "";
+        document.getElementById("cart-contact").value = "";
+
+        // Show success message
+        const flash = document.createElement("div");
+        flash.className = "flash success";
+        flash.style.cssText =
+          "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:1rem 2rem;border-radius:12px;font-size:1rem;font-weight:600;";
+        flash.innerHTML = `✅ Order #${orderNum} placed successfully! Save this number to track your order.`;
+        document.body.appendChild(flash);
         setTimeout(() => {
-          document.getElementById("modal-cart").classList.remove("open");
+          flash.remove();
           window.location.href = "/";
-        }, 2000);
+        }, 4000);
       }
 
       function showAddedFlash() {
