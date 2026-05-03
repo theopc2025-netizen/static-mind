@@ -1162,6 +1162,7 @@
             </div>
 
             <button
+              id="place-order-btn"
               class="btn-primary"
               style="width: 100%; justify-content: center"
               onclick="submitCartOrder()"
@@ -1367,7 +1368,7 @@
         formData.append("email", contact);
         formData.append("details", details);
 
-        const btn = event.target;
+        const btn = document.getElementById("place-order-btn");
         btn.innerHTML = "⏳ Placing order...";
         btn.disabled = true;
 
@@ -1381,8 +1382,8 @@
           document.getElementById("cart-contact").value = "";
           window.scrollTo({ top: 0, behavior: "smooth" });
           setTimeout(() => {
-            location.reload();
-          }, 300);
+            window.location.href = "/";
+          }, 500);
         } else {
           btn.innerHTML = "🚀 Place Order";
           btn.disabled = false;
