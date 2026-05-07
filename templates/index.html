@@ -1281,6 +1281,17 @@
       let cart = [];
       let selectedPayment = "delivery";
 
+      function saveCart() {
+        localStorage.setItem('staticmind_cart', JSON.stringify(cart));
+      }
+
+      function loadCart() {
+        try {
+          const saved = localStorage.getItem('staticmind_cart');
+          if (saved) cart = JSON.parse(saved);
+        } catch(e) { cart = []; }
+      }
+
       function addToCart(name, price) {
         const existing = cart.find((i) => i.name === name);
         if (existing) {
@@ -1288,12 +1299,14 @@
         } else {
           cart.push({ name, price, qty: 1 });
         }
+        saveCart();
         updateCartUI();
         showAddedFlash();
       }
 
       function removeFromCart(name) {
         cart = cart.filter((i) => i.name !== name);
+        saveCart();
         updateCartUI();
       }
 
@@ -1302,7 +1315,7 @@
         if (!item) return;
         item.qty += delta;
         if (item.qty <= 0) removeFromCart(name);
-        else updateCartUI();
+        else { saveCart(); updateCartUI(); }
       }
 
       function updateCartUI() {
@@ -1392,33 +1405,29 @@
             body: formData,
             headers: { "X-Requested-With": "XMLHttpRequest" },
           });
-          const text = await res.text();
-          try {
-            const data = JSON.parse(text);
-            if (data.order_id) orderNum = data.order_id;
-          } catch (e2) {
-            const match = text.match(/Order #(\d+)/);
-            if (match) orderNum = match[1];
-          }
-        } catch (e) {}
+          const data = await res.json();
+          if (data.order_id) orderNum = data.order_id;
+        } catch (e) {
+          console.log('fetch error:', e);
+        }
 
+        // Reset cart and UI
         cart = [];
+        localStorage.removeItem('staticmind_cart');
         updateCartUI();
         document.getElementById("cart-name").value = "";
         document.getElementById("cart-contact").value = "";
         document.getElementById("modal-cart").classList.remove("open");
+        btn.innerHTML = "🚀 Place Order";
+        btn.disabled = false;
 
         // Show success message
         const flash = document.createElement("div");
         flash.className = "flash success";
-        flash.style.cssText =
-          "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:1rem 2rem;border-radius:12px;font-size:1rem;font-weight:600;";
-        flash.innerHTML = `✅ Order #${orderNum} placed successfully! Save this number to track your order.`;
+        flash.style.cssText = "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:1rem 2rem;border-radius:12px;font-size:1rem;font-weight:600;white-space:nowrap;";
+        flash.innerHTML = `✅ Order #${orderNum} placed! Save this number to track your order.`;
         document.body.appendChild(flash);
-        setTimeout(() => {
-          flash.remove();
-          window.location.href = "/";
-        }, 4000);
+        setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
       }
 
       function showAddedFlash() {
@@ -1505,28 +1514,29 @@
       });
 
       // Init cart
+      loadCart();
       updateCartUI();
     </script>
 
     <!-- WHATSAPP BUTTON -->
-    <a
+  <a
   href="https://wa.me/96170316354"
   target="_blank"
   style="
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    z-index: 9999;
-    width: 56px;
-    height: 56px;
-    background: #25d366;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    position: fixed !important;
+    bottom: 1.5rem !important;
+    right: 1.5rem !important;
+    z-index: 999999 !important;
+    width: 56px !important;
+    height: 56px !important;
+    background: #25d366 !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4) !important;
     transition: transform 0.2s, box-shadow 0.2s;
-    text-decoration: none;
+    text-decoration: none !important;
   "
   onmouseover="
     this.style.transform = 'scale(1.1)';
