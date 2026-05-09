@@ -853,6 +853,21 @@
           padding: 1.5rem 1rem;
         }
       }
+      @keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse-wts {
+  0%, 100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  50% { box-shadow: 0 4px 35px rgba(37,211,102,0.9), 0 0 0 8px rgba(37,211,102,0.15); }
+}
+.card-animate {
+  opacity: 0;
+  animation: slideUp 0.5s ease forwards;
+}
+.wts-pulse {
+  animation: pulse-wts 2s ease-in-out infinite;
+}
     </style>
   </head>
 
@@ -892,7 +907,12 @@
       {% endfor %}
     </div>
     {% endif %} {% endwith %}
-
+<!-- PROMO BANNER -->
+<div id="promo-banner" style="background:linear-gradient(90deg,#7c3aed,#4c1d95);padding:0.6rem 1.2rem;text-align:center;font-size:0.85rem;display:flex;align-items:center;justify-content:center;gap:0.75rem;position:relative">
+  🎉 New here? Use code <strong style="background:rgba(255,255,255,0.2);padding:0.2rem 0.6rem;border-radius:6px;letter-spacing:0.05em">STATIC10</strong> for <strong>10% off</strong> your first order!
+  <button onclick="document.getElementById('promo-banner').style.display='none';localStorage.setItem('promo_closed','1')" style="background:none;border:none;color:rgba(255,255,255,0.6);font-size:1.1rem;cursor:pointer;position:absolute;right:1rem">✕</button>
+</div>
+<script>if(localStorage.getItem('promo_closed'))document.getElementById('promo-banner').style.display='none';</script>
     <!-- ADDED TO CART NOTIFICATION -->
     <div class="added-flash" id="added-flash">✓ Added to cart!</div>
 
@@ -1312,6 +1332,27 @@ oninput="validateContact(this)"
     </form>
   </div>
 </section>
+<!-- FAQ -->
+<section class="section" id="faq" style="padding-bottom:0">
+  <h2 class="section-title" style="margin-bottom:1.2rem">FAQ <span>❓</span></h2>
+  <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:2.5rem">
+    {% for q, a in [
+      ('How long does printing take?', 'Usually 24–48h depending on size and complexity.'),
+      ('Do you deliver in Lebanon?', 'Yes! We deliver across Lebanon. Contact us on WhatsApp to arrange delivery.'),
+      ('What file formats do you accept?', 'We accept .STL, .OBJ, .PNG, .JPG and .PDF files.'),
+      ('How do I pay?', 'Pay on delivery (cash) or arrange via WhatsApp.'),
+      ('Can I track my order?', 'Yes! Use the Order Tracking section above with your order number.'),
+      ('Can I get a custom color?', 'Yes, we have multiple filament colors available. Mention it in your order details.')
+    ] %}
+    <details style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:1rem 1.2rem;cursor:pointer">
+      <summary style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;list-style:none;display:flex;justify-content:space-between;align-items:center">
+        {{ q }} <span style="color:var(--violet-clair)">+</span>
+      </summary>
+      <p style="color:#9ca3af;font-size:0.88rem;margin-top:0.75rem;line-height:1.6">{{ a }}</p>
+    </details>
+    {% endfor %}
+  </div>
+</section>
     <!-- FOOTER -->
     <footer>
       <p
@@ -1598,7 +1639,18 @@ if (contact.length < 3) {
 function validateContact(input) {
   input.style.borderColor = input.value.trim().length >= 3 ? '' : '#ef4444';
 }
-      // Init cart
+// ── ANIMATIONS ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('card-animate'), i * 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
+   
+  // Init cart
       loadCart();
       updateCartUI();
     </script>
@@ -1615,6 +1667,7 @@ function validateContact(input) {
     width: 56px !important;
     height: 56px !important;
     background: #25d366 !important;
+    animation: pulse-wts 2s ease-in-out infinite !important;
     border-radius: 50% !important;
     display: flex !important;
     align-items: center !important;
