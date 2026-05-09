@@ -13,16 +13,16 @@ class Product(db.Model):
     image       = db.Column(db.String(300), nullable=True)
     notes       = db.Column(db.Text, default='')
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
-
     def __repr__(self):
         return f'<Product {self.nom}>'
+
 class Categorie(db.Model):
     __tablename__ = 'categories'
     id   = db.Column(db.Integer, primary_key=True)
     nom  = db.Column(db.String(100), nullable=False, unique=True)
-
     def __repr__(self):
         return f'<Categorie {self.nom}>'
+
 class Order(db.Model):
     __tablename__ = 'orders'
     id          = db.Column(db.Integer, primary_key=True)
@@ -30,11 +30,11 @@ class Order(db.Model):
     email       = db.Column(db.String(200), nullable=True)
     details     = db.Column(db.Text, nullable=False)
     fichier     = db.Column(db.String(300), nullable=True)
-    statut      = db.Column(db.String(50), default='En attente')
+    statut      = db.Column(db.String(50), default='Pending')
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
-
     def __repr__(self):
         return f'<Order #{self.id} — {self.nom_client}>'
+
 class Coupon(db.Model):
     __tablename__ = 'coupons'
     id         = db.Column(db.Integer, primary_key=True)
@@ -42,6 +42,16 @@ class Coupon(db.Model):
     reduction  = db.Column(db.Float, nullable=False)
     actif      = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
     def __repr__(self):
         return f'<Coupon {self.code} -{self.reduction}%>'
+
+class Avis(db.Model):
+    __tablename__ = 'avis'
+    id         = db.Column(db.Integer, primary_key=True)
+    nom        = db.Column(db.String(200), nullable=False)
+    etoiles    = db.Column(db.Integer, nullable=False)
+    texte      = db.Column(db.Text, nullable=False)
+    approuve   = db.Column(db.Boolean, default=False)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    def __repr__(self):
+        return f'<Avis {self.nom} {self.etoiles}⭐>'

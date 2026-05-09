@@ -656,6 +656,9 @@
         <button class="nav-item" onclick="showPanel('coupons', this)">
           <span class="nav-icon">🎟</span> Coupons
         </button>
+        <button class="nav-item" onclick="showPanel('avis', this)">
+          <span class="nav-icon">⭐</span> Reviews
+        </button>
         <a class="nav-item" href="/" target="_blank">
           <span class="nav-icon">🌐</span> View Site
         </a>
@@ -1214,6 +1217,55 @@
           </div>
         </div>
       </div>
+      <div class="panel" id="panel-avis">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Stars</th>
+                <th>Review</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in tous_avis %}
+              <tr>
+                <td><strong>{{ a.nom }}</strong></td>
+                <td style="color: #fbbf24">{{ '⭐' * a.etoiles }}</td>
+                <td
+                  style="color: #9ca3af; font-size: 0.82rem; max-width: 200px"
+                >
+                  {{ a.texte[:80] }}...
+                </td>
+                <td>
+                  <span
+                    class="badge badge-{{ 'accepted' if a.approuve else 'pending' }}"
+                    >{{ 'Approved' if a.approuve else 'Pending' }}</span
+                  >
+                </td>
+                <td>
+                  <div class="action-group">
+                    {% if not a.approuve %}<a
+                      href="/admin/avis/{{ a.id }}/approve"
+                      class="btn-edit"
+                      >✓ Approve</a
+                    >{% endif %}
+                    <a
+                      href="/admin/avis/{{ a.id }}/delete"
+                      class="btn-action btn-delete"
+                      onclick="return confirm('Delete?');"
+                      >🗑</a
+                    >
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
       <!-- /content -->
     </div>
     <!-- /main -->
@@ -1234,6 +1286,7 @@
           "add-product": "Add a Product",
           categories: "Categories",
           coupons: "Coupons",
+          avis: "Reviews",
         };
         document.getElementById("page-title").textContent =
           titles[name] || name;

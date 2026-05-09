@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
-from models import db, Product, Order, Categorie, Coupon
+from models import db, Product, Order, Categorie, Coupon, Avis
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -69,7 +69,8 @@ def create_tables():
 def index():
     products = Product.query.order_by(Product.id.desc()).all()
     categories = Categorie.query.order_by(Categorie.id).all()
-    return render_template('index.html', products=products, categories=categories)
+    avis = Avis.query.filter_by(approuve=True).order_by(Avis.id.desc()).all()
+    return render_template('index.html', products=products, categories=categories, avis=avis)
 
 @app.route('/order', methods=['POST'])
 def place_order():
@@ -146,7 +147,8 @@ def admin_dashboard():
     }
     categories = Categorie.query.order_by(Categorie.id).all()
     coupons = Coupon.query.order_by(Coupon.id.desc()).all()
-    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories, coupons=coupons)
+    tous_avis = Avis.query.order_by(Avis.id.desc()).all()
+    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories, coupons=coupons, tous_avis=tous_avis)
 
 @app.route('/admin/order/<int:order_id>/<action>')
 def update_order(order_id, action):
@@ -299,6 +301,31 @@ def delete_coupon(coupon_id):
     db.session.delete(c)
     db.session.commit()
     flash('Coupon deleted.', 'success')
+    return redirect(url_for('admin_dashboard'))
+@app.route('/avis', methods=['POST'])
+def submit_avis():
+    nom = request.form.get('nom')
+    etoiles = int(request.form.get('etoiles', 5))
+    texte = request.form.get('texte')
+    if nom and texte:
+        db.session.add(Avis(nom=nom, etoiles=etoiles, texte=texte))
+        db.session.commit()
+        flash('Merci pour votre avis! Il sera publié après vérification.', 'success')
+    return redirect(url_for('index'))
+
+@app.route('/admin/avis/<int:avis_id>/<action>')
+def manage_avis(avis_id, action):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    a = Avis.query.get_or_404(avis_id)
+    if action == 'approve':
+        a.approuve = True
+        db.session.commit()
+        flash('Avis approuvé!', 'success')
+    elif action == 'delete':
+        db.session.delete(a)
+        db.session.commit()
+        flash('Avis supprimé.', 'success')
     return redirect(url_for('admin_dashboard'))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
