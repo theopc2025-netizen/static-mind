@@ -1430,11 +1430,10 @@ oninput="validateContact(this)"
           alert("Please enter your contact info!");
           return;
         }
-        const validContact = /^(\+961|0)[0-9\s]{7,11}$/.test(contact) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
-        if (!validContact) {
-          alert("❌ Numéro libanais (+961...) ou email valide seulement!");
-          return;
-        }
+if (contact.length < 3) {
+  alert("Please enter your contact info!");
+  return;
+}
         if (cart.length === 0) return;
 
         const items = cart
@@ -1589,10 +1588,8 @@ oninput="validateContact(this)"
         }
       }
 function validateContact(input) {
-        const v = input.value.trim();
-        const ok = /^(\+961|0)[0-9\s]{7,11}$/.test(v) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        input.style.borderColor = ok || !v ? '' : '#ef4444';
-      }
+  input.style.borderColor = input.value.trim().length >= 3 ? '' : '#ef4444';
+}
       // Init cart
       loadCart();
       updateCartUI();
