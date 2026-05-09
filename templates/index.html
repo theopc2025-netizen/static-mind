@@ -34,6 +34,108 @@
         --shadow: 0 8px 32px rgba(124, 58, 237, 0.18);
         --transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
       }
+      .product-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.product-modal-overlay.open { display: flex; }
+.product-modal-box {
+  background: #111827;
+  border-radius: 20px;
+  border: 1px solid rgba(124,58,237,0.25);
+  width: 90%;
+  max-width: 780px;
+  max-height: 85vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  position: relative;
+}
+@media (max-width: 580px) {
+  .product-modal-box {
+    grid-template-columns: 1fr;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+}
+.product-modal-img {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  background: linear-gradient(135deg, #1a1a2e, #2d1b69);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.product-modal-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.product-modal-info {
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  overflow-y: auto;
+}
+.product-modal-cat {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6b7280;
+}
+.product-modal-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1.2;
+  color: #f5f5f5;
+}
+.product-modal-price {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #a78bfa;
+}
+.product-modal-divider {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin: 0.25rem 0;
+}
+.product-modal-desc {
+  color: #9ca3af;
+  font-size: 0.9rem;
+  line-height: 1.7;
+  flex: 1;
+}
+.product-modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: #fff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  transition: background 0.2s;
+}
+.product-modal-close:hover { background: #7c3aed; }
+.card-img { cursor: pointer; }
       *,
       *::before,
       *::after {
@@ -963,39 +1065,37 @@
         </div>
       </div>
       <div class="product-grid" id="product-grid">
-        {% if products %} {% for p in products %}
-        <div class="product-card" data-cat="{{ p.categorie }}">
-          <div class="card-img">
-            {% if p.image %}
-            <img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}" />
-            {% else %}
-            <span class="placeholder">
-              {% if p.categorie == 'Figurines' %}🗿 {% elif p.categorie ==
-              'Keychains' %}🔑 {% else %}🏆{% endif %}
-            </span>
-            {% endif %}
-            <div class="card-badge">{{ p.categorie }}</div>
-          </div>
-          <div class="card-body">
-            <div class="card-cat">{{ p.categorie }}</div>
-            <div class="card-name">{{ p.nom }}</div>
-            <div class="card-footer">
-              <span class="card-price">{{ "%.2f"|format(p.prix) }} USD</span>
-              <button
-                class="btn-add"
-                onclick="addToCart('{{ p.nom }}', {{ p.prix }})"
-              >
-                +
-              </button>
-            </div>
-          </div>
-        </div>
-        {% endfor %} {% else %}
-        <div class="empty-state">
-          <div class="icon">📦</div>
-          <p>No products yet.<br />Check back soon!</p>
-        </div>
-        {% endif %}
+     {% for p in products %}
+<div class="product-card" data-cat="{{ p.categorie }}">
+  <div class="card-img"
+    onclick="openProductModal(
+      '{{ p.nom | replace("'", "\\'") }}',
+      '{{ p.categorie }}',
+      {{ p.prix }},
+      '{{ (p.description or '') | replace("'", "\\'") | replace('\n', ' ') }}',
+      '{% if p.image %}/static/uploads/{{ p.image }}{% endif %}'
+    )">
+    {% if p.image %}
+    <img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}" />
+    {% else %}
+    <span class="placeholder">
+      {% if p.categorie == 'Figurines' %}🗿
+      {% elif p.categorie == 'Keychains' %}🔑
+      {% else %}🏆{% endif %}
+    </span>
+    {% endif %}
+    <div class="card-badge">{{ p.categorie }}</div>
+  </div>
+  <div class="card-body">
+    <div class="card-cat">{{ p.categorie }}</div>
+    <div class="card-name">{{ p.nom }}</div>
+    <div class="card-footer">
+      <span class="card-price">{{ "%.2f"|format(p.prix) }} USD</span>
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('{{ p.nom }}', {{ p.prix }})">+</button>
+    </div>
+  </div>
+</div>
+{% endfor %}
       </div>
     </section>
 
@@ -1636,12 +1736,60 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
-   
+   function openProductModal(name, cat, price, desc, imgUrl) {
+  const icons = { 'Figurines': '🗿', 'Keychains': '🔑' };
+  const wrap = document.getElementById('modal-img-wrap');
+  const ph = document.getElementById('modal-placeholder');
+  const oldImg = wrap.querySelector('img');
+  if (oldImg) oldImg.remove();
+  if (imgUrl) {
+    ph.style.display = 'none';
+    const img = document.createElement('img');
+    img.src = imgUrl;
+    img.alt = name;
+    wrap.appendChild(img);
+  } else {
+    ph.style.display = '';
+    ph.textContent = icons[cat] || '🏆';
+  }
+  document.getElementById('modal-cat').textContent = cat;
+  document.getElementById('modal-name').textContent = name;
+  document.getElementById('modal-price').textContent = '$' + parseFloat(price).toFixed(2);
+  document.getElementById('modal-desc').textContent = desc || 'No description available.';
+  document.getElementById('modal-add-btn').onclick = () => {
+    addToCart(name, price);
+    closeProductModal();
+  };
+  document.getElementById('product-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeProductModal() {
+  document.getElementById('product-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
   // Init cart
       loadCart();
       updateCartUI();
     </script>
-
+<div class="product-modal-overlay" id="product-modal"
+  onclick="if(event.target===this)closeProductModal()">
+  <div class="product-modal-box">
+    <button class="product-modal-close" onclick="closeProductModal()">✕</button>
+    <div class="product-modal-img" id="modal-img-wrap">
+      <span id="modal-placeholder" style="font-size:5rem"></span>
+    </div>
+    <div class="product-modal-info">
+      <div class="product-modal-cat" id="modal-cat"></div>
+      <div class="product-modal-name" id="modal-name"></div>
+      <div class="product-modal-price" id="modal-price"></div>
+      <hr class="product-modal-divider">
+      <p class="product-modal-desc" id="modal-desc"></p>
+      <button class="btn-primary" style="justify-content:center;margin-top:auto"
+        id="modal-add-btn">+ Add to Cart</button>
+    </div>
+  </div>
+</div>
     <!-- WHATSAPP BUTTON -->
   <a
   href="https://wa.me/96170316354"
