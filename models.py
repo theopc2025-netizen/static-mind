@@ -35,3 +35,13 @@ class Order(db.Model):
 
     def __repr__(self):
         return f'<Order #{self.id} — {self.nom_client}>'
+class Coupon(db.Model):
+    __tablename__ = 'coupons'
+    id         = db.Column(db.Integer, primary_key=True)
+    code       = db.Column(db.String(50), nullable=False, unique=True)
+    reduction  = db.Column(db.Float, nullable=False)
+    actif      = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Coupon {self.code} -{self.reduction}%>'

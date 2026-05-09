@@ -1105,6 +1105,11 @@
           <div id="cart-items-list"></div>
 
           <div id="cart-checkout" style="display: none">
+            <div style="display:flex;gap:0.5rem;margin-bottom:0.75rem">
+              <input type="text" id="coupon-input" class="form-control" placeholder="Coupon code..." style="flex:1;text-transform:uppercase" />
+              <button type="button" class="btn-primary" style="padding:0.5rem 1rem;font-size:0.85rem" onclick="applyCoupon()">Apply</button>
+            </div>
+            <p id="coupon-msg" style="font-size:0.82rem;margin-bottom:0.5rem"></p>
             <div class="cart-total">
               <span>Total</span>
               <span class="cart-total-amount" id="cart-total-display"
@@ -1156,7 +1161,8 @@
                   type="text"
                   id="cart-contact"
                   class="form-control"
-                  placeholder="Contact info"
+                  placeholder="+961 XX XXX XXX ou email@gmail.com"
+oninput="validateContact(this)"
                 />
               </div>
              <p
@@ -1282,6 +1288,8 @@
       // ── CART STATE ──
       let cart = [];
       let selectedPayment = "delivery";
+      let appliedCoupon = null;
+      let discountPct = 0;
 
       function saveCart() {
         localStorage.setItem('staticmind_cart', JSON.stringify(cart));
@@ -1357,8 +1365,10 @@
             )
             .join("");
           checkout.style.display = "block";
-          document.getElementById("cart-total-display").textContent =
-            `$${total.toFixed(2)}`;
+          const discounted = total * (1 - discountPct / 100);
+          document.getElementById("cart-total-display").textContent = discountPct > 0
+            ? `$${discounted.toFixed(2)} (-${discountPct}%)`
+            : `$${total.toFixed(2)}`;
         }
       }
 
@@ -1383,13 +1393,19 @@
           alert("Please enter your contact info!");
           return;
         }
+        const validContact = /^(\+961|0)[0-9\s]{7,11}$/.test(contact) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact);
+        if (!validContact) {
+          alert("❌ Numéro libanais (+961...) ou email valide seulement!");
+          return;
+        }
         if (cart.length === 0) return;
 
         const items = cart
           .map((i) => `${i.name} x${i.qty} ($${(i.price * i.qty).toFixed(2)})`)
           .join(", ");
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-        const details = `[CART ORDER] Items: ${items} | Total: $${total.toFixed(2)} | Payment: ${selectedPayment === "delivery" ? "Pay on Delivery" : "Arrange via WhatsApp"}`;
+        const discounted = total * (1 - discountPct / 100);
+        const details = `[CART ORDER] Items: ${items} | Total: $${discounted.toFixed(2)}${discountPct > 0 ? ` (Coupon: ${appliedCoupon} -${discountPct}%)` : ''} | Payment: ${selectedPayment === "delivery" ? "Pay on Delivery" : "Arrange via WhatsApp"}`;
 
         const formData = new FormData();
         formData.append("nom", name);
@@ -1427,7 +1443,7 @@
         const flash = document.createElement("div");
         flash.className = "flash success";
         flash.style.cssText = "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:1rem 2rem;border-radius:12px;font-size:1rem;font-weight:600;white-space:nowrap;";
-        flash.innerHTML = `✅ Order #${orderNum} placed! Save this number to track your order.`;
+        flash.innerHTML = `✅ Order placed!<br><strong style="font-size:1.4rem;color:#6ee7b7">#${orderNum}</strong><br><span style="font-size:0.85rem">Save this number to track your order</span>`;
         document.body.appendChild(flash);
         setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
       }
@@ -1514,7 +1530,32 @@
           );
         });
       });
-
+      async function applyCoupon() {
+        const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+        const msg = document.getElementById('coupon-msg');
+        if (!code) return;
+        const fd = new FormData();
+        fd.append('code', code);
+        const res = await fetch('/check-coupon', { method: 'POST', body: fd });
+        const data = await res.json();
+        if (data.valid) {
+          appliedCoupon = data.code;
+          discountPct = data.reduction;
+          msg.style.color = '#34d399';
+          msg.textContent = `✅ Coupon "${data.code}" applied! -${data.reduction}%`;
+          updateCartUI();
+        } else {
+          appliedCoupon = null;
+          discountPct = 0;
+          msg.style.color = '#f87171';
+          msg.textContent = '❌ Invalid coupon code';
+        }
+      }
+function validateContact(input) {
+        const v = input.value.trim();
+        const ok = /^(\+961|0)[0-9\s]{7,11}$/.test(v) || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        input.style.borderColor = ok || !v ? '' : '#ef4444';
+      }
       // Init cart
       loadCart();
       updateCartUI();

@@ -653,6 +653,9 @@
         <button class="nav-item" onclick="showPanel('categories', this)">
           <span class="nav-icon">🏷</span> Categories
         </button>
+        <button class="nav-item" onclick="showPanel('coupons', this)">
+          <span class="nav-icon">🎟</span> Coupons
+        </button>
         <a class="nav-item" href="/" target="_blank">
           <span class="nav-icon">🌐</span> View Site
         </a>
@@ -1135,6 +1138,81 @@
             </table>
           </div>
         </div>
+        <!-- ═══ PANEL: COUPONS ═══ -->
+        <div class="panel" id="panel-coupons">
+          <div class="form-card">
+            <h3>🎟 Add a Coupon</h3>
+            <form
+              action="/admin/coupon/add"
+              method="POST"
+              style="display: flex; gap: 0.75rem; flex-wrap: wrap"
+            >
+              <div class="form-group" style="flex: 1; min-width: 150px">
+                <label>Code *</label>
+                <input
+                  type="text"
+                  name="code"
+                  class="form-control"
+                  placeholder="ex: SUMMER20"
+                  required
+                />
+              </div>
+              <div class="form-group" style="flex: 1; min-width: 120px">
+                <label>Reduction (%) *</label>
+                <input
+                  type="number"
+                  name="reduction"
+                  class="form-control"
+                  placeholder="ex: 20"
+                  min="1"
+                  max="100"
+                  required
+                />
+              </div>
+              <div style="display: flex; align-items: flex-end">
+                <button type="submit" class="btn-submit">➕ Add</button>
+              </div>
+            </form>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Reduction</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for c in coupons %}
+                <tr>
+                  <td>
+                    <strong style="color: var(--violet-clair)"
+                      >{{ c.code }}</strong
+                    >
+                  </td>
+                  <td><strong>-{{ c.reduction }}%</strong></td>
+                  <td>
+                    <span
+                      class="badge badge-{{ 'accepted' if c.actif else 'rejected' }}"
+                      >{{ 'Active' if c.actif else 'Inactive' }}</span
+                    >
+                  </td>
+                  <td>
+                    <a
+                      href="/admin/coupon/delete/{{ c.id }}"
+                      class="btn-action btn-delete"
+                      onclick="return confirm('Delete?');"
+                      >🗑</a
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <!-- /content -->
     </div>
@@ -1155,6 +1233,7 @@
           products: "Products",
           "add-product": "Add a Product",
           categories: "Categories",
+          coupons: "Coupons",
         };
         document.getElementById("page-title").textContent =
           titles[name] || name;

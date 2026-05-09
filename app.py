@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
-from models import db, Product, Order, Categorie
+from models import db, Product, Order, Categorie, Coupon
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -145,7 +145,8 @@ def admin_dashboard():
         'delivery': Order.query.filter_by(statut='Out for Delivery').count(),
     }
     categories = Categorie.query.order_by(Categorie.id).all()
-    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories)
+    coupons = Coupon.query.order_by(Coupon.id.desc()).all()
+    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories, coupons=coupons)
 
 @app.route('/admin/order/<int:order_id>/<action>')
 def update_order(order_id, action):
@@ -270,6 +271,34 @@ def reset_orders():
     db.session.commit()
     flash('Orders reset! Counter back to #1.', 'success')
     return redirect(url_for('admin_dashboard'))
+@app.route('/check-coupon', methods=['POST'])
+def check_coupon():
+    code = request.form.get('code', '').strip().upper()
+    coupon = Coupon.query.filter_by(code=code, actif=True).first()
+    if coupon:
+        return jsonify({'valid': True, 'reduction': coupon.reduction, 'code': coupon.code})
+    return jsonify({'valid': False})
 
+@app.route('/admin/coupon/add', methods=['POST'])
+def add_coupon():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    code = request.form.get('code', '').strip().upper()
+    reduction = float(request.form.get('reduction', 0))
+    if code and not Coupon.query.filter_by(code=code).first():
+        db.session.add(Coupon(code=code, reduction=reduction))
+        db.session.commit()
+        flash(f'Coupon "{code}" added!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/coupon/delete/<int:coupon_id>')
+def delete_coupon(coupon_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    c = Coupon.query.get_or_404(coupon_id)
+    db.session.delete(c)
+    db.session.commit()
+    flash('Coupon deleted.', 'success')
+    return redirect(url_for('admin_dashboard'))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
