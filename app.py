@@ -310,7 +310,7 @@ def submit_avis():
     if nom and texte:
         db.session.add(Avis(nom=nom, etoiles=etoiles, texte=texte))
         db.session.commit()
-        flash('Merci pour votre avis! Il sera publié après vérification.', 'success')
+        flash('Thank you for your feedback! It will be published after a few minutes.', 'success')
     return redirect(url_for('index'))
 
 @app.route('/admin/avis/<int:avis_id>/<action>')
