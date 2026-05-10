@@ -37,13 +37,20 @@ class Order(db.Model):
 
 class Coupon(db.Model):
     __tablename__ = 'coupons'
-    id         = db.Column(db.Integer, primary_key=True)
-    code       = db.Column(db.String(50), nullable=False, unique=True)
-    reduction  = db.Column(db.Float, nullable=False)
-    actif      = db.Column(db.Boolean, default=True)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    def __repr__(self):
-        return f'<Coupon {self.code} -{self.reduction}%>'
+    id          = db.Column(db.Integer, primary_key=True)
+    code        = db.Column(db.String(50), nullable=False, unique=True)
+    reduction   = db.Column(db.Float, nullable=False)
+    actif       = db.Column(db.Boolean, default=True)
+
+    # NOUVEAU: None = tous les produits, int = produit spécifique
+    product_id  = db.Column(db.Integer, db.ForeignKey('products.id'), nullable=True)
+    product     = db.relationship('Product', backref='coupons')
+
+    # NOUVEAU: True = usage unique (se désactive après 1 utilisation)
+    one_time    = db.Column(db.Boolean, default=False)
+    used        = db.Column(db.Boolean, default=False)
+
+    created_at  = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Avis(db.Model):
     __tablename__ = 'avis'

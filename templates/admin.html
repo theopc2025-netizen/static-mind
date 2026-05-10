@@ -1147,9 +1147,14 @@
             <form
               action="/admin/coupon/add"
               method="POST"
-              style="display: flex; gap: 0.75rem; flex-wrap: wrap"
+              style="
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                align-items: flex-end;
+              "
             >
-              <div class="form-group" style="flex: 1; min-width: 150px">
+              <div class="form-group" style="flex: 1; min-width: 140px">
                 <label>Code *</label>
                 <input
                   type="text"
@@ -1159,7 +1164,7 @@
                   required
                 />
               </div>
-              <div class="form-group" style="flex: 1; min-width: 120px">
+              <div class="form-group" style="flex: 1; min-width: 110px">
                 <label>Reduction (%) *</label>
                 <input
                   type="number"
@@ -1171,6 +1176,39 @@
                   required
                 />
               </div>
+              <div class="form-group" style="flex: 1; min-width: 160px">
+                <label>Type</label>
+                <select
+                  name="coupon_type"
+                  class="form-control"
+                  onchange="toggleCouponType(this.value)"
+                >
+                  <option value="global">🌍 Global (tous produits)</option>
+                  <option value="product">🛍 Produit spécifique</option>
+                  <option value="one_time">👤 Usage unique</option>
+                </select>
+              </div>
+              <div
+                class="form-group"
+                id="product-select-group"
+                style="flex: 1; min-width: 160px; display: none"
+              >
+                <label>Produit *</label>
+                <select name="product_id" class="form-control">
+                  <option value="">-- Choisir --</option>
+                  {% for p in products %}
+                  <option value="{{ p.id }}">
+                    {{ p.nom }} ({{ "%.0f"|format(p.prix) }} USD)
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <input
+                type="checkbox"
+                name="one_time"
+                id="one-time-checkbox"
+                style="display: none"
+              />
               <div style="display: flex; align-items: flex-end">
                 <button type="submit" class="btn-submit">➕ Add</button>
               </div>
@@ -1183,6 +1221,7 @@
                   <th>Code</th>
                   <th>Reduction</th>
                   <th>Status</th>
+                  <th>Type</th>
                   <th>Action</th>
                 </tr>
               </thead>
@@ -1200,6 +1239,19 @@
                       class="badge badge-{{ 'accepted' if c.actif else 'rejected' }}"
                       >{{ 'Active' if c.actif else 'Inactive' }}</span
                     >
+                  </td>
+                  <td>
+                    {% if c.one_time %}
+                    <span class="badge badge-printing"
+                      >👤 Usage unique {% if c.used %}(utilisé){% endif %}</span
+                    >
+                    {% elif c.product_id %}
+                    <span class="badge badge-category"
+                      >🛍 {{ c.product.nom if c.product else '?' }}</span
+                    >
+                    {% else %}
+                    <span class="badge badge-accepted">🌍 Global</span>
+                    {% endif %}
                   </td>
                   <td>
                     <a
@@ -1312,7 +1364,12 @@
           .setAttribute("action", "/admin/product/edit/" + id);
         document.getElementById("modal-product").classList.add("open");
       }
-
+      function toggleCouponType(val) {
+        document.getElementById("product-select-group").style.display =
+          val === "product" ? "flex" : "none";
+        document.getElementById("one-time-checkbox").checked =
+          val === "one_time";
+      }
       function openEditCategory(id, nom) {
         document.getElementById("edit-cat-nom").value = nom;
         document.getElementById("form-edit-category").action =

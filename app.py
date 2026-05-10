@@ -62,6 +62,14 @@ def create_tables():
             conn.commit()
     except:
         pass
+    try:
+        with db.engine.connect() as conn:
+            conn.execute(db.text("ALTER TABLE coupons ADD COLUMN one_time BOOLEAN DEFAULT FALSE"))
+            conn.execute(db.text("ALTER TABLE coupons ADD COLUMN used BOOLEAN DEFAULT FALSE"))
+            conn.execute(db.text("ALTER TABLE coupons ADD COLUMN product_id INTEGER REFERENCES products(id)"))
+            conn.commit()
+    except:
+        pass
 
 # ─── PUBLIC ROUTES ───────────────────────────────────────────────
 
@@ -276,10 +284,19 @@ def reset_orders():
 @app.route('/check-coupon', methods=['POST'])
 def check_coupon():
     code = request.form.get('code', '').strip().upper()
+    product_id = request.form.get('product_id')
     coupon = Coupon.query.filter_by(code=code, actif=True).first()
-    if coupon:
-        return jsonify({'valid': True, 'reduction': coupon.reduction, 'code': coupon.code})
-    return jsonify({'valid': False})
+    if not coupon:
+        return jsonify({'valid': False, 'reason': 'invalid'})
+    if coupon.one_time and coupon.used:
+        return jsonify({'valid': False, 'reason': 'used'})
+    if coupon.product_id and product_id:
+        if str(coupon.product_id) != str(product_id):
+            return jsonify({'valid': False, 'reason': 'wrong_product'})
+    if coupon.one_time:
+        coupon.used = True
+        db.session.commit()
+    return jsonify({'valid': True, 'reduction': coupon.reduction, 'code': coupon.code, 'product_id': coupon.product_id})
 
 @app.route('/admin/coupon/add', methods=['POST'])
 def add_coupon():
@@ -287,8 +304,12 @@ def add_coupon():
         return redirect(url_for('admin_login'))
     code = request.form.get('code', '').strip().upper()
     reduction = float(request.form.get('reduction', 0))
+    one_time = request.form.get('one_time') == 'on'
+    product_id = request.form.get('product_id') or None
+    if product_id:
+        product_id = int(product_id)
     if code and not Coupon.query.filter_by(code=code).first():
-        db.session.add(Coupon(code=code, reduction=reduction))
+        db.session.add(Coupon(code=code, reduction=reduction, one_time=one_time, product_id=product_id))
         db.session.commit()
         flash(f'Coupon "{code}" added!', 'success')
     return redirect(url_for('admin_dashboard'))
