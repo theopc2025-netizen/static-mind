@@ -21,7 +21,7 @@ ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
 ADMIN_USERNAME = 'Theo'
 ADMIN_PASSWORD = 'StaticMind2026'
 GMAIL_USER = 'staticmind012@gmail.com'
-GMAIL_PASSWORD = 'rrzk tqqh wazn tqfu'
+GMAIL_PASSWORD = 'xnim ppxq pvxy osxw'
 def send_notification(order_id, name, details, email):
     try:
         msg = MIMEMultipart()

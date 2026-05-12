@@ -1366,7 +1366,7 @@
       }
       function toggleCouponType(val) {
         document.getElementById("product-select-group").style.display =
-          val === "product" ? "flex" : "none";
+          val === "product" || val === "one_time" ? "flex" : "none";
         document.getElementById("one-time-checkbox").checked =
           val === "one_time";
       }

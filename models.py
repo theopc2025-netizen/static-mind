@@ -49,7 +49,7 @@ class Coupon(db.Model):
     # NOUVEAU: True = usage unique (se désactive après 1 utilisation)
     one_time    = db.Column(db.Boolean, default=False)
     used        = db.Column(db.Boolean, default=False)
-
+    used_by     = db.Column(db.String(200), nullable=True)
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
 
 class Avis(db.Model):

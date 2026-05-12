@@ -1543,9 +1543,12 @@ oninput="validateContact(this)"
             )
             .join("");
           checkout.style.display = "block";
-          const discounted = total * (1 - discountPct / 100);
-          document.getElementById("cart-total-display").textContent = discountPct > 0
-            ? `$${discounted.toFixed(2)} (-${discountPct}%)`
+          const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+          const qtyDiscount = getQuantityDiscount(totalQty);
+          const finalDiscount = Math.max(discountPct, qtyDiscount);
+          const discounted = total * (1 - finalDiscount / 100);
+          document.getElementById("cart-total-display").textContent = finalDiscount > 0
+            ? `$${discounted.toFixed(2)} (-${finalDiscount}%${qtyDiscount > 0 && qtyDiscount >= discountPct ? ' 🎁' : ''})`
             : `$${total.toFixed(2)}`;
         }
       }
@@ -1581,8 +1584,11 @@ if (contact.length < 3) {
           .map((i) => `${i.name} x${i.qty} ($${(i.price * i.qty).toFixed(2)})`)
           .join(", ");
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
-        const discounted = total * (1 - discountPct / 100);
-        const details = `[CART ORDER] Items: ${items} | Total: $${discounted.toFixed(2)}${discountPct > 0 ? ` (Coupon: ${appliedCoupon} -${discountPct}%)` : ''} | Payment: ${selectedPayment === "delivery" ? "Pay on Delivery" : "Arrange via WhatsApp"}`;
+        const totalQty = cart.reduce((s, i) => s + i.qty, 0);
+        const qtyDiscount = getQuantityDiscount(totalQty);
+        const finalDiscount = Math.max(discountPct, qtyDiscount);
+        const discounted = total * (1 - finalDiscount / 100);
+        const details = `[CART ORDER] Items: ${items} | Total: $${discounted.toFixed(2)}${finalDiscount > 0 ? ` (Coupon: ${appliedCoupon || 'Qty'} -${finalDiscount}%)` : ''} | Payment: ${selectedPayment === "delivery" ? "Pay on Delivery" : "Arrange via WhatsApp"}`;
 
         const formData = new FormData();
         formData.append("nom", name);
@@ -1774,6 +1780,11 @@ document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
 function closeProductModal() {
   document.getElementById('product-modal').classList.remove('open');
   document.body.style.overflow = '';
+}
+function getQuantityDiscount(qty) {
+  if (qty >= 10) return 10;
+  if (qty >= 5) return 5;
+  return 0;
 }
   // Init cart
       loadCart();
