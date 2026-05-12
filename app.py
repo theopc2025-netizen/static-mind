@@ -94,31 +94,34 @@ def place_order():
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             file_path = filename
 
+    import secrets
     order = Order(
         nom_client=name,
         email=email,
         details=details,
         fichier=file_path,
-        statut='Pending'
+        statut='Pending',
+        tracking_code=secrets.token_hex(4).upper()
     )
     db.session.add(order)
     db.session.commit()
     order_id = order.id
     import threading
     threading.Thread(target=send_notification, args=(order_id, name, details, email)).start()
+    order_id_display = str(order_id).zfill(3)
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        return jsonify({'order_id': order_id})
-    flash(f'Order #{order_id} submitted successfully!', 'success')
+        return jsonify({'order_id': order_id_display, 'tracking_code': order.tracking_code})
+    flash(f'Order #{order_id_display} submitted successfully! Tracking code: {order.tracking_code}', 'success')
     return redirect(url_for('index'))
 
 @app.route('/track', methods=['POST'])
 def track_order():
-    order_id = request.form.get('order_id')
-    order = Order.query.get(order_id)
+    code = request.form.get('order_id', '').strip().upper()
+    order = Order.query.filter_by(tracking_code=code).first()
     if order:
         return jsonify({
             'found': True,
-            'id': order.id,
+            'id': str(order.id).zfill(3),
             'name': order.nom_client,
             'status': order.statut,
             'details': order.details
@@ -276,10 +279,9 @@ def edit_category(cat_id):
 def reset_orders():
     if not session.get('admin_logged_in'):
         return redirect(url_for('admin_login'))
-    Order.query.delete()
-    db.session.execute(db.text('ALTER SEQUENCE orders_id_seq RESTART WITH 1'))
+    deleted = Order.query.filter_by(statut='Completed').delete()
     db.session.commit()
-    flash('Orders reset! Counter back to #1.', 'success')
+    flash(f'{deleted} completed order(s) deleted.', 'success')
     return redirect(url_for('admin_dashboard'))
 @app.route('/check-coupon', methods=['POST'])
 def check_coupon():
