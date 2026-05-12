@@ -37,7 +37,7 @@ def send_notification(order_id, name, details, email):
             data=payload,
             headers={
                 'Content-Type': 'application/json',
-                'api-key': 'NYwrkTxbh7LDEOyK'
+                'api-key': os.environ.get('BREVO_API_KEY', '')
             }
         )
         urllib.request.urlopen(req)
