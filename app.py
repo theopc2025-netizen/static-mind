@@ -45,7 +45,9 @@ Go to admin: https://static-mind-production.up.railway.app/admin
         server.send_message(msg)
         server.quit()
     except Exception as e:
+        import traceback
         print(f'Email error: {e}')
+        print(traceback.format_exc())
 
 db.init_app(app)
 
