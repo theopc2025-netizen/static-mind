@@ -1188,7 +1188,7 @@
           type="number"
           id="suivi-id"
           class="form-control"
-          placeholder="Tracking code (e.g. A3F9C2B1)"
+          placeholder="Order number (e.g. 42)"
           onkeydown="if (event.key === 'Enter') trackOrder();"
         />
         <button class="btn-primary" onclick="trackOrder()">Check</button>
@@ -1626,7 +1626,7 @@ if (contact.length < 3) {
         const flash = document.createElement("div");
         flash.className = "flash success";
         flash.style.cssText = "position:fixed;top:80px;left:50%;transform:translateX(-50%);z-index:9999;padding:1rem 2rem;border-radius:12px;font-size:1rem;font-weight:600;white-space:nowrap;";
-        flash.innerHTML = `✅ Order placed!<br><strong style="font-size:1.4rem;color:#6ee7b7">#${orderNum}</strong><br><span style="font-size:0.9rem">Tracking code: <strong style="color:#a78bfa">${data.tracking_code}</strong></span><br><span style="font-size:0.78rem;color:#6b7280">Save this to track your order</span>`;
+        flash.innerHTML = `✅ Order placed!<br><strong style="font-size:1.4rem;color:#6ee7b7">#${orderNum}</strong><br><span style="font-size:0.85rem">Save this number to track your order</span>`;
         document.body.appendChild(flash);
         localStorage.setItem('order_placed', '1');
 setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
