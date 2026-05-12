@@ -1673,10 +1673,10 @@ setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
         const result = document.getElementById("suivi-result");
         result.style.display = "block";
         if (!isOwner) {
-          document.getElementById("suivi-nom").textContent = "🔒 Accès refusé";
+          document.getElementById("suivi-nom").textContent = "🔒 Access denied";
           document.getElementById("suivi-status").textContent = "";
           document.getElementById("suivi-status").className = "suivi-status";
-          document.getElementById("suivi-details").textContent = "Tu peux seulement suivre les commandes passées depuis cet appareil.";
+          document.getElementById("suivi-details").textContent = "You can only track orders placed from this device.";
           document.getElementById("suivi-id-display").textContent = "";
           return;
         }

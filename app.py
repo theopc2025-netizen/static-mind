@@ -26,7 +26,7 @@ def send_notification(order_id, name, details, email):
     try:
         msg = MIMEMultipart()
         msg['From'] = BREVO_USER
-        msg['To'] = 'staticmind012@gmail.com'
+        msg['To'] = 'matheoteddy10@gmail.com'
         msg['Subject'] = f'🖨 New Order #{order_id} — Static Mind'
         body = f"""
 New order received!
