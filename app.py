@@ -20,13 +20,13 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
 ADMIN_USERNAME = 'Theo'
 ADMIN_PASSWORD = 'StaticMind2026'
-GMAIL_USER = 'staticmind012@gmail.com'
-GMAIL_PASSWORD = 'xnim ppxq pvxy osxw'
+BREVO_USER = 'ab18fe001@smtp-brevo.com'
+BREVO_PASSWORD = 'NYwrkTxbh7LDEOyK'
 def send_notification(order_id, name, details, email):
     try:
         msg = MIMEMultipart()
-        msg['From'] = GMAIL_USER
-        msg['To'] = GMAIL_USER
+        msg['From'] = BREVO_USER
+        msg['To'] = 'staticmind012@gmail.com'
         msg['Subject'] = f'🖨 New Order #{order_id} — Static Mind'
         body = f"""
 New order received!
@@ -39,9 +39,9 @@ Details: {details}
 Go to admin: https://static-mind-production.up.railway.app/admin
         """
         msg.attach(MIMEText(body, 'plain'))
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server = smtplib.SMTP('smtp-relay.brevo.com', 587)
         server.starttls()
-        server.login(GMAIL_USER, GMAIL_PASSWORD)
+        server.login(BREVO_USER, BREVO_PASSWORD)
         server.send_message(msg)
         server.quit()
     except Exception as e:
