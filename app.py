@@ -118,6 +118,11 @@ def place_order():
 def track_order():
     code = request.form.get('order_id', '').strip().upper()
     order = Order.query.filter_by(tracking_code=code).first()
+    if not order:
+        try:
+            order = Order.query.get(int(code))
+        except:
+            pass
     if order:
         return jsonify({
             'found': True,
