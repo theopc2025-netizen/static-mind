@@ -1047,7 +1047,18 @@
         </div>
       </div>
     </section>
-
+<!-- FILAMENT COLORS -->
+<section class="section" id="colors" style="padding-bottom:0">
+  <h2 class="section-title" style="margin-bottom:1.2rem">Available <span>Colors</span></h2>
+  <div style="display:flex;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem">
+    {% for color in colors %}
+    <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
+      <div style="width:52px;height:52px;border-radius:50%;background:{{ color.hex }};border:3px solid rgba(255,255,255,0.15);box-shadow:0 4px 16px {{ color.hex }}55"></div>
+      <span style="font-size:0.78rem;color:#9ca3af">{{ color.nom }}</span>
+    </div>
+    {% endfor %}
+  </div>
+</section>
     <!-- PRODUCTS -->
     <section class="section" id="products">
       <div class="section-header">

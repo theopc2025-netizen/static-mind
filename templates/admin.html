@@ -659,6 +659,9 @@
         <button class="nav-item" onclick="showPanel('avis', this)">
           <span class="nav-icon">⭐</span> Reviews
         </button>
+        <button class="nav-item" onclick="showPanel('filaments', this)">
+          <span class="nav-icon">🎨</span> Colors
+        </button>
         <a class="nav-item" href="/" target="_blank">
           <span class="nav-icon">🌐</span> View Site
         </a>
@@ -1316,6 +1319,77 @@
             </table>
           </div>
         </div>
+        <!-- ═══ PANEL: FILAMENTS ═══ -->
+        <div class="panel" id="panel-filaments">
+          <div class="form-card">
+            <h3>🎨 Add a Filament Color</h3>
+            <form
+              action="/admin/filament/add"
+              method="POST"
+              style="
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                align-items: flex-end;
+              "
+            >
+              <div class="form-group" style="flex: 1; min-width: 140px">
+                <label>Color Name *</label>
+                <input
+                  type="text"
+                  name="nom"
+                  class="form-control"
+                  placeholder="e.g. Red"
+                  required
+                />
+              </div>
+              <div class="form-group" style="flex: 1; min-width: 120px">
+                <label>Hex Color *</label>
+                <input
+                  type="color"
+                  name="hex"
+                  class="form-control"
+                  value="#ffffff"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn-submit">➕ Add</button>
+            </form>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Color</th>
+                  <th>Name</th>
+                  <th>Hex</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for f in filaments %}
+                <tr>
+                  <td>
+                    <div
+                      style="width:30px;height:30px;border-radius:50%;background:{{ f.hex }};border:1px solid rgba(255,255,255,0.1)"
+                    ></div>
+                  </td>
+                  <td><strong>{{ f.nom }}</strong></td>
+                  <td style="color: #9ca3af">{{ f.hex }}</td>
+                  <td>
+                    <a
+                      href="/admin/filament/delete/{{ f.id }}"
+                      class="btn-action btn-delete"
+                      onclick="return confirm('Delete?');"
+                      >🗑</a
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
       <!-- /content -->
     </div>
@@ -1338,6 +1412,7 @@
           categories: "Categories",
           coupons: "Coupons",
           avis: "Reviews",
+          filaments: "Colors",
         };
         document.getElementById("page-title").textContent =
           titles[name] || name;

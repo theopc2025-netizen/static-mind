@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
-from models import db, Product, Order, Categorie, Coupon, Avis
+from models import db, Product, Order, Categorie, Coupon, Avis, Filament
 import os
 import smtplib
 from email.mime.text import MIMEText
@@ -69,7 +69,8 @@ def index():
     products = Product.query.order_by(Product.id.desc()).all()
     categories = Categorie.query.order_by(Categorie.id).all()
     avis = Avis.query.filter_by(approuve=True).order_by(Avis.id.desc()).all()
-    return render_template('index.html', products=products, categories=categories, avis=avis)
+    colors = Filament.query.order_by(Filament.id).all()
+    return render_template('index.html', products=products, categories=categories, avis=avis, colors=colors)
 
 @app.route('/order', methods=['POST'])
 def place_order():
@@ -155,7 +156,8 @@ def admin_dashboard():
     categories = Categorie.query.order_by(Categorie.id).all()
     coupons = Coupon.query.order_by(Coupon.id.desc()).all()
     tous_avis = Avis.query.order_by(Avis.id.desc()).all()
-    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories, coupons=coupons, tous_avis=tous_avis)
+    filaments = Filament.query.order_by(Filament.id).all()
+    return render_template('admin.html', orders=orders, products=products, stats=stats, categories=categories, coupons=coupons, tous_avis=tous_avis, filaments=filaments)
 
 @app.route('/admin/order/<int:order_id>/<action>')
 def update_order(order_id, action):
@@ -345,6 +347,27 @@ def manage_avis(avis_id, action):
         db.session.delete(a)
         db.session.commit()
         flash('Avis supprimé.', 'success')
+    return redirect(url_for('admin_dashboard'))
+@app.route('/admin/filament/add', methods=['POST'])
+def add_filament():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    nom = request.form.get('nom')
+    hex_color = request.form.get('hex', '#ffffff')
+    if nom:
+        db.session.add(Filament(nom=nom, hex=hex_color))
+        db.session.commit()
+        flash(f'Color "{nom}" added!', 'success')
+    return redirect(url_for('admin_dashboard'))
+
+@app.route('/admin/filament/delete/<int:fid>')
+def delete_filament(fid):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    f = Filament.query.get_or_404(fid)
+    db.session.delete(f)
+    db.session.commit()
+    flash('Color deleted.', 'success')
     return redirect(url_for('admin_dashboard'))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

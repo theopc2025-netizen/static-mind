@@ -42,7 +42,6 @@ class Coupon(db.Model):
     used       = db.Column(db.Boolean, default=False)
     used_by    = db.Column(db.String(200), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
-
 class Avis(db.Model):
     __tablename__ = 'avis'
     id         = db.Column(db.Integer, primary_key=True)
@@ -51,3 +50,10 @@ class Avis(db.Model):
     texte      = db.Column(db.Text, nullable=False)
     approuve   = db.Column(db.Boolean, default=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+class Filament(db.Model):
+    __tablename__ = 'filaments'
+    id         = db.Column(db.Integer, primary_key=True)
+    nom        = db.Column(db.String(50), nullable=False)
+    hex        = db.Column(db.String(10), nullable=False, default='#ffffff')
+    created_at = db.Column(db.DateTime, default=db.func.now())
