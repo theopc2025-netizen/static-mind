@@ -27,7 +27,7 @@ def send_notification(order_id, name, details, email):
         import urllib.request
         import json
         payload = json.dumps({
-            "sender": {"name": "Static Mind", "email": "staticmind012@gmail.com"},
+            "sender": {"name": "Static Mind", "email": "theopc2025@gmail.com"},
             "to": [{"email": "matheoteddy10@gmail.com"}],
             "subject": f"New Order #{order_id} — Static Mind",
             "textContent": f"New order!\n\nOrder #{order_id}\nCustomer: {name}\nContact: {email or 'Not provided'}\nDetails: {details}\n\nAdmin: https://static-mind-production.up.railway.app/admin"
