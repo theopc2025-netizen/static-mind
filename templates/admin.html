@@ -929,7 +929,9 @@
                           class="btn-action btn-delete"
                           onclick="return confirm('Delete this product?');"
                           >🗑</a
-                        >
+                      <button class="btn-edit" onclick="openFilamentModal({{ p.id }}, '{{ p.nom }}', [{{ p.filaments | map(attribute='id') | list | join(',') }}])">
+    🎨 Colors
+</button>
                       </div>
                     </td>
                   </tr>
@@ -1561,5 +1563,36 @@
         </form>
       </div>
     </div>
+    <!-- MODAL FILAMENTS PRODUIT -->
+<div class="modal-overlay" id="modal-filaments" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal">
+    <button class="modal-close-btn" onclick="document.getElementById('modal-filaments').classList.remove('open')">✕</button>
+    <h3>🎨 Available Colors for <span id="filament-modal-name"></span></h3>
+    <form id="form-filaments" method="POST" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem">
+      <div id="filament-checkboxes" style="display:flex;flex-wrap:wrap;gap:0.75rem">
+        {% for f in filaments %}
+        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;background:var(--gris2);padding:0.5rem 0.8rem;border-radius:8px;border:1px solid var(--border)">
+          <input type="checkbox" name="filament_ids" value="{{ f.id }}" class="filament-cb-{{ f.id }}">
+          <div style="width:18px;height:18px;border-radius:50%;background:{{ f.hex }}"></div>
+          {{ f.nom }}
+        </label>
+        {% endfor %}
+      </div>
+      <button type="submit" class="btn-submit">💾 Save</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function openFilamentModal(id, nom, selectedIds) {
+  document.getElementById('filament-modal-name').textContent = nom;
+  document.getElementById('form-filaments').action = '/admin/product/filaments/' + id;
+  document.querySelectorAll('[class^="filament-cb-"]').forEach(cb => {
+    cb.checked = selectedIds.includes(parseInt(cb.value));
+  });
+  document.getElementById('modal-filaments').classList.add('open');
+}
+</script>
+
   </body>
 </html>

@@ -10,6 +10,11 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E0E5H4JD9X');
+      window.productColors = {
+  {% for p in products %}
+  {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
+  {% endfor %}
+};
     </script>
     <title>Static Mind — 3D Printing</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1107,7 +1112,7 @@
     <div class="card-name">{{ p.nom }}</div>
     <div class="card-footer">
       <span class="card-price">{{ "%.2f"|format(p.prix) }} USD</span>
-      <button class="btn-add" onclick="event.stopPropagation();addToCart('{{ p.nom }}', {{ p.prix }})">+</button>
+      onclick="event.stopPropagation();addToCart('{{ p.nom }}', {{ p.prix }}, {{ p.id }})"
     </div>
   </div>
 </div>
@@ -1491,32 +1496,65 @@ oninput="validateContact(this)"
         } catch(e) { cart = []; }
       }
 
-      function addToCart(name, price) {
-        const existing = cart.find((i) => i.name === name);
-        if (existing) {
-          existing.qty++;
-        } else {
-          cart.push({ name, price, qty: 1 });
-        }
-        saveCart();
-        updateCartUI();
-        showAddedFlash();
-      }
+     function addToCart(name, price, productId) {
+  // Cherche les couleurs dispo pour ce produit
+  const colorData = window.productColors[productId];
+  if (colorData && colorData.length > 0) {
+    showColorPicker(name, price, colorData);
+  } else {
+    pushToCart(name, price, null);
+  }
+}
 
-      function removeFromCart(name) {
-        cart = cart.filter((i) => i.name !== name);
-        saveCart();
-        updateCartUI();
-      }
+function showColorPicker(name, price, colors) {
+  const overlay = document.getElementById('color-picker-overlay');
+  document.getElementById('cp-title').textContent = name;
+  const grid = document.getElementById('cp-colors');
+  grid.innerHTML = colors.map(c => `
+    <div onclick="selectColor(this, '${c.hex}', '${c.nom}')"
+      style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;cursor:pointer;padding:0.5rem;border-radius:10px;border:2px solid transparent"
+      data-hex="${c.hex}" data-nom="${c.nom}">
+      <div style="width:40px;height:40px;border-radius:50%;background:${c.hex};border:2px solid rgba(255,255,255,0.2)"></div>
+      <span style="font-size:0.75rem;color:#9ca3af">${c.nom}</span>
+    </div>`).join('');
+  window._cpName = name;
+  window._cpPrice = price;
+  overlay.classList.add('open');
+}
 
-      function changeQty(name, delta) {
-        const item = cart.find((i) => i.name === name);
-        if (!item) return;
-        item.qty += delta;
-        if (item.qty <= 0) removeFromCart(name);
-        else { saveCart(); updateCartUI(); }
-      }
+function selectColor(el, hex, nom) {
+  document.querySelectorAll('#cp-colors > div').forEach(d => d.style.borderColor = 'transparent');
+  el.style.borderColor = '#7c3aed';
+  window._cpColor = { hex, nom };
+}
 
+function confirmColor() {
+  if (!window._cpColor) { alert('Please select a color!'); return; }
+  pushToCart(window._cpName, window._cpPrice, window._cpColor);
+  document.getElementById('color-picker-overlay').classList.remove('open');
+}
+
+function pushToCart(name, price, color) {
+  const key = name + (color ? '|' + color.nom : '');
+  const existing = cart.find(i => i.key === key);
+  if (existing) { existing.qty++; }
+  else { cart.push({ key, name, price, qty: 1, color }); }
+  saveCart();
+  updateCartUI();
+  showAddedFlash();
+}
+
+      function removeFromCart(key) {
+  cart = cart.filter(i => i.key !== key);
+  saveCart(); updateCartUI();
+}
+function changeQty(key, delta) {
+  const item = cart.find(i => i.key === key);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) removeFromCart(item.key);
+  else { saveCart(); updateCartUI(); }
+}
       function updateCartUI() {
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
         const count = cart.reduce((s, i) => s + i.qty, 0);
@@ -1791,9 +1829,10 @@ document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
   document.getElementById('modal-name').textContent = name;
   document.getElementById('modal-price').textContent = '$' + parseFloat(price).toFixed(2);
   document.getElementById('modal-desc').textContent = desc || 'No description available.';
-  document.getElementById('modal-add-btn').onclick = () => {
-    addToCart(name, price);
-    closeProductModal();
+ document.getElementById('modal-add-btn').onclick = () => {
+  addToCart(name, price, productId);  // passe productId
+  closeProductModal();
+};
   };
   document.getElementById('product-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
@@ -1866,6 +1905,18 @@ function getQuantityDiscount(qty) {
     />
   </svg>
 </a>
-
+<div class="modal-overlay" id="color-picker-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h3>🎨 Choose a color</h3>
+      <button class="modal-close" onclick="document.getElementById('color-picker-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:1rem" id="cp-title"></p>
+      <div id="cp-colors" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem"></div>
+      <button class="btn-primary" style="width:100%;justify-content:center" onclick="confirmColor()">✓ Confirm</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>

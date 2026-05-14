@@ -13,6 +13,7 @@ class Product(db.Model):
     image       = db.Column(db.String(300), nullable=True)
     notes       = db.Column(db.Text, default='')
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
+    filaments = db.relationship('Filament', secondary='product_filaments', backref='products')
 
 class Categorie(db.Model):
     __tablename__ = 'categories'
@@ -57,3 +58,9 @@ class Filament(db.Model):
     nom        = db.Column(db.String(50), nullable=False)
     hex        = db.Column(db.String(10), nullable=False, default='#ffffff')
     created_at = db.Column(db.DateTime, default=db.func.now())
+  
+    # Table liaison produit <-> filaments disponibles
+product_filaments = db.Table('product_filaments',
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id')),
+    db.Column('filament_id', db.Integer, db.ForeignKey('filaments.id'))
+)

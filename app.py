@@ -369,5 +369,15 @@ def delete_filament(fid):
     db.session.commit()
     flash('Color deleted.', 'success')
     return redirect(url_for('admin_dashboard'))
+@app.route('/admin/product/filaments/<int:product_id>', methods=['POST'])
+def set_product_filaments(product_id):
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    product = Product.query.get_or_404(product_id)
+    selected_ids = request.form.getlist('filament_ids')
+    product.filaments = Filament.query.filter(Filament.id.in_([int(i) for i in selected_ids])).all()
+    db.session.commit()
+    flash('Colors updated!', 'success')
+    return redirect(url_for('admin_dashboard'))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
