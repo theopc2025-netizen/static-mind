@@ -20,32 +20,23 @@ app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
 ADMIN_USERNAME = 'Theo'
 ADMIN_PASSWORD = 'StaticMind2026'
-BREVO_USER = 'ab18fe001@smtp-brevo.com'
-BREVO_PASSWORD = 'NYwrkTxbh7LDEOyK'
+
 def send_notification(order_id, name, details, email):
     try:
-        import urllib.request
-        import json
-        payload = json.dumps({
-            "sender": {"name": "Static Mind", "email": "theopc2025@gmail.com"},
-            "to": [{"email": "matheoteddy10@gmail.com"}],
-            "subject": f"New Order #{order_id} — Static Mind",
-            "textContent": f"New order!\n\nOrder #{order_id}\nCustomer: {name}\nContact: {email or 'Not provided'}\nDetails: {details}\n\nAdmin: https://static-mind-production.up.railway.app/admin"
-        }).encode('utf-8')
-        req = urllib.request.Request(
-            'https://api.brevo.com/v3/smtp/email',
-            data=payload,
-            headers={
-                'Content-Type': 'application/json',
-                'api-key': os.environ.get('BREVO_API_KEY', '')
-            }
-        )
-        urllib.request.urlopen(req)
+        msg = MIMEMultipart()
+        msg['From'] = 'theopc2025@gmail.com'
+        msg['To'] = 'matheoteddy10@gmail.com'
+        msg['Subject'] = f'New Order #{order_id} — Static Mind'
+        body = f"New order!\n\nOrder #{order_id}\nCustomer: {name}\nContact: {email or 'Not provided'}\nDetails: {details}\n\nAdmin: https://static-mind-production.up.railway.app/admin"
+        msg.attach(MIMEText(body, 'plain'))
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        server.login('theopc2025@gmail.com', os.environ.get('GMAIL_APP_PASSWORD', ''))
+        server.sendmail('theopc2025@gmail.com', 'matheoteddy10@gmail.com', msg.as_string())
+        server.quit()
         print('Email sent!')
     except Exception as e:
-        import traceback
         print(f'Email error: {e}')
-        print(traceback.format_exc())
 
 db.init_app(app)
 
