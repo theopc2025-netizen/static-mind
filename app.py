@@ -99,7 +99,7 @@ def place_order():
         details=details,
         fichier=file_path,
         statut='Pending',
-        tracking_code=secrets.token_hex(4).upper()
+        tracking_code=secrets.token_hex(4).upper() 
     )
     db.session.add(order)
     db.session.commit()
