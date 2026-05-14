@@ -55,6 +55,12 @@ def create_tables():
         pass
     try:
         with db.engine.connect() as conn:
+            conn.execute(db.text("ALTER TABLE products ADD COLUMN customizable BOOLEAN DEFAULT FALSE"))
+            conn.commit()
+    except:
+        pass
+    try:
+        with db.engine.connect() as conn:
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN one_time BOOLEAN DEFAULT FALSE"))
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN used BOOLEAN DEFAULT FALSE"))
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN product_id INTEGER REFERENCES products(id)"))
