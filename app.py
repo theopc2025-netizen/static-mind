@@ -4,7 +4,7 @@ import os
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename  
 
 app = Flask(__name__)
 app.secret_key = 'static_mind_secret_key_2026'
