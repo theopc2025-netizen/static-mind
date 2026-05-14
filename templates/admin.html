@@ -1,821 +1,794 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Dashboard — Static Mind</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
-      rel="stylesheet"
-    />
-    <style>
-      :root {
-        --violet: #7c3aed;
-        --violet-clair: #a78bfa;
-        --violet-sombre: #4c1d95;
-        --noir: #0a0a0a;
-        --blanc: #f5f5f5;
-        --gris: #111827;
-        --gris2: #1f2937;
-        --border: rgba(255, 255, 255, 0.07);
-        --radius: 14px;
-        --vert: #10b981;
-        --rouge: #ef4444;
-        --orange: #f59e0b;
-        --bleu: #3b82f6;
-        --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-      }
 
-      *,
-      *::before,
-      *::after {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard — Static Mind</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet" />
+  <style>
+    :root {
+      --violet: #7c3aed;
+      --violet-clair: #a78bfa;
+      --violet-sombre: #4c1d95;
+      --noir: #0a0a0a;
+      --blanc: #f5f5f5;
+      --gris: #111827;
+      --gris2: #1f2937;
+      --border: rgba(255, 255, 255, 0.07);
+      --radius: 14px;
+      --vert: #10b981;
+      --rouge: #ef4444;
+      --orange: #f59e0b;
+      --bleu: #3b82f6;
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
 
-      html {
-        scroll-behavior: smooth;
-      }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-      body {
-        font-family: "DM Sans", sans-serif;
-        background: var(--noir);
-        color: var(--blanc);
-        min-height: 100vh;
-        display: flex;
-      }
+    html {
+      scroll-behavior: smooth;
+    }
 
-      /* SIDEBAR */
-      .sidebar {
-        width: 240px;
-        min-height: 100vh;
-        background: var(--gris);
-        border-right: 1px solid var(--border);
-        display: flex;
-        flex-direction: column;
-        position: fixed;
-        top: 0;
-        left: 0;
-        z-index: 50;
-      }
+    body {
+      font-family: "DM Sans", sans-serif;
+      background: var(--noir);
+      color: var(--blanc);
+      min-height: 100vh;
+      display: flex;
+    }
 
-      .sidebar-logo {
-        padding: 1.5rem;
-        border-bottom: 1px solid var(--border);
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1.2rem;
-      }
+    /* SIDEBAR */
+    .sidebar {
+      width: 240px;
+      min-height: 100vh;
+      background: var(--gris);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 50;
+    }
 
-      .sidebar-logo span {
-        color: var(--violet-clair);
-      }
+    .sidebar-logo {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      font-size: 1.2rem;
+    }
 
-      .sidebar-logo small {
-        display: block;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.72rem;
-        color: #4b5563;
-        font-weight: 400;
-        margin-top: 0.1rem;
-      }
+    .sidebar-logo span {
+      color: var(--violet-clair);
+    }
 
-      .sidebar-nav {
-        flex: 1;
-        padding: 1rem 0;
-      }
+    .sidebar-logo small {
+      display: block;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.72rem;
+      color: #4b5563;
+      font-weight: 400;
+      margin-top: 0.1rem;
+    }
 
-      .nav-item {
-        display: flex;
-        align-items: center;
-        gap: 0.7rem;
-        padding: 0.75rem 1.2rem;
-        color: #9ca3af;
-        text-decoration: none;
-        font-size: 0.88rem;
-        cursor: pointer;
-        border: none;
-        background: none;
-        width: 100%;
-        transition:
-          background var(--transition),
-          color var(--transition);
-        font-family: "DM Sans", sans-serif;
-      }
+    .sidebar-nav {
+      flex: 1;
+      padding: 1rem 0;
+    }
 
-      .nav-item:hover,
-      .nav-item.active {
-        background: rgba(124, 58, 237, 0.15);
-        color: var(--violet-clair);
-      }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.75rem 1.2rem;
+      color: #9ca3af;
+      text-decoration: none;
+      font-size: 0.88rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      width: 100%;
+      transition:
+        background var(--transition),
+        color var(--transition);
+      font-family: "DM Sans", sans-serif;
+    }
 
-      .nav-item .nav-icon {
-        width: 20px;
-        text-align: center;
-      }
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(124, 58, 237, 0.15);
+      color: var(--violet-clair);
+    }
 
-      .nav-section-label {
-        padding: 0.5rem 1.2rem;
-        font-size: 0.7rem;
-        color: #374151;
-        text-transform: uppercase;
-        letter-spacing: 0.1em;
-        margin-top: 0.5rem;
-      }
+    .nav-item .nav-icon {
+      width: 20px;
+      text-align: center;
+    }
 
-      .sidebar-footer {
-        padding: 1rem 1.2rem;
-        border-top: 1px solid var(--border);
-      }
+    .nav-section-label {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.7rem;
+      color: #374151;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 0.5rem;
+    }
 
-      .logout-btn {
-        display: flex;
-        align-items: center;
-        gap: 0.6rem;
-        color: #6b7280;
-        text-decoration: none;
-        font-size: 0.82rem;
-        padding: 0.5rem 0;
-        transition: color var(--transition);
-      }
+    .sidebar-footer {
+      padding: 1rem 1.2rem;
+      border-top: 1px solid var(--border);
+    }
 
-      .logout-btn:hover {
-        color: var(--rouge);
-      }
+    .logout-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 0.5rem 0;
+      transition: color var(--transition);
+    }
 
-      /* MAIN */
-      .main {
-        margin-left: 240px;
-        flex: 1;
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-      }
+    .logout-btn:hover {
+      color: var(--rouge);
+    }
 
-      .topbar {
-        padding: 1rem 1.5rem;
-        background: rgba(10, 10, 10, 0.8);
-        backdrop-filter: blur(12px);
-        border-bottom: 1px solid var(--border);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        position: sticky;
-        top: 0;
-        z-index: 40;
-      }
+    /* MAIN */
+    .main {
+      margin-left: 240px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
 
-      .topbar h1 {
-        font-family: "Syne", sans-serif;
-        font-size: 1.1rem;
-        font-weight: 800;
-      }
+    .topbar {
+      padding: 1rem 1.5rem;
+      background: rgba(10, 10, 10, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
 
-      .topbar-right {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-      }
+    .topbar h1 {
+      font-family: "Syne", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
 
-      .badge-admin {
-        background: rgba(124, 58, 237, 0.2);
-        border: 1px solid rgba(124, 58, 237, 0.4);
-        color: var(--violet-clair);
-        font-size: 0.75rem;
-        padding: 0.25rem 0.7rem;
-        border-radius: 100px;
-      }
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
 
-      /* CONTENT */
-      .content {
-        padding: 1.5rem;
-        flex: 1;
-      }
+    .badge-admin {
+      background: rgba(124, 58, 237, 0.2);
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      color: var(--violet-clair);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+    }
 
-      .panel {
-        display: none;
-      }
+    /* CONTENT */
+    .content {
+      padding: 1.5rem;
+      flex: 1;
+    }
 
-      .panel.active {
-        display: block;
-      }
+    .panel {
+      display: none;
+    }
 
-      /* STATS */
+    .panel.active {
+      display: block;
+    }
+
+    /* STATS */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    @media (min-width: 900px) {
       .stats-grid {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
-        margin-bottom: 1.5rem;
+        grid-template-columns: repeat(5, 1fr);
+      }
+    }
+
+    .stat-card {
+      background: var(--gris);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+    }
+
+    .stat-card .stat-num {
+      font-family: "Syne", sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.1rem;
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.78rem;
+      color: #6b7280;
+    }
+
+    .stat-card.violet .stat-num {
+      color: var(--violet-clair);
+    }
+
+    .stat-card.orange .stat-num {
+      color: #fbbf24;
+    }
+
+    .stat-card.bleu .stat-num {
+      color: #60a5fa;
+    }
+
+    .stat-card.vert .stat-num {
+      color: #34d399;
+    }
+
+    /* TABLE */
+    .table-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .table-title {
+      font-family: "Syne", sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .search-input {
+      background: var(--gris2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--blanc);
+      padding: 0.5rem 0.8rem;
+      font-size: 0.85rem;
+      font-family: "DM Sans", sans-serif;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--violet);
+    }
+
+    .table-wrap {
+      background: var(--gris);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      color: #6b7280;
+      font-weight: 500;
+      border-bottom: 1px solid var(--border);
+      background: var(--gris2);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background: rgba(124, 58, 237, 0.04);
+    }
+
+    /* BADGES */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.7rem;
+      border-radius: 100px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #fbbf24;
+    }
+
+    .badge-accepted {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .badge-rejected {
+      background: rgba(239, 68, 68, 0.15);
+      color: #f87171;
+    }
+
+    .badge-printing {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+    }
+
+    .badge-completed {
+      background: rgba(124, 58, 237, 0.2);
+      color: var(--violet-clair);
+    }
+
+    .badge-delivery {
+      background: rgba(16, 185, 129, 0.15);
+      color: #34d399;
+    }
+
+    .badge-category {
+      background: rgba(59, 130, 246, 0.15);
+      color: #60a5fa;
+    }
+
+    /* ACTION BUTTONS */
+    .action-group {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-action {
+      padding: 0.3rem 0.65rem;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+      text-decoration: none;
+    }
+
+    .btn-delete {
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+    }
+
+    .btn-delete:hover {
+      background: rgba(239, 68, 68, 0.25);
+    }
+
+    /* FORM */
+    .form-card {
+      background: var(--gris);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-card h3 {
+      font-family: "Syne", sans-serif;
+      font-size: 1rem;
+      font-weight: 800;
+      margin-bottom: 1.2rem;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    @media (min-width: 640px) {
+      .form-grid.two {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      color: #9ca3af;
+    }
+
+    .form-control {
+      background: var(--gris2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--blanc);
+      padding: 0.65rem 0.9rem;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.88rem;
+      transition: border-color var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--violet);
+      background: rgba(124, 58, 237, 0.06);
+    }
+
+    select.form-control option {
+      background: #1f2937;
+    }
+
+    .btn-submit {
+      background: var(--violet);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.7rem 1.5rem;
+      font-family: "Syne", sans-serif;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition:
+        background var(--transition),
+        transform var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-submit:hover {
+      background: var(--violet-sombre);
+      transform: translateY(-1px);
+    }
+
+    /* PRODUCT THUMB */
+    .prod-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: var(--gris2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+
+    .prod-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    /* FLASH */
+    .flash-zone {
+      margin-bottom: 1rem;
+    }
+
+    .flash {
+      padding: 0.7rem 1rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+      border-left: 3px solid;
+    }
+
+    .flash.success {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: var(--vert);
+      color: #6ee7b7;
+    }
+
+    .flash.error {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: var(--rouge);
+      color: #fca5a5;
+    }
+
+    /* EMPTY */
+    .empty-row td {
+      text-align: center;
+      color: #4b5563;
+      padding: 3rem;
+      font-size: 0.9rem;
+    }
+
+    /* MOBILE */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s;
       }
 
-      @media (min-width: 900px) {
-        .stats-grid {
-          grid-template-columns: repeat(5, 1fr);
-        }
+      .sidebar.open {
+        transform: translateX(0);
       }
 
-      .stat-card {
-        background: var(--gris);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.2rem;
-      }
-
-      .stat-card .stat-num {
-        font-family: "Syne", sans-serif;
-        font-size: 2rem;
-        font-weight: 800;
-        margin-bottom: 0.1rem;
-      }
-
-      .stat-card .stat-label {
-        font-size: 0.78rem;
-        color: #6b7280;
-      }
-
-      .stat-card.violet .stat-num {
-        color: var(--violet-clair);
-      }
-
-      .stat-card.orange .stat-num {
-        color: #fbbf24;
-      }
-
-      .stat-card.bleu .stat-num {
-        color: #60a5fa;
-      }
-
-      .stat-card.vert .stat-num {
-        color: #34d399;
-      }
-
-      /* TABLE */
-      .table-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 1rem;
-        flex-wrap: wrap;
-        gap: 0.75rem;
-      }
-
-      .table-title {
-        font-family: "Syne", sans-serif;
-        font-size: 1rem;
-        font-weight: 800;
-      }
-
-      .search-input {
-        background: var(--gris2);
-        border: 1px solid var(--border);
-        border-radius: 8px;
-        color: var(--blanc);
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85rem;
-        font-family: "DM Sans", sans-serif;
-      }
-
-      .search-input:focus {
-        outline: none;
-        border-color: var(--violet);
-      }
-
-      .table-wrap {
-        background: var(--gris);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        overflow: hidden;
-      }
-
-      .table-scroll {
-        overflow-x: auto;
-      }
-
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.85rem;
-      }
-
-      th {
-        padding: 0.75rem 1rem;
-        text-align: left;
-        color: #6b7280;
-        font-weight: 500;
-        border-bottom: 1px solid var(--border);
-        background: var(--gris2);
-        font-size: 0.78rem;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-      }
-
-      td {
-        padding: 0.85rem 1rem;
-        border-bottom: 1px solid var(--border);
-        vertical-align: middle;
-      }
-
-      tr:last-child td {
-        border-bottom: none;
-      }
-
-      tr:hover td {
-        background: rgba(124, 58, 237, 0.04);
-      }
-
-      /* BADGES */
-      .badge {
-        display: inline-block;
-        padding: 0.25rem 0.7rem;
-        border-radius: 100px;
-        font-size: 0.75rem;
-        font-weight: 500;
-      }
-
-      .badge-pending {
-        background: rgba(245, 158, 11, 0.15);
-        color: #fbbf24;
-      }
-
-      .badge-accepted {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-      }
-
-      .badge-rejected {
-        background: rgba(239, 68, 68, 0.15);
-        color: #f87171;
-      }
-
-      .badge-printing {
-        background: rgba(59, 130, 246, 0.15);
-        color: #60a5fa;
-      }
-
-      .badge-completed {
-        background: rgba(124, 58, 237, 0.2);
-        color: var(--violet-clair);
-      }
-
-      .badge-delivery {
-        background: rgba(16, 185, 129, 0.15);
-        color: #34d399;
-      }
-
-      .badge-category {
-        background: rgba(59, 130, 246, 0.15);
-        color: #60a5fa;
-      }
-
-      /* ACTION BUTTONS */
-      .action-group {
-        display: flex;
-        gap: 0.4rem;
-        flex-wrap: wrap;
-      }
-
-      .btn-action {
-        padding: 0.3rem 0.65rem;
-        border-radius: 7px;
-        border: none;
-        cursor: pointer;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.75rem;
-        font-weight: 500;
-        transition: all var(--transition);
-        display: flex;
-        align-items: center;
-        gap: 0.3rem;
-        text-decoration: none;
-      }
-
-      .btn-delete {
-        background: rgba(239, 68, 68, 0.1);
-        color: #f87171;
-      }
-
-      .btn-delete:hover {
-        background: rgba(239, 68, 68, 0.25);
-      }
-
-      /* FORM */
-      .form-card {
-        background: var(--gris);
-        border: 1px solid var(--border);
-        border-radius: var(--radius);
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
-      }
-
-      .form-card h3 {
-        font-family: "Syne", sans-serif;
-        font-size: 1rem;
-        font-weight: 800;
-        margin-bottom: 1.2rem;
-      }
-
-      .form-grid {
-        display: grid;
-        gap: 1rem;
-      }
-
-      @media (min-width: 640px) {
-        .form-grid.two {
-          grid-template-columns: 1fr 1fr;
-        }
-      }
-
-      .form-group {
-        display: flex;
-        flex-direction: column;
-        gap: 0.35rem;
-      }
-
-      .form-group label {
-        font-size: 0.8rem;
-        color: #9ca3af;
-      }
-
-      .form-control {
-        background: var(--gris2);
-        border: 1px solid var(--border);
-        border-radius: 10px;
-        color: var(--blanc);
-        padding: 0.65rem 0.9rem;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.88rem;
-        transition: border-color var(--transition);
-      }
-
-      .form-control:focus {
-        outline: none;
-        border-color: var(--violet);
-        background: rgba(124, 58, 237, 0.06);
-      }
-
-      select.form-control option {
-        background: #1f2937;
-      }
-
-      .btn-submit {
-        background: var(--violet);
-        color: #fff;
-        border: none;
-        border-radius: 10px;
-        padding: 0.7rem 1.5rem;
-        font-family: "Syne", sans-serif;
-        font-size: 0.9rem;
-        font-weight: 700;
-        cursor: pointer;
-        transition:
-          background var(--transition),
-          transform var(--transition);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-
-      .btn-submit:hover {
-        background: var(--violet-sombre);
-        transform: translateY(-1px);
-      }
-
-      /* PRODUCT THUMB */
-      .prod-thumb {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        object-fit: cover;
-        background: var(--gris2);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-      }
-
-      .prod-thumb img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        border-radius: 8px;
-      }
-
-      /* FLASH */
-      .flash-zone {
-        margin-bottom: 1rem;
-      }
-
-      .flash {
-        padding: 0.7rem 1rem;
-        border-radius: 10px;
-        font-size: 0.85rem;
-        margin-bottom: 0.5rem;
-        border-left: 3px solid;
-      }
-
-      .flash.success {
-        background: rgba(16, 185, 129, 0.1);
-        border-color: var(--vert);
-        color: #6ee7b7;
-      }
-
-      .flash.error {
-        background: rgba(239, 68, 68, 0.1);
-        border-color: var(--rouge);
-        color: #fca5a5;
-      }
-
-      /* EMPTY */
-      .empty-row td {
-        text-align: center;
-        color: #4b5563;
-        padding: 3rem;
-        font-size: 0.9rem;
-      }
-
-      /* MOBILE */
-      @media (max-width: 768px) {
-        .sidebar {
-          transform: translateX(-100%);
-          transition: transform 0.25s;
-        }
-
-        .sidebar.open {
-          transform: translateX(0);
-        }
-
-        .main {
-          margin-left: 0;
-        }
-
-        .mobile-menu-btn {
-          display: flex;
-        }
+      .main {
+        margin-left: 0;
       }
 
       .mobile-menu-btn {
-        display: none;
-        background: none;
-        border: none;
-        color: var(--blanc);
-        font-size: 1.3rem;
-        cursor: pointer;
-        padding: 0.2rem;
-      }
-
-      /* MODAL EDIT */
-      .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.75);
-        backdrop-filter: blur(6px);
-        z-index: 200;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 1rem;
-      }
-
-      .modal-overlay.open {
         display: flex;
       }
+    }
 
-      .modal {
-        background: var(--gris);
-        border-radius: 20px;
-        width: 100%;
-        max-width: 520px;
-        border: 1px solid rgba(124, 58, 237, 0.25);
-        max-height: 90vh;
-        overflow-y: auto;
-        padding: 1.5rem;
-      }
+    .mobile-menu-btn {
+      display: none;
+      background: none;
+      border: none;
+      color: var(--blanc);
+      font-size: 1.3rem;
+      cursor: pointer;
+      padding: 0.2rem;
+    }
 
-      .modal h3 {
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1.1rem;
-        margin-bottom: 1.2rem;
-      }
+    /* MODAL EDIT */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
 
-      .modal-close-btn {
-        float: right;
-        background: none;
-        border: none;
-        color: #9ca3af;
-        font-size: 1.4rem;
-        cursor: pointer;
-      }
+    .modal-overlay.open {
+      display: flex;
+    }
 
-      .btn-edit {
-        background: rgba(124, 58, 237, 0.15);
-        color: var(--violet-clair);
-        padding: 0.3rem 0.65rem;
-        border-radius: 7px;
-        border: none;
-        cursor: pointer;
-        font-family: "DM Sans", sans-serif;
-        font-size: 0.75rem;
-        font-weight: 500;
-        transition: all var(--transition);
-        display: inline-flex;
-        align-items: center;
-        gap: 0.3rem;
-      }
+    .modal {
+      background: var(--gris);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 520px;
+      border: 1px solid rgba(124, 58, 237, 0.25);
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
 
-      .btn-edit:hover {
-        background: rgba(124, 58, 237, 0.3);
-      }
-    </style>
-  </head>
+    .modal h3 {
+      font-family: "Syne", sans-serif;
+      font-weight: 800;
+      font-size: 1.1rem;
+      margin-bottom: 1.2rem;
+    }
 
-  <body>
-    <!-- SIDEBAR -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-logo">
-        Static<span>Mind</span>
-        <small>Admin Panel</small>
-      </div>
-      <nav class="sidebar-nav">
-        <div class="nav-section-label">Overview</div>
-        <button class="nav-item active" onclick="showPanel('orders', this)">
-          <span class="nav-icon">📋</span> Orders
-        </button>
-        <button class="nav-item" onclick="showPanel('products', this)">
-          <span class="nav-icon">📦</span> Products
-        </button>
-        <div class="nav-section-label">Management</div>
-        <button class="nav-item" onclick="showPanel('add-product', this)">
-          <span class="nav-icon">➕</span> Add a Product
-        </button>
-        <button class="nav-item" onclick="showPanel('categories', this)">
-          <span class="nav-icon">🏷</span> Categories
-        </button>
-        <button class="nav-item" onclick="showPanel('coupons', this)">
-          <span class="nav-icon">🎟</span> Coupons
-        </button>
-        <button class="nav-item" onclick="showPanel('avis', this)">
-          <span class="nav-icon">⭐</span> Reviews
-        </button>
-        <button class="nav-item" onclick="showPanel('filaments', this)">
-          <span class="nav-icon">🎨</span> Colors
-        </button>
-        <a class="nav-item" href="/" target="_blank">
-          <span class="nav-icon">🌐</span> View Site
-        </a>
-        <form
-          action="/admin/reset-orders"
-          method="POST"
-          onsubmit="return confirm('Delete ALL orders and reset to #1?');"
-        >
-          <button
-            type="submit"
-            class="nav-item"
-            style="color: #f87171; width: 100%"
-          >
-            <span class="nav-icon">🔄</span> Reset Orders
-          </button>
-        </form>
-      </nav>
-      <div class="sidebar-footer">
-        <a href="/admin/logout" class="logout-btn">🚪 Log out</a>
-      </div>
-    </aside>
+    .modal-close-btn {
+      float: right;
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
 
-    <!-- MAIN -->
-    <div class="main">
-      <div class="topbar">
-        <div style="display: flex; align-items: center; gap: 0.75rem">
-          <button
-            class="mobile-menu-btn"
-            onclick="
+    .btn-edit {
+      background: rgba(124, 58, 237, 0.15);
+      color: var(--violet-clair);
+      padding: 0.3rem 0.65rem;
+      border-radius: 7px;
+      border: none;
+      cursor: pointer;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 500;
+      transition: all var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .btn-edit:hover {
+      background: rgba(124, 58, 237, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      Static<span>Mind</span>
+      <small>Admin Panel</small>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Overview</div>
+      <button class="nav-item active" onclick="showPanel('orders', this)">
+        <span class="nav-icon">📋</span> Orders
+      </button>
+      <button class="nav-item" onclick="showPanel('products', this)">
+        <span class="nav-icon">📦</span> Products
+      </button>
+      <div class="nav-section-label">Management</div>
+      <button class="nav-item" onclick="showPanel('add-product', this)">
+        <span class="nav-icon">➕</span> Add a Product
+      </button>
+      <button class="nav-item" onclick="showPanel('categories', this)">
+        <span class="nav-icon">🏷</span> Categories
+      </button>
+      <button class="nav-item" onclick="showPanel('coupons', this)">
+        <span class="nav-icon">🎟</span> Coupons
+      </button>
+      <button class="nav-item" onclick="showPanel('avis', this)">
+        <span class="nav-icon">⭐</span> Reviews
+      </button>
+      <button class="nav-item" onclick="showPanel('filaments', this)">
+        <span class="nav-icon">🎨</span> Colors
+      </button>
+      <button class="nav-item" onclick="showPanel('customizable', this)">
+        <span class="nav-icon">✨</span> Customizable Products
+      </button>
+      <a class="nav-item" href="/" target="_blank">
+        <span class="nav-icon">🌐</span> View Site
+      </a>
+      <form action="/admin/reset-orders" method="POST" onsubmit="return confirm('Delete ALL orders and reset to #1?');">
+        <button type="submit" class="nav-item" style="color: #f87171; width: 100%">
+          <span class="nav-icon">🔄</span> Reset Orders
+        </button>
+      </form>
+    </nav>
+    <div class="sidebar-footer">
+      <a href="/admin/logout" class="logout-btn">🚪 Log out</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div style="display: flex; align-items: center; gap: 0.75rem">
+        <button class="mobile-menu-btn" onclick="
               document.getElementById('sidebar').classList.toggle('open')
-            "
-          >
-            ☰
-          </button>
-          <h1 id="page-title">Orders</h1>
-        </div>
-        <div class="topbar-right">
-          <span class="badge-admin">Admin logged in</span>
-        </div>
+            ">
+          ☰
+        </button>
+        <h1 id="page-title">Orders</h1>
       </div>
+      <div class="topbar-right">
+        <span class="badge-admin">Admin logged in</span>
+      </div>
+    </div>
 
-      <div class="content">
-        <!-- FLASH -->
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-        messages %}
-        <div class="flash-zone">
-          {% for cat, msg in messages %}
-          <div class="flash {{ cat }}">{{ msg }}</div>
-          {% endfor %}
+    <div class="content">
+      <!-- FLASH -->
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %}
+      <div class="flash-zone">
+        {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+        {% endfor %}
+      </div>
+      {% endif %} {% endwith %}
+
+      <!-- ═══ PANEL: ORDERS ═══ -->
+      <div class="panel active" id="panel-orders">
+        <div class="stats-grid">
+          <div class="stat-card violet">
+            <div class="stat-num">{{ stats.total }}</div>
+            <div class="stat-label">Total orders</div>
+          </div>
+          <div class="stat-card orange">
+            <div class="stat-num">{{ stats.pending }}</div>
+            <div class="stat-label">Pending</div>
+          </div>
+          <div class="stat-card bleu">
+            <div class="stat-num">{{ stats.printing }}</div>
+            <div class="stat-label">Printing</div>
+          </div>
+          <div class="stat-card vert">
+            <div class="stat-num">{{ stats.accepted }}</div>
+            <div class="stat-label">Accepted</div>
+          </div>
+          <div class="stat-card bleu">
+            <div class="stat-num">{{ stats.delivery }}</div>
+            <div class="stat-label">Out for Delivery</div>
+          </div>
         </div>
-        {% endif %} {% endwith %}
 
-        <!-- ═══ PANEL: ORDERS ═══ -->
-        <div class="panel active" id="panel-orders">
-          <div class="stats-grid">
-            <div class="stat-card violet">
-              <div class="stat-num">{{ stats.total }}</div>
-              <div class="stat-label">Total orders</div>
-            </div>
-            <div class="stat-card orange">
-              <div class="stat-num">{{ stats.pending }}</div>
-              <div class="stat-label">Pending</div>
-            </div>
-            <div class="stat-card bleu">
-              <div class="stat-num">{{ stats.printing }}</div>
-              <div class="stat-label">Printing</div>
-            </div>
-            <div class="stat-card vert">
-              <div class="stat-num">{{ stats.accepted }}</div>
-              <div class="stat-label">Accepted</div>
-            </div>
-            <div class="stat-card bleu">
-              <div class="stat-num">{{ stats.delivery }}</div>
-              <div class="stat-label">Out for Delivery</div>
-            </div>
-          </div>
-
-          <div class="table-header">
-            <span class="table-title">All Orders</span>
-            <input
-              class="search-input"
-              placeholder="🔍 Search..."
-              oninput="filterTable(this, 'orders-tbody')"
-            />
-          </div>
-          <div class="table-wrap">
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>#ID</th>
-                    <th>Customer</th>
-                    <th>Email / WhatsApp</th>
-                    <th>Details</th>
-                    <th>File</th>
-                    <th>Status</th>
-                    <th>Date</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="orders-tbody">
-                  {% if orders %} {% for o in orders %}
-                  <tr>
-                    <td><strong>#{{ o.id }}</strong></td>
-                    <td>{{ o.nom_client }}</td>
-                    <td style="color: #9ca3af; font-size: 0.8rem">
-                      {{ o.email or '—' }}
-                    </td>
-                    <td
-                      style="
+        <div class="table-header">
+          <span class="table-title">All Orders</span>
+          <input class="search-input" placeholder="🔍 Search..." oninput="filterTable(this, 'orders-tbody')" />
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>#ID</th>
+                  <th>Customer</th>
+                  <th>Email / WhatsApp</th>
+                  <th>Details</th>
+                  <th>File</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody">
+                {% if orders %} {% for o in orders %}
+                <tr>
+                  <td><strong>#{{ o.id }}</strong></td>
+                  <td>{{ o.nom_client }}</td>
+                  <td style="color: #9ca3af; font-size: 0.8rem">
+                    {{ o.email or '—' }}
+                  </td>
+                  <td style="
                         max-width: 350px;
                         color: #9ca3af;
                         font-size: 0.82rem;
                         white-space: normal;
                         word-break: break-word;
-                      "
-                      title="{{ o.details }}"
-                    >
-                      {{ o.details }}
-                    </td>
-                    <td>
-                      {% if o.fichier %}
-                      <a
-                        href="/static/uploads/{{ o.fichier }}"
-                        target="_blank"
-                        style="
+                      " title="{{ o.details }}">
+                    {{ o.details }}
+                  </td>
+                  <td>
+                    {% if o.fichier %}
+                    <a href="/static/uploads/{{ o.fichier }}" target="_blank" style="
                           color: var(--violet-clair);
                           font-size: 0.78rem;
                           text-decoration: none;
-                        "
-                        >📎 {{ o.fichier[:15] }}...</a
-                      >
-                      {% else %}<span style="color: #374151; font-size: 0.8rem"
-                        >None</span
-                      >{% endif %}
-                    </td>
-                    <td>
-                      {% set sc = { 'Pending': 'pending', 'Accepted':
-                      'accepted', 'Rejected': 'rejected', 'Printing':
-                      'printing', 'Completed': 'completed', 'Out for Delivery':
-                      'delivery' } %}
-                      <span
-                        class="badge badge-{{ sc.get(o.statut, 'pending') }}"
-                        >{{ o.statut }}</span
-                      >
-                    </td>
-                    <td style="color: #6b7280; font-size: 0.78rem">
-                      {{ o.created_at.strftime('%m/%d %H:%M') }}
-                    </td>
-                    <td>
-                      <div class="action-group">
-                        <select
-                          onchange="window.location.href='/admin/order/{{ o.id }}/'+this.value"
-                          style="
+                        ">📎 {{ o.fichier[:15] }}...</a>
+                    {% else %}<span style="color: #374151; font-size: 0.8rem">None</span>{% endif %}
+                  </td>
+                  <td>
+                    {% set sc = { 'Pending': 'pending', 'Accepted':
+                    'accepted', 'Rejected': 'rejected', 'Printing':
+                    'printing', 'Completed': 'completed', 'Out for Delivery':
+                    'delivery' } %}
+                    <span class="badge badge-{{ sc.get(o.statut, 'pending') }}">{{ o.statut }}</span>
+                  </td>
+                  <td style="color: #6b7280; font-size: 0.78rem">
+                    {{ o.created_at.strftime('%m/%d %H:%M') }}
+                  </td>
+                  <td>
+                    <div class="action-group">
+                      <select onchange="window.location.href='/admin/order/{{ o.id }}/'+this.value" style="
                             background: #1f2937;
                             border: 1px solid rgba(124, 58, 237, 0.3);
                             color: #a78bfa;
@@ -824,775 +797,590 @@
                             font-size: 0.78rem;
                             cursor: pointer;
                             font-family: &quot;DM Sans&quot;, sans-serif;
-                          "
-                        >
-                          <option value="" disabled selected>
-                            {{ o.statut }}
-                          </option>
-                          <option value="pending">⏳ Pending</option>
-                          <option value="accept">✓ Accepted</option>
-                          <option value="print">🖨 Printing</option>
-                          <option value="complete">✦ Completed</option>
-                          <option value="delivery">🚚 Out for Delivery</option>
-                          <option value="reject">✕ Rejected</option>
-                        </select>
-                        <a
-                          href="/admin/order/{{ o.id }}/delete"
-                          class="btn-action btn-delete"
-                          onclick="return confirm('Delete this order?');"
-                          >🗑</a
-                        >
-                      </div>
-                    </td>
-                  </tr>
-                  {% endfor %} {% else %}
-                  <tr class="empty-row">
-                    <td colspan="8">📭 No orders yet.</td>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
+                          ">
+                        <option value="" disabled selected>
+                          {{ o.statut }}
+                        </option>
+                        <option value="pending">⏳ Pending</option>
+                        <option value="accept">✓ Accepted</option>
+                        <option value="print">🖨 Printing</option>
+                        <option value="complete">✦ Completed</option>
+                        <option value="delivery">🚚 Out for Delivery</option>
+                        <option value="reject">✕ Rejected</option>
+                      </select>
+                      <a href="/admin/order/{{ o.id }}/delete" class="btn-action btn-delete"
+                        onclick="return confirm('Delete this order?');">🗑</a>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr class="empty-row">
+                  <td colspan="8">📭 No orders yet.</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
-        <!-- ═══ PANEL: PRODUCTS ═══ -->
-        <div class="panel" id="panel-products">
-          <div class="table-header">
-            <span class="table-title">Product Catalog</span>
-            <input
-              class="search-input"
-              placeholder="🔍 Search..."
-              oninput="filterTable(this, 'products-tbody')"
-            />
-          </div>
-          <div class="table-wrap">
-            <div class="table-scroll">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Image</th>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Added on</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                <tbody id="products-tbody">
-                  {% if products %} {% for p in products %}
-                  <tr>
-                    <td>
-                      <div class="prod-thumb">
-                        {% if p.image %}<img
-                          src="/static/uploads/{{ p.image }}"
-                          alt="{{ p.nom }}"
-                        />
-                        {% else %} {% if p.categorie == 'Figurines' %}🗿 {% elif
-                        p.categorie == 'Keychains' %}🔑 {% else %}🏆{% endif %}
-                        {% endif %}
-                      </div>
-                    </td>
-                    <td>
-                      <strong>{{ p.nom }}</strong>
-                      {% if p.description %}<br /><span
-                        style="color: #6b7280; font-size: 0.78rem"
-                        >{{ p.description[:50] }}...</span
-                      >{% endif %} {% if p.notes %}<br /><span
-                        style="color: #f59e0b; font-size: 0.75rem"
-                        >📝 {{ p.notes[:40] }}...</span
-                      >{% endif %}
-                    </td>
-                    <td>
-                      <span class="badge badge-category"
-                        >{{ p.categorie }}</span
-                      >
-                    </td>
-                    <td>
-                      <strong style="color: var(--violet-clair)"
-                        >{{ "%.0f"|format(p.prix) }} USD</strong
-                      >
-                    </td>
-                    <td style="color: #6b7280; font-size: 0.78rem">
-                      {{ p.created_at.strftime('%m/%d/%Y') }}
-                    </td>
-                    <td>
-                      <div class="action-group">
-                        <button
-                          class="btn-edit"
-                          onclick="openEditProduct({{ p.id }}, '{{ p.nom }}', {{ p.prix }}, '{{ p.categorie }}', '{{ p.description or '' }}', '{{ p.notes or '' }}')"
-                        >
-                          ✏️ Edit
-                        </button>
-                        <a
-                          href="/admin/product/delete/{{ p.id }}"
-                          class="btn-action btn-delete"
-                          onclick="return confirm('Delete this product?');"
-                          >🗑</a
-                      <button class="btn-edit" onclick="openFilamentModal({{ p.id }}, '{{ p.nom }}', [{{ p.filaments | map(attribute='id') | list | join(',') }}])">
-    🎨 Colors
-</button>
-                      </div>
-                    </td>
-                  </tr>
-                  {% endfor %} {% else %}
-                  <tr class="empty-row">
-                    <td colspan="6">📦 No products yet. Add one!</td>
-                  </tr>
-                  {% endif %}
-                </tbody>
-              </table>
-            </div>
+      <!-- ═══ PANEL: PRODUCTS ═══ -->
+      <div class="panel" id="panel-products">
+        <div class="table-header">
+          <span class="table-title">Product Catalog</span>
+          <input class="search-input" placeholder="🔍 Search..." oninput="filterTable(this, 'products-tbody')" />
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Image</th>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Added on</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="products-tbody">
+                {% if products %} {% for p in products %}
+                <tr>
+                  <td>
+                    <div class="prod-thumb">
+                      {% if p.image %}<img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}" />
+                      {% else %} {% if p.categorie == 'Figurines' %}🗿 {% elif
+                      p.categorie == 'Keychains' %}🔑 {% else %}🏆{% endif %}
+                      {% endif %}
+                    </div>
+                  </td>
+                  <td>
+                    <strong>{{ p.nom }}</strong>
+                    {% if p.description %}<br /><span style="color: #6b7280; font-size: 0.78rem">{{ p.description[:50]
+                      }}...</span>{% endif %} {% if p.notes %}<br /><span style="color: #f59e0b; font-size: 0.75rem">📝
+                      {{ p.notes[:40] }}...</span>{% endif %}
+                  </td>
+                  <td>
+                    <span class="badge badge-category">{{ p.categorie }}</span>
+                  </td>
+                  <td>
+                    <strong style="color: var(--violet-clair)">{{ "%.0f"|format(p.prix) }} USD</strong>
+                  </td>
+                  <td style="color: #6b7280; font-size: 0.78rem">
+                    {{ p.created_at.strftime('%m/%d/%Y') }}
+                  </td>
+                  <td>
+                    <div class="action-group">
+                      <button class="btn-edit"
+                        onclick="openEditProduct({{ p.id }}, '{{ p.nom }}', {{ p.prix }}, '{{ p.categorie }}', '{{ p.description or '' }}', '{{ p.notes or '' }}')">
+                        ✏️ Edit
+                      </button>
+                      <a href="/admin/product/delete/{{ p.id }}" class="btn-action btn-delete"
+                        onclick="return confirm('Delete this product?');">🗑</a <button class="btn-edit"
+                        onclick="openFilamentModal({{ p.id }}, '{{ p.nom }}', [{{ p.filaments | map(attribute='id') | list | join(',') }}])">
+                      🎨 Colors
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %} {% else %}
+                <tr class="empty-row">
+                  <td colspan="6">📦 No products yet. Add one!</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
           </div>
         </div>
+      </div>
 
-        <!-- ═══ PANEL: ADD PRODUCT ═══ -->
-        <div class="panel" id="panel-add-product">
-          <div class="form-card">
-            <h3>➕ Add a New Product</h3>
-            <form
-              action="/admin/product/add"
-              method="POST"
-              enctype="multipart/form-data"
-            >
-              <div class="form-grid two" style="margin-bottom: 1rem">
-                <div class="form-group">
-                  <label>Product name *</label>
-                  <input
-                    type="text"
-                    name="nom"
-                    class="form-control"
-                    placeholder="e.g. Dragon Figurine"
-                    required
-                  />
-                </div>
-                <div class="form-group">
-                  <label>Price (USD) *</label>
-                  <input
-                    type="number"
-                    name="prix"
-                    class="form-control"
-                    placeholder="e.g. 10.99"
-                    step="0.01"
-                    required
-                  />
-                </div>
+      <!-- ═══ PANEL: ADD PRODUCT ═══ -->
+      <div class="panel" id="panel-add-product">
+        <div class="form-card">
+          <h3>➕ Add a New Product</h3>
+          <form action="/admin/product/add" method="POST" enctype="multipart/form-data">
+            <div class="form-grid two" style="margin-bottom: 1rem">
+              <div class="form-group">
+                <label>Product name *</label>
+                <input type="text" name="nom" class="form-control" placeholder="e.g. Dragon Figurine" required />
               </div>
-              <div class="form-grid two" style="margin-bottom: 1rem">
-                <div class="form-group">
-                  <label>Category *</label>
-                  <select name="categorie" class="form-control" required>
-                    {% for cat in categories %}
-                    <option value="{{ cat.nom }}">{{ cat.nom }}</option>
-                    {% endfor %}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Product image</label>
-                  <input
-                    type="file"
-                    name="image"
-                    class="form-control"
-                    accept=".png,.jpg,.jpeg,.gif"
-                    style="padding: 0.5rem"
-                  />
-                </div>
+              <div class="form-group">
+                <label>Price (USD) *</label>
+                <input type="number" name="prix" class="form-control" placeholder="e.g. 10.99" step="0.01" required />
               </div>
-              <div class="form-group" style="margin-bottom: 1rem">
-                <label>Description</label>
-                <input
-                  type="text"
-                  name="description"
-                  class="form-control"
-                  placeholder="Short product description..."
-                />
-              </div>
-              <div class="form-group" style="margin-bottom: 1.2rem">
-                <label>📝 Notes (internal)</label>
-                <textarea
-                  name="notes"
-                  class="form-control"
-                  rows="3"
-                  placeholder="Internal notes..."
-                ></textarea>
-              </div>
-              <button type="submit" class="btn-submit">
-                ✦ Publish Product
-              </button>
-            </form>
-          </div>
-
-          {% if products %}
-          <div style="margin-top: 1.5rem">
-            <div class="table-title" style="margin-bottom: 1rem">
-              Recently Added Products
             </div>
-            <div
-              style="
+            <div class="form-grid two" style="margin-bottom: 1rem">
+              <div class="form-group">
+                <label>Category *</label>
+                <select name="categorie" class="form-control" required>
+                  {% for cat in categories %}
+                  <option value="{{ cat.nom }}">{{ cat.nom }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Product image</label>
+                <input type="file" name="image" class="form-control" accept=".png,.jpg,.jpeg,.gif"
+                  style="padding: 0.5rem" />
+              </div>
+            </div>
+            <div class="form-group" style="margin-bottom: 1rem">
+              <label>Description</label>
+              <input type="text" name="description" class="form-control" placeholder="Short product description..." />
+            </div>
+            <div class="form-group" style="margin-bottom: 1.2rem">
+              <label>📝 Notes (internal)</label>
+              <textarea name="notes" class="form-control" rows="3" placeholder="Internal notes..."></textarea>
+            </div>
+            <button type="submit" class="btn-submit">
+              ✦ Publish Product
+            </button>
+          </form>
+        </div>
+
+        {% if products %}
+        <div style="margin-top: 1.5rem">
+          <div class="table-title" style="margin-bottom: 1rem">
+            Recently Added Products
+          </div>
+          <div style="
                 display: grid;
                 grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
                 gap: 0.75rem;
-              "
-            >
-              {% for p in products[:6] %}
-              <div
-                style="
+              ">
+            {% for p in products[:6] %}
+            <div style="
                   background: var(--gris);
                   border: 1px solid var(--border);
                   border-radius: 12px;
                   overflow: hidden;
-                "
-              >
-                <div
-                  style="
+                ">
+              <div style="
                     height: 100px;
                     background: var(--gris2);
                     display: flex;
                     align-items: center;
                     justify-content: center;
                     font-size: 2.5rem;
-                  "
-                >
-                  {% if p.image %}
-                  <img
-                    src="/static/uploads/{{ p.image }}"
-                    style="width: 100%; height: 100%; object-fit: cover"
-                    alt=""
-                  />
-                  {% else %} {% if p.categorie == 'Figurines' %}🗿 {% elif
-                  p.categorie == 'Keychains' %}🔑 {% else %}🏆{% endif %} {%
-                  endif %}
-                </div>
-                <div style="padding: 0.6rem">
-                  <div
-                    style="
+                  ">
+                {% if p.image %}
+                <img src="/static/uploads/{{ p.image }}" style="width: 100%; height: 100%; object-fit: cover" alt="" />
+                {% else %} {% if p.categorie == 'Figurines' %}🗿 {% elif
+                p.categorie == 'Keychains' %}🔑 {% else %}🏆{% endif %} {%
+                endif %}
+              </div>
+              <div style="padding: 0.6rem">
+                <div style="
                       font-size: 0.82rem;
                       font-weight: 700;
                       margin-bottom: 0.2rem;
-                    "
-                  >
-                    {{ p.nom }}
-                  </div>
-                  <div
-                    style="
+                    ">
+                  {{ p.nom }}
+                </div>
+                <div style="
                       color: var(--violet-clair);
                       font-family: &quot;Syne&quot;, sans-serif;
                       font-size: 0.88rem;
                       font-weight: 700;
-                    "
-                  >
-                    {{ "%.0f"|format(p.prix) }} USD
-                  </div>
+                    ">
+                  {{ "%.0f"|format(p.prix) }} USD
                 </div>
               </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+
+      <!-- ═══ PANEL: CATEGORIES ═══ -->
+      <div class="panel" id="panel-categories">
+        <div class="form-card">
+          <h3>🏷 Add a Category</h3>
+          <form action="/admin/category/add" method="POST" style="display: flex; gap: 0.75rem; flex-wrap: wrap">
+            <input type="text" name="nom" class="form-control" placeholder="e.g. Accessories" required
+              style="flex: 1; min-width: 200px" />
+            <button type="submit" class="btn-submit">➕ Add</button>
+          </form>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for cat in categories %}
+              <tr>
+                <td><strong>{{ cat.nom }}</strong></td>
+                <td>
+                  <div class="action-group">
+                    <button class="btn-edit" onclick="openEditCategory({{ cat.id }}, '{{ cat.nom }}')">
+                      ✏️ Edit
+                    </button>
+                    <a href="/admin/category/delete/{{ cat.id }}" class="btn-action btn-delete"
+                      onclick="return confirm('Delete this category?');">🗑</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- ═══ PANEL: COUPONS ═══ -->
+      <div class="panel" id="panel-coupons">
+        <div class="form-card">
+          <h3>🎟 Add a Coupon</h3>
+          <form action="/admin/coupon/add" method="POST" style="
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                align-items: flex-end;
+              ">
+            <div class="form-group" style="flex: 1; min-width: 140px">
+              <label>Code *</label>
+              <input type="text" name="code" class="form-control" placeholder="ex: SUMMER20" required />
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 110px">
+              <label>Reduction (%) *</label>
+              <input type="number" name="reduction" class="form-control" placeholder="ex: 20" min="1" max="100"
+                required />
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 160px">
+              <label>Type</label>
+              <select name="coupon_type" class="form-control" onchange="toggleCouponType(this.value)">
+                <option value="global">🌍 Global (tous produits)</option>
+                <option value="product">🛍 Produit spécifique</option>
+                <option value="one_time">👤 Usage unique</option>
+              </select>
+            </div>
+            <div class="form-group" id="product-select-group" style="flex: 1; min-width: 160px; display: none">
+              <label>Produit *</label>
+              <select name="product_id" class="form-control">
+                <option value="">-- Choisir --</option>
+                {% for p in products %}
+                <option value="{{ p.id }}">
+                  {{ p.nom }} ({{ "%.0f"|format(p.prix) }} USD)
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+            <input type="checkbox" name="one_time" id="one-time-checkbox" style="display: none" />
+            <div style="display: flex; align-items: flex-end">
+              <button type="submit" class="btn-submit">➕ Add</button>
+            </div>
+          </form>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Code</th>
+                <th>Reduction</th>
+                <th>Status</th>
+                <th>Type</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for c in coupons %}
+              <tr>
+                <td>
+                  <strong style="color: var(--violet-clair)">{{ c.code }}</strong>
+                </td>
+                <td><strong>-{{ c.reduction }}%</strong></td>
+                <td>
+                  <span class="badge badge-{{ 'accepted' if c.actif else 'rejected' }}">{{ 'Active' if c.actif else
+                    'Inactive' }}</span>
+                </td>
+                <td>
+                  {% if c.one_time %}
+                  <span class="badge badge-printing">👤 Usage unique {% if c.used %}(utilisé){% endif %}</span>
+                  {% elif c.product_id %}
+                  <span class="badge badge-category">🛍 {{ c.product.nom if c.product else '?' }}</span>
+                  {% else %}
+                  <span class="badge badge-accepted">🌍 Global</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="/admin/coupon/delete/{{ c.id }}" class="btn-action btn-delete"
+                    onclick="return confirm('Delete?');">🗑</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel" id="panel-avis">
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Stars</th>
+                <th>Review</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for a in tous_avis %}
+              <tr>
+                <td><strong>{{ a.nom }}</strong></td>
+                <td style="color: #fbbf24">{{ '⭐' * a.etoiles }}</td>
+                <td style="color: #9ca3af; font-size: 0.82rem; max-width: 200px">
+                  {{ a.texte[:80] }}...
+                </td>
+                <td>
+                  <span class="badge badge-{{ 'accepted' if a.approuve else 'pending' }}">{{ 'Approved' if a.approuve
+                    else 'Pending' }}</span>
+                </td>
+                <td>
+                  <div class="action-group">
+                    {% if not a.approuve %}<a href="/admin/avis/{{ a.id }}/approve" class="btn-edit">✓ Approve</a>{%
+                    endif %}
+                    <a href="/admin/avis/{{ a.id }}/delete" class="btn-action btn-delete"
+                      onclick="return confirm('Delete?');">🗑</a>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- ═══ PANEL: CUSTOMIZABLE ═══ -->
+      <div class="panel" id="panel-customizable">
+        <div class="form-card">
+          <h3>✨ Customizable Products</h3>
+          <p style="color:#9ca3af;font-size:0.88rem;margin-bottom:1.5rem">Choose which products allow color selection
+            when added to cart.</p>
+          <form action="/admin/product/set-customizable" method="POST">
+            <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
+              {% for p in products %}
+              <label
+                style="display:flex;align-items:center;gap:0.75rem;cursor:pointer;background:var(--gris2);padding:0.75rem 1rem;border-radius:10px;border:1px solid var(--border)">
+                <input type="checkbox" name="product_ids" value="{{ p.id }}" {% if p.customizable %}checked{% endif %}
+                  style="width:16px;height:16px;accent-color:#7c3aed">
+                <span style="font-weight:600">{{ p.nom }}</span>
+                <span style="color:var(--violet-clair);font-family:'Syne',sans-serif;margin-left:auto">{{
+                  "%.0f"|format(p.prix) }} USD</span>
+              </label>
               {% endfor %}
             </div>
-          </div>
-          {% endif %}
-        </div>
-
-        <!-- ═══ PANEL: CATEGORIES ═══ -->
-        <div class="panel" id="panel-categories">
-          <div class="form-card">
-            <h3>🏷 Add a Category</h3>
-            <form
-              action="/admin/category/add"
-              method="POST"
-              style="display: flex; gap: 0.75rem; flex-wrap: wrap"
-            >
-              <input
-                type="text"
-                name="nom"
-                class="form-control"
-                placeholder="e.g. Accessories"
-                required
-                style="flex: 1; min-width: 200px"
-              />
-              <button type="submit" class="btn-submit">➕ Add</button>
-            </form>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for cat in categories %}
-                <tr>
-                  <td><strong>{{ cat.nom }}</strong></td>
-                  <td>
-                    <div class="action-group">
-                      <button
-                        class="btn-edit"
-                        onclick="openEditCategory({{ cat.id }}, '{{ cat.nom }}')"
-                      >
-                        ✏️ Edit
-                      </button>
-                      <a
-                        href="/admin/category/delete/{{ cat.id }}"
-                        class="btn-action btn-delete"
-                        onclick="return confirm('Delete this category?');"
-                        >🗑</a
-                      >
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- ═══ PANEL: COUPONS ═══ -->
-        <div class="panel" id="panel-coupons">
-          <div class="form-card">
-            <h3>🎟 Add a Coupon</h3>
-            <form
-              action="/admin/coupon/add"
-              method="POST"
-              style="
-                display: flex;
-                gap: 0.75rem;
-                flex-wrap: wrap;
-                align-items: flex-end;
-              "
-            >
-              <div class="form-group" style="flex: 1; min-width: 140px">
-                <label>Code *</label>
-                <input
-                  type="text"
-                  name="code"
-                  class="form-control"
-                  placeholder="ex: SUMMER20"
-                  required
-                />
-              </div>
-              <div class="form-group" style="flex: 1; min-width: 110px">
-                <label>Reduction (%) *</label>
-                <input
-                  type="number"
-                  name="reduction"
-                  class="form-control"
-                  placeholder="ex: 20"
-                  min="1"
-                  max="100"
-                  required
-                />
-              </div>
-              <div class="form-group" style="flex: 1; min-width: 160px">
-                <label>Type</label>
-                <select
-                  name="coupon_type"
-                  class="form-control"
-                  onchange="toggleCouponType(this.value)"
-                >
-                  <option value="global">🌍 Global (tous produits)</option>
-                  <option value="product">🛍 Produit spécifique</option>
-                  <option value="one_time">👤 Usage unique</option>
-                </select>
-              </div>
-              <div
-                class="form-group"
-                id="product-select-group"
-                style="flex: 1; min-width: 160px; display: none"
-              >
-                <label>Produit *</label>
-                <select name="product_id" class="form-control">
-                  <option value="">-- Choisir --</option>
-                  {% for p in products %}
-                  <option value="{{ p.id }}">
-                    {{ p.nom }} ({{ "%.0f"|format(p.prix) }} USD)
-                  </option>
-                  {% endfor %}
-                </select>
-              </div>
-              <input
-                type="checkbox"
-                name="one_time"
-                id="one-time-checkbox"
-                style="display: none"
-              />
-              <div style="display: flex; align-items: flex-end">
-                <button type="submit" class="btn-submit">➕ Add</button>
-              </div>
-            </form>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Code</th>
-                  <th>Reduction</th>
-                  <th>Status</th>
-                  <th>Type</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for c in coupons %}
-                <tr>
-                  <td>
-                    <strong style="color: var(--violet-clair)"
-                      >{{ c.code }}</strong
-                    >
-                  </td>
-                  <td><strong>-{{ c.reduction }}%</strong></td>
-                  <td>
-                    <span
-                      class="badge badge-{{ 'accepted' if c.actif else 'rejected' }}"
-                      >{{ 'Active' if c.actif else 'Inactive' }}</span
-                    >
-                  </td>
-                  <td>
-                    {% if c.one_time %}
-                    <span class="badge badge-printing"
-                      >👤 Usage unique {% if c.used %}(utilisé){% endif %}</span
-                    >
-                    {% elif c.product_id %}
-                    <span class="badge badge-category"
-                      >🛍 {{ c.product.nom if c.product else '?' }}</span
-                    >
-                    {% else %}
-                    <span class="badge badge-accepted">🌍 Global</span>
-                    {% endif %}
-                  </td>
-                  <td>
-                    <a
-                      href="/admin/coupon/delete/{{ c.id }}"
-                      class="btn-action btn-delete"
-                      onclick="return confirm('Delete?');"
-                      >🗑</a
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="panel" id="panel-avis">
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Stars</th>
-                  <th>Review</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for a in tous_avis %}
-                <tr>
-                  <td><strong>{{ a.nom }}</strong></td>
-                  <td style="color: #fbbf24">{{ '⭐' * a.etoiles }}</td>
-                  <td
-                    style="color: #9ca3af; font-size: 0.82rem; max-width: 200px"
-                  >
-                    {{ a.texte[:80] }}...
-                  </td>
-                  <td>
-                    <span
-                      class="badge badge-{{ 'accepted' if a.approuve else 'pending' }}"
-                      >{{ 'Approved' if a.approuve else 'Pending' }}</span
-                    >
-                  </td>
-                  <td>
-                    <div class="action-group">
-                      {% if not a.approuve %}<a
-                        href="/admin/avis/{{ a.id }}/approve"
-                        class="btn-edit"
-                        >✓ Approve</a
-                      >{% endif %}
-                      <a
-                        href="/admin/avis/{{ a.id }}/delete"
-                        class="btn-action btn-delete"
-                        onclick="return confirm('Delete?');"
-                        >🗑</a
-                      >
-                    </div>
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <!-- ═══ PANEL: FILAMENTS ═══ -->
-        <div class="panel" id="panel-filaments">
-          <div class="form-card">
-            <h3>🎨 Add a Filament Color</h3>
-            <form
-              action="/admin/filament/add"
-              method="POST"
-              style="
-                display: flex;
-                gap: 0.75rem;
-                flex-wrap: wrap;
-                align-items: flex-end;
-              "
-            >
-              <div class="form-group" style="flex: 1; min-width: 140px">
-                <label>Color Name *</label>
-                <input
-                  type="text"
-                  name="nom"
-                  class="form-control"
-                  placeholder="e.g. Red"
-                  required
-                />
-              </div>
-              <div class="form-group" style="flex: 1; min-width: 120px">
-                <label>Hex Color *</label>
-                <input
-                  type="color"
-                  name="hex"
-                  class="form-control"
-                  value="#ffffff"
-                  required
-                />
-              </div>
-              <button type="submit" class="btn-submit">➕ Add</button>
-            </form>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Color</th>
-                  <th>Name</th>
-                  <th>Hex</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {% for f in filaments %}
-                <tr>
-                  <td>
-                    <div
-                      style="width:30px;height:30px;border-radius:50%;background:{{ f.hex }};border:1px solid rgba(255,255,255,0.1)"
-                    ></div>
-                  </td>
-                  <td><strong>{{ f.nom }}</strong></td>
-                  <td style="color: #9ca3af">{{ f.hex }}</td>
-                  <td>
-                    <a
-                      href="/admin/filament/delete/{{ f.id }}"
-                      class="btn-action btn-delete"
-                      onclick="return confirm('Delete?');"
-                      >🗑</a
-                    >
-                  </td>
-                </tr>
-                {% endfor %}
-              </tbody>
-            </table>
-          </div>
+            <button type="submit" class="btn-submit">💾 Save</button>
+          </form>
         </div>
       </div>
-      <!-- /content -->
-    </div>
-    <!-- /main -->
-
-    <script>
-      function showPanel(name, btn) {
-        document
-          .querySelectorAll(".panel")
-          .forEach((p) => p.classList.remove("active"));
-        document
-          .querySelectorAll(".nav-item")
-          .forEach((n) => n.classList.remove("active"));
-        document.getElementById("panel-" + name).classList.add("active");
-        btn.classList.add("active");
-        const titles = {
-          orders: "Orders",
-          products: "Products",
-          "add-product": "Add a Product",
-          categories: "Categories",
-          coupons: "Coupons",
-          avis: "Reviews",
-          filaments: "Colors",
-        };
-        document.getElementById("page-title").textContent =
-          titles[name] || name;
-        document.getElementById("sidebar").classList.remove("open");
-      }
-
-      function filterTable(input, tbodyId) {
-        const q = input.value.toLowerCase();
-        document.querySelectorAll(`#${tbodyId} tr`).forEach((row) => {
-          row.style.display = row.textContent.toLowerCase().includes(q)
-            ? ""
-            : "none";
-        });
-      }
-
-      function openEditProduct(id, nom, prix, categorie, description, notes) {
-        document.getElementById("edit-nom").value = nom;
-        document.getElementById("edit-prix").value = prix;
-        document.getElementById("edit-categorie").value = categorie;
-        document.getElementById("edit-description").value = description || "";
-        document.getElementById("edit-notes").value = notes || "";
-        document
-          .getElementById("form-edit-product")
-          .setAttribute("action", "/admin/product/edit/" + id);
-        document.getElementById("modal-product").classList.add("open");
-      }
-      function toggleCouponType(val) {
-        document.getElementById("product-select-group").style.display =
-          val === "product" || val === "one_time" ? "flex" : "none";
-        document.getElementById("one-time-checkbox").checked =
-          val === "one_time";
-      }
-      function openEditCategory(id, nom) {
-        document.getElementById("edit-cat-nom").value = nom;
-        document.getElementById("form-edit-category").action =
-          "/admin/category/edit/" + id;
-        document.getElementById("modal-category").classList.add("open");
-      }
-    </script>
-    <!-- MODAL EDIT PRODUCT -->
-    <div
-      class="modal-overlay"
-      id="modal-product"
-      onclick="if (event.target === this) this.classList.remove('open');"
-    >
-      <div class="modal">
-        <button
-          class="modal-close-btn"
-          onclick="
-            document.getElementById('modal-product').classList.remove('open')
-          "
-        >
-          ✕
-        </button>
-        <h3>✏️ Edit Product</h3>
-        <form
-          id="form-edit-product"
-          method="POST"
-          style="display: flex; flex-direction: column; gap: 0.75rem"
-        >
-          <div class="form-group">
-            <label>Name *</label>
-            <input
-              type="text"
-              name="nom"
-              id="edit-nom"
-              class="form-control"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label>Price (USD) *</label>
-            <input
-              type="number"
-              name="prix"
-              id="edit-prix"
-              class="form-control"
-              step="0.01"
-              required
-            />
-          </div>
-          <div class="form-group">
-            <label>Category *</label>
-            <select name="categorie" id="edit-categorie" class="form-control">
-              {% for cat in categories %}
-              <option value="{{ cat.nom }}">{{ cat.nom }}</option>
+      <!-- ═══ PANEL: FILAMENTS ═══ -->
+      <div class="panel" id="panel-filaments">
+        <div class="form-card">
+          <h3>🎨 Add a Filament Color</h3>
+          <form action="/admin/filament/add" method="POST" style="
+                display: flex;
+                gap: 0.75rem;
+                flex-wrap: wrap;
+                align-items: flex-end;
+              ">
+            <div class="form-group" style="flex: 1; min-width: 140px">
+              <label>Color Name *</label>
+              <input type="text" name="nom" class="form-control" placeholder="e.g. Red" required />
+            </div>
+            <div class="form-group" style="flex: 1; min-width: 120px">
+              <label>Hex Color *</label>
+              <input type="color" name="hex" class="form-control" value="#ffffff" required />
+            </div>
+            <button type="submit" class="btn-submit">➕ Add</button>
+          </form>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Color</th>
+                <th>Name</th>
+                <th>Hex</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for f in filaments %}
+              <tr>
+                <td>
+                  <div
+                    style="width:30px;height:30px;border-radius:50%;background:{{ f.hex }};border:1px solid rgba(255,255,255,0.1)">
+                  </div>
+                </td>
+                <td><strong>{{ f.nom }}</strong></td>
+                <td style="color: #9ca3af">{{ f.hex }}</td>
+                <td>
+                  <a href="/admin/filament/delete/{{ f.id }}" class="btn-action btn-delete"
+                    onclick="return confirm('Delete?');">🗑</a>
+                </td>
+              </tr>
               {% endfor %}
-            </select>
-          </div>
-          <div class="form-group">
-            <label>Description</label>
-            <input
-              type="text"
-              name="description"
-              id="edit-description"
-              class="form-control"
-            />
-          </div>
-          <div class="form-group">
-            <label>📝 Notes (internal)</label>
-            <textarea
-              name="notes"
-              id="edit-notes"
-              class="form-control"
-              rows="3"
-              placeholder="Internal notes..."
-            ></textarea>
-          </div>
-          <button type="submit" class="btn-submit">💾 Save Changes</button>
-        </form>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-
-    <!-- MODAL EDIT CATEGORY -->
-    <div
-      class="modal-overlay"
-      id="modal-category"
-      onclick="if (event.target === this) this.classList.remove('open');"
-    >
-      <div class="modal">
-        <button
-          class="modal-close-btn"
-          onclick="
-            document.getElementById('modal-category').classList.remove('open')
-          "
-        >
-          ✕
-        </button>
-        <h3>✏️ Edit Category</h3>
-        <form
-          id="form-edit-category"
-          method="POST"
-          style="display: flex; flex-direction: column; gap: 0.75rem"
-        >
-          <div class="form-group">
-            <label>Category Name *</label>
-            <input
-              type="text"
-              name="nom"
-              id="edit-cat-nom"
-              class="form-control"
-              required
-            />
-          </div>
-          <button type="submit" class="btn-submit">💾 Save</button>
-        </form>
-      </div>
-    </div>
-    <!-- MODAL FILAMENTS PRODUIT -->
-<div class="modal-overlay" id="modal-filaments" onclick="if(event.target===this)this.classList.remove('open')">
-  <div class="modal">
-    <button class="modal-close-btn" onclick="document.getElementById('modal-filaments').classList.remove('open')">✕</button>
-    <h3>🎨 Available Colors for <span id="filament-modal-name"></span></h3>
-    <form id="form-filaments" method="POST" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem">
-      <div id="filament-checkboxes" style="display:flex;flex-wrap:wrap;gap:0.75rem">
-        {% for f in filaments %}
-        <label style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;background:var(--gris2);padding:0.5rem 0.8rem;border-radius:8px;border:1px solid var(--border)">
-          <input type="checkbox" name="filament_ids" value="{{ f.id }}" class="filament-cb-{{ f.id }}">
-          <div style="width:18px;height:18px;border-radius:50%;background:{{ f.hex }}"></div>
-          {{ f.nom }}
-        </label>
-        {% endfor %}
-      </div>
-      <button type="submit" class="btn-submit">💾 Save</button>
-    </form>
+    <!-- /content -->
   </div>
-</div>
+  <!-- /main -->
 
-<script>
-function openFilamentModal(id, nom, selectedIds) {
-  document.getElementById('filament-modal-name').textContent = nom;
-  document.getElementById('form-filaments').action = '/admin/product/filaments/' + id;
-  document.querySelectorAll('[class^="filament-cb-"]').forEach(cb => {
-    cb.checked = selectedIds.includes(parseInt(cb.value));
-  });
-  document.getElementById('modal-filaments').classList.add('open');
-}
-</script>
+  <script>
+    function showPanel(name, btn) {
+      document
+        .querySelectorAll(".panel")
+        .forEach((p) => p.classList.remove("active"));
+      document
+        .querySelectorAll(".nav-item")
+        .forEach((n) => n.classList.remove("active"));
+      document.getElementById("panel-" + name).classList.add("active");
+      btn.classList.add("active");
+      const titles = {
+        orders: "Orders",
+        products: "Products",
+        "add-product": "Add a Product",
+        categories: "Categories",
+        coupons: "Coupons",
+        avis: "Reviews",
+        filaments: "Colors",
+        customizable: "Customizable Products",
+      };
+      document.getElementById("page-title").textContent =
+        titles[name] || name;
+      document.getElementById("sidebar").classList.remove("open");
+    }
 
-  </body>
+    function filterTable(input, tbodyId) {
+      const q = input.value.toLowerCase();
+      document.querySelectorAll(`#${tbodyId} tr`).forEach((row) => {
+        row.style.display = row.textContent.toLowerCase().includes(q)
+          ? ""
+          : "none";
+      });
+    }
+
+    function openEditProduct(id, nom, prix, categorie, description, notes) {
+      document.getElementById("edit-nom").value = nom;
+      document.getElementById("edit-prix").value = prix;
+      document.getElementById("edit-categorie").value = categorie;
+      document.getElementById("edit-description").value = description || "";
+      document.getElementById("edit-notes").value = notes || "";
+      document
+        .getElementById("form-edit-product")
+        .setAttribute("action", "/admin/product/edit/" + id);
+      document.getElementById("modal-product").classList.add("open");
+    }
+    function toggleCouponType(val) {
+      document.getElementById("product-select-group").style.display =
+        val === "product" || val === "one_time" ? "flex" : "none";
+      document.getElementById("one-time-checkbox").checked =
+        val === "one_time";
+    }
+    function openEditCategory(id, nom) {
+      document.getElementById("edit-cat-nom").value = nom;
+      document.getElementById("form-edit-category").action =
+        "/admin/category/edit/" + id;
+      document.getElementById("modal-category").classList.add("open");
+    }
+  </script>
+  <!-- MODAL EDIT PRODUCT -->
+  <div class="modal-overlay" id="modal-product" onclick="if (event.target === this) this.classList.remove('open');">
+    <div class="modal">
+      <button class="modal-close-btn" onclick="
+            document.getElementById('modal-product').classList.remove('open')
+          ">
+        ✕
+      </button>
+      <h3>✏️ Edit Product</h3>
+      <form id="form-edit-product" method="POST" style="display: flex; flex-direction: column; gap: 0.75rem">
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" name="nom" id="edit-nom" class="form-control" required />
+        </div>
+        <div class="form-group">
+          <label>Price (USD) *</label>
+          <input type="number" name="prix" id="edit-prix" class="form-control" step="0.01" required />
+        </div>
+        <div class="form-group">
+          <label>Category *</label>
+          <select name="categorie" id="edit-categorie" class="form-control">
+            {% for cat in categories %}
+            <option value="{{ cat.nom }}">{{ cat.nom }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" name="description" id="edit-description" class="form-control" />
+        </div>
+        <div class="form-group">
+          <label>📝 Notes (internal)</label>
+          <textarea name="notes" id="edit-notes" class="form-control" rows="3"
+            placeholder="Internal notes..."></textarea>
+        </div>
+        <button type="submit" class="btn-submit">💾 Save Changes</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL EDIT CATEGORY -->
+  <div class="modal-overlay" id="modal-category" onclick="if (event.target === this) this.classList.remove('open');">
+    <div class="modal">
+      <button class="modal-close-btn" onclick="
+            document.getElementById('modal-category').classList.remove('open')
+          ">
+        ✕
+      </button>
+      <h3>✏️ Edit Category</h3>
+      <form id="form-edit-category" method="POST" style="display: flex; flex-direction: column; gap: 0.75rem">
+        <div class="form-group">
+          <label>Category Name *</label>
+          <input type="text" name="nom" id="edit-cat-nom" class="form-control" required />
+        </div>
+        <button type="submit" class="btn-submit">💾 Save</button>
+      </form>
+    </div>
+  </div>
+  <!-- MODAL FILAMENTS PRODUIT -->
+  <div class="modal-overlay" id="modal-filaments" onclick="if(event.target===this)this.classList.remove('open')">
+    <div class="modal">
+      <button class="modal-close-btn"
+        onclick="document.getElementById('modal-filaments').classList.remove('open')">✕</button>
+      <h3>🎨 Available Colors for <span id="filament-modal-name"></span></h3>
+      <form id="form-filaments" method="POST" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem">
+        <div id="filament-checkboxes" style="display:flex;flex-wrap:wrap;gap:0.75rem">
+          {% for f in filaments %}
+          <label
+            style="display:flex;align-items:center;gap:0.5rem;cursor:pointer;background:var(--gris2);padding:0.5rem 0.8rem;border-radius:8px;border:1px solid var(--border)">
+            <input type="checkbox" name="filament_ids" value="{{ f.id }}" class="filament-cb-{{ f.id }}">
+            <div style="width:18px;height:18px;border-radius:50%;background:{{ f.hex }}"></div>
+            {{ f.nom }}
+          </label>
+          {% endfor %}
+        </div>
+        <button type="submit" class="btn-submit">💾 Save</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    function openFilamentModal(id, nom, selectedIds) {
+      document.getElementById('filament-modal-name').textContent = nom;
+      document.getElementById('form-filaments').action = '/admin/product/filaments/' + id;
+      document.querySelectorAll('[class^="filament-cb-"]').forEach(cb => {
+        cb.checked = selectedIds.includes(parseInt(cb.value));
+      });
+      document.getElementById('modal-filaments').classList.add('open');
+    }
+  </script>
+
+</body>
+
 </html>

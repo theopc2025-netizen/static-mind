@@ -10,6 +10,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E0E5H4JD9X');
+      window.customizableProducts = [{% for p in products %}{% if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
       window.productColors = {
   {% for p in products %}
   {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
@@ -1094,7 +1095,8 @@
       '{{ p.categorie }}',
       {{ p.prix }},
       '{{ (p.description or '') | replace("'", "\\'") | replace('\n', ' ') }}',
-      '{% if p.image %}/static/uploads/{{ p.image }}{% endif %}'
+      '{% if p.image %}/static/uploads/{{ p.image }}{% endif %}',
+      {{ p.id }}
     )">
     {% if p.image %}
     <img src="/static/uploads/{{ p.image }}" alt="{{ p.nom }}" />
@@ -1112,7 +1114,7 @@
     <div class="card-name">{{ p.nom }}</div>
     <div class="card-footer">
       <span class="card-price">{{ "%.2f"|format(p.prix) }} USD</span>
-      onclick="event.stopPropagation();addToCart('{{ p.nom }}', {{ p.prix }}, {{ p.id }})"
+      <button class="btn-add" onclick="event.stopPropagation();addToCart('{{ p.nom }}', {{ p.prix }}, {{ p.id }})">+</button>
     </div>
   </div>
 </div>
@@ -1499,7 +1501,7 @@ oninput="validateContact(this)"
      function addToCart(name, price, productId) {
   // Cherche les couleurs dispo pour ce produit
   const colorData = window.productColors[productId];
-  if (colorData && colorData.length > 0) {
+  if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(productId)) {
     showColorPicker(name, price, colorData);
   } else {
     pushToCart(name, price, null);
@@ -1809,7 +1811,8 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
-   function openProductModal(name, cat, price, desc, imgUrl) {
+   function openProductModal(name, cat, price, desc, imgUrl, productId) {
+
   const icons = { 'Figurines': '🗿', 'Keychains': '🔑' };
   const wrap = document.getElementById('modal-img-wrap');
   const ph = document.getElementById('modal-placeholder');
@@ -1830,7 +1833,7 @@ document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
   document.getElementById('modal-price').textContent = '$' + parseFloat(price).toFixed(2);
   document.getElementById('modal-desc').textContent = desc || 'No description available.';
  document.getElementById('modal-add-btn').onclick = () => {
-  addToCart(name, price, productId);  // passe productId
+  addToCart(name, price, productId);
   closeProductModal();
 };
   };

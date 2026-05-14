@@ -379,5 +379,15 @@ def set_product_filaments(product_id):
     db.session.commit()
     flash('Colors updated!', 'success')
     return redirect(url_for('admin_dashboard'))
+@app.route('/admin/product/set-customizable', methods=['POST'])
+def set_customizable():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    selected_ids = request.form.getlist('product_ids')
+    for product in Product.query.all():
+        product.customizable = str(product.id) in selected_ids
+    db.session.commit()
+    flash('Customizable products updated!', 'success')
+    return redirect(url_for('admin_dashboard'))
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
