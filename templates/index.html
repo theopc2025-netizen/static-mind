@@ -1833,9 +1833,8 @@ document.querySelectorAll('.product-card').forEach(c => observer.observe(c));
   document.getElementById('modal-price').textContent = '$' + parseFloat(price).toFixed(2);
   document.getElementById('modal-desc').textContent = desc || 'No description available.';
  document.getElementById('modal-add-btn').onclick = () => {
-  addToCart(name, price, productId);
-  closeProductModal();
-};
+    addToCart(name, price, productId);
+    closeProductModal();
   };
   document.getElementById('product-modal').classList.add('open');
   document.body.style.overflow = 'hidden';
