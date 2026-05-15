@@ -10,7 +10,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E0E5H4JD9X');
-      window.customizableProducts = [{% for p in products %}{% if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endif %}{% endfor %}];
+      window.customizableProducts = [{% for p in products if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
       window.productColors = {
   {% for p in products %}
   {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
@@ -1500,7 +1500,7 @@ oninput="validateContact(this)"
 
      function addToCart(name, price, productId) {
   // Cherche les couleurs dispo pour ce produit
-  const colorData = window.productColors[productId];
+  const colorData = window.productColors[parseInt(productId)];
   if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(productId)) {
     showColorPicker(name, price, colorData);
   } else {
