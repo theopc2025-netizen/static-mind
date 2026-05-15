@@ -1,47 +1,51 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash, jsonify
 from models import db, Product, Order, Categorie, Coupon, Avis, Filament
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from werkzeug.utils import secure_filename  
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.secret_key = 'static_mind_secret_key_2026'
-import os
+
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///makermind.db')
 if database_url.startswith('postgres://'):
     database_url = database_url.replace('postgres://', 'postgresql://', 1)
 app.config['SQLALCHEMY_DATABASE_URI'] = database_url
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
-app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
 ADMIN_USERNAME = 'Theo'
 ADMIN_PASSWORD = 'StaticMind2026'
 
-def send_notification(order_id, name, details, email):
+def send_telegram(message):
     try:
-        msg = MIMEMultipart()
-        msg['From'] = 'theopc2025@gmail.com'
-        msg['To'] = 'matheoteddy10@gmail.com'
-        msg['Subject'] = f'New Order #{order_id} — Static Mind'
-        body = f"New order!\n\nOrder #{order_id}\nCustomer: {name}\nContact: {email or 'Not provided'}\nDetails: {details}\n\nAdmin: https://static-mind-production.up.railway.app/admin"
-        msg.attach(MIMEText(body, 'plain'))
-        server = smtplib.SMTP('smtp.gmail.com', 587)
-        server.starttls()
-        server.login('theopc2025@gmail.com', os.environ.get('GMAIL_APP_PASSWORD', ''))
-        server.sendmail('theopc2025@gmail.com', 'matheoteddy10@gmail.com', msg.as_string())
-        server.quit()
-        print('Email sent!')
+        import urllib.request, json
+        TOKEN = os.environ.get('TELEGRAM_TOKEN', '8872141816:AAFjxCDq8yc5GXt9BEWWWIMHvARhvPq_VzY')
+        CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '8251129580')
+        data = json.dumps({'chat_id': CHAT_ID, 'text': message, 'parse_mode': 'HTML'}).encode()
+        req = urllib.request.Request(
+            f'https://api.telegram.org/bot{TOKEN}/sendMessage',
+            data=data,
+            headers={'Content-Type': 'application/json'}
+        )
+        urllib.request.urlopen(req)
+        print('Telegram sent!')
     except Exception as e:
-        print(f'Email error: {e}')
+        print(f'Telegram error: {e}')
 
-db.init_app(app)
+def send_notification(order_id, name, details, email):
+    send_telegram(
+        f"🛒 <b>New Order #{order_id}!</b>\n"
+        f"👤 <b>Name:</b> {name}\n"
+        f"📞 <b>Contact:</b> {email or 'Not provided'}\n"
+        f"📝 <b>Details:</b> {details[:200]}"
+    )
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+db.init_app(app)
 
 @app.before_request
 def create_tables():
