@@ -10,7 +10,7 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E0E5H4JD9X');
-      window.customizableProducts = [{% for p in products if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
+      window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
       window.productColors = {
   {% for p in products %}
   {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
@@ -1533,15 +1533,29 @@ function selectColor(el, hex, nom) {
 
 function confirmColor() {
   if (!window._cpColor) { alert('Please select a color!'); return; }
-  pushToCart(window._cpName, window._cpPrice, window._cpColor);
   document.getElementById('color-picker-overlay').classList.remove('open');
+  if (window.needsTextProducts && window.needsTextProducts.includes(parseInt(window._cpProductId))) {
+    document.getElementById('text-picker-product').textContent = window._cpName;
+    document.getElementById('text-picker-input').value = '';
+    document.getElementById('text-picker-overlay').classList.add('open');
+  } else {
+    pushToCart(window._cpName, window._cpPrice, window._cpColor);
+  }
 }
 
-function pushToCart(name, price, color) {
-  const key = name + (color ? '|' + color.nom : '');
+function confirmText() {
+  const txt = document.getElementById('text-picker-input').value.trim().toUpperCase();
+  if (!txt) { alert('Please enter your text!'); return; }
+  window._cpText = txt;
+  pushToCart(window._cpName, window._cpPrice, window._cpColor, txt);
+  document.getElementById('text-picker-overlay').classList.remove('open');
+}
+
+function pushToCart(name, price, color, customText) {
+  const key = name + (color ? '|' + color.nom : '') + (customText ? '|' + customText : '');
   const existing = cart.find(i => i.key === key);
   if (existing) { existing.qty++; }
-  else { cart.push({ key, name, price, qty: 1, color, productId: window._cpProductId || 0 }); }
+  else { cart.push({ key, name, price, qty: 1, color, customText, productId: window._cpProductId || 0 }); }
   saveCart();
   updateCartUI();
   showAddedFlash();
@@ -1588,7 +1602,7 @@ function changeQty(key, delta) {
               (item) => `
             <div class="cart-item">
               <div class="cart-item-info">
-                <div class="cart-item-name">${item.name}${item.color ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">· <span style="width:12px;height:12px;border-radius:50%;background:${item.color.hex};display:inline-block"></span>${item.color.nom}</span>` : ''}</div>
+                <div class="cart-item-name">${item.name}${item.color ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">· <span style="width:12px;height:12px;border-radius:50%;background:${item.color.hex};display:inline-block"></span>${item.color.nom}</span>` : ''}${item.customText ? ` <span style="font-size:0.75rem;color:#a78bfa;font-weight:700">· "${item.customText}"</span>` : ''}</div>
 <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
               </div>
               <div class="cart-item-qty">
@@ -1925,6 +1939,19 @@ function getQuantityDiscount(qty) {
       <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:1rem" id="cp-title"></p>
       <div id="cp-colors" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem"></div>
       <button class="btn-primary" style="width:100%;justify-content:center" onclick="confirmColor()">✓ Confirm</button>
+    </div>
+  </div>
+</div>
+<div class="modal-overlay" id="text-picker-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-header">
+      <h3>✏️ Your custom text</h3>
+      <button class="modal-close" onclick="document.getElementById('text-picker-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:1rem">What text do you want printed on <strong id="text-picker-product"></strong>?</p>
+      <input type="text" id="text-picker-input" class="form-control" placeholder="e.g. NOLAN" style="text-transform:uppercase;font-size:1.2rem;font-weight:700;letter-spacing:0.1em;margin-bottom:1.5rem" oninput="this.value=this.value.toUpperCase()" />
+      <button class="btn-primary" style="width:100%;justify-content:center" onclick="confirmText()">✓ Confirm</button>
     </div>
   </div>
 </div>

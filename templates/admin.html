@@ -872,7 +872,7 @@
                   <td>
                     <div class="action-group">
                       <button class="btn-edit"
-                        onclick="openEditProduct({{ p.id }}, '{{ p.nom }}', {{ p.prix }}, '{{ p.categorie }}', '{{ p.description or '' }}', '{{ p.notes or '' }}')">
+                        onclick="openEditProduct({{ p.id }}, '{{ p.nom }}', {{ p.prix }}, '{{ p.categorie }}', '{{ p.description or '' }}', '{{ p.notes or '' }}', {{ 'true' if p.needs_text else 'false' }})">
                         ✏️ Edit
                       </button>
                       <a href="/admin/product/delete/{{ p.id }}" class="btn-action btn-delete"
@@ -1273,6 +1273,7 @@
       document.getElementById("edit-categorie").value = categorie;
       document.getElementById("edit-description").value = description || "";
       document.getElementById("edit-notes").value = notes || "";
+      document.getElementById("edit-needs-text").checked = arguments[6] || false;
       document
         .getElementById("form-edit-product")
         .setAttribute("action", "/admin/product/edit/" + id);

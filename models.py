@@ -13,6 +13,7 @@ class Product(db.Model):
     image       = db.Column(db.String(300), nullable=True)
     notes          = db.Column(db.Text, default='')
     customizable   = db.Column(db.Boolean, default=False)
+    needs_text     = db.Column(db.Boolean, default=False)
     created_at  = db.Column(db.DateTime, default=datetime.utcnow)
     filaments = db.relationship('Filament', secondary='product_filaments', backref='products')
 

@@ -55,7 +55,7 @@ def create_tables():
         pass
     try:
         with db.engine.connect() as conn:
-            conn.execute(db.text("ALTER TABLE products ADD COLUMN customizable BOOLEAN DEFAULT FALSE"))
+            conn.execute(db.text("ALTER TABLE products ADD COLUMN needs_text BOOLEAN DEFAULT FALSE"))
             conn.commit()
     except:
         pass
@@ -265,6 +265,7 @@ def edit_product(product_id):
     product.description = request.form.get('description')
     product.categorie = request.form.get('categorie')
     product.notes = request.form.get('notes')
+    product.needs_text = request.form.get('needs_text') == 'on'
     db.session.commit()
     flash(f'Product updated!', 'success')
     return redirect(url_for('admin_dashboard'))
