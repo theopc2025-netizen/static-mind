@@ -1521,6 +1521,7 @@ function showColorPicker(name, price, colors) {
     </div>`).join('');
   window._cpName = name;
   window._cpPrice = price;
+  window._cpProductId = productId;
   overlay.classList.add('open');
 }
 
@@ -1540,7 +1541,7 @@ function pushToCart(name, price, color) {
   const key = name + (color ? '|' + color.nom : '');
   const existing = cart.find(i => i.key === key);
   if (existing) { existing.qty++; }
-  else { cart.push({ key, name, price, qty: 1, color }); }
+  else { cart.push({ key, name, price, qty: 1, color, productId: window._cpProductId || 0 }); }
   saveCart();
   updateCartUI();
   showAddedFlash();
@@ -1553,6 +1554,13 @@ function pushToCart(name, price, color) {
 function changeQty(key, delta) {
   const item = cart.find(i => i.key === key);
   if (!item) return;
+  if (delta > 0 && window.customizableProducts.includes(parseInt(item.productId))) {
+    const colors = window.productColors[parseInt(item.productId)];
+    if (colors && colors.length > 0) {
+      addToCart(item.name, item.price, item.productId);
+      return;
+    }
+  }
   item.qty += delta;
   if (item.qty <= 0) removeFromCart(item.key);
   else { saveCart(); updateCartUI(); }
