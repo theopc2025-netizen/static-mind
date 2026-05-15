@@ -876,9 +876,10 @@
                         ✏️ Edit
                       </button>
                       <a href="/admin/product/delete/{{ p.id }}" class="btn-action btn-delete"
-                        onclick="return confirm('Delete this product?');">🗑</a <button class="btn-edit"
+                        onclick="return confirm('Delete this product?');">🗑</a>
+                      <button class="btn-edit"
                         onclick="openFilamentModal({{ p.id }}, '{{ p.nom }}', [{{ p.filaments | map(attribute='id') | list | join(',') }}])">
-                      🎨 Colors
+                        🎨 Colors
                       </button>
                     </div>
                   </td>
