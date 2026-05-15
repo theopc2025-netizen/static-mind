@@ -1529,10 +1529,8 @@ function showColorPicker(name, price, colors) {
     </div>`).join('');
   window._cpName = name;
   window._cpPrice = price;
-  window._cpProductId = productId;
   overlay.classList.add('open');
 }
-
 function selectColor(el, hex, nom) {
   document.querySelectorAll('#cp-colors > div').forEach(d => d.style.borderColor = 'transparent');
   el.style.borderColor = '#7c3aed';
