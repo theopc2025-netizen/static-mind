@@ -10,7 +10,8 @@
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
       gtag('config', 'G-E0E5H4JD9X');
-      window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
+      window.customizableProducts = [{% for p in products if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
+window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
       window.productColors = {
   {% for p in products %}
   {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
@@ -1499,10 +1500,17 @@ oninput="validateContact(this)"
       }
 
      function addToCart(name, price, productId) {
-  // Cherche les couleurs dispo pour ce produit
+  window._cpProductId = parseInt(productId);
   const colorData = window.productColors[parseInt(productId)];
   if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(parseInt(productId))) {
     showColorPicker(name, price, colorData);
+  } else if (window.needsTextProducts && window.needsTextProducts.includes(parseInt(productId))) {
+    document.getElementById('text-picker-product').textContent = name;
+    document.getElementById('text-picker-input').value = '';
+    window._cpName = name;
+    window._cpPrice = price;
+    window._cpColor = null;
+    document.getElementById('text-picker-overlay').classList.add('open');
   } else {
     pushToCart(name, price, null);
   }
