@@ -1235,28 +1235,28 @@
 
   <script>
     function showPanel(name, btn) {
-      document
-        .querySelectorAll(".panel")
-        .forEach((p) => p.classList.remove("active"));
-      document
-        .querySelectorAll(".nav-item")
-        .forEach((n) => n.classList.remove("active"));
+      document.querySelectorAll(".panel").forEach((p) => p.classList.remove("active"));
+      document.querySelectorAll(".nav-item").forEach((n) => n.classList.remove("active"));
       document.getElementById("panel-" + name).classList.add("active");
       btn.classList.add("active");
       const titles = {
-        orders: "Orders",
-        products: "Products",
-        "add-product": "Add a Product",
-        categories: "Categories",
-        coupons: "Coupons",
-        avis: "Reviews",
-        filaments: "Colors",
-        customizable: "Customizable Products",
+        orders: "Orders", products: "Products", "add-product": "Add a Product",
+        categories: "Categories", coupons: "Coupons", avis: "Reviews",
+        filaments: "Colors", customizable: "Customizable Products",
       };
-      document.getElementById("page-title").textContent =
-        titles[name] || name;
+      document.getElementById("page-title").textContent = titles[name] || name;
       document.getElementById("sidebar").classList.remove("open");
+      localStorage.setItem('admin_panel', name);
     }
+
+    // Auto-restore last panel
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('admin_panel');
+      if (saved) {
+        const btn = document.querySelector(`[onclick="showPanel('${saved}', this)"]`);
+        if (btn) showPanel(saved, btn);
+      }
+    });
 
     function filterTable(input, tbodyId) {
       const q = input.value.toLowerCase();
