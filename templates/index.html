@@ -1501,7 +1501,7 @@ oninput="validateContact(this)"
      function addToCart(name, price, productId) {
   // Cherche les couleurs dispo pour ce produit
   const colorData = window.productColors[parseInt(productId)];
-  if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(productId)) {
+  if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(parseInt(productId))) {
     showColorPicker(name, price, colorData);
   } else {
     pushToCart(name, price, null);
@@ -1580,14 +1580,14 @@ function changeQty(key, delta) {
               (item) => `
             <div class="cart-item">
               <div class="cart-item-info">
-                <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
+                <div class="cart-item-name">${item.name}${item.color ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">· <span style="width:12px;height:12px;border-radius:50%;background:${item.color.hex};display:inline-block"></span>${item.color.nom}</span>` : ''}</div>
+<div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
               </div>
               <div class="cart-item-qty">
-                <button class="qty-btn" onclick="changeQty('${item.name}', -1)">−</button>
-                <span class="qty-num">${item.qty}</span>
-                <button class="qty-btn" onclick="changeQty('${item.name}', 1)">+</button>
-                <button class="qty-btn" onclick="removeFromCart('${item.name}')" style="color:#f87171;margin-left:0.2rem">🗑</button>
+                <button class="qty-btn" onclick="changeQty('${item.key}', -1)">−</button>
+<span class="qty-num">${item.qty}</span>
+<button class="qty-btn" onclick="changeQty('${item.key}', 1)">+</button>
+<button class="qty-btn" onclick="removeFromCart('${item.key}')" style="color:#f87171;margin-left:0.2rem">🗑</button>
               </div>
             </div>
           `,
