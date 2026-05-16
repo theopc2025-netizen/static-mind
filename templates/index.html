@@ -583,125 +583,157 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
         font-size: 1.1rem;
       }
 
-      /* CART MODAL */
-      .cart-item {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        padding: 0.75rem 0;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.07);
-        gap: 0.75rem;
-      }
-      .cart-item:last-child {
-        border-bottom: none;
-      }
-      .cart-item-info {
-        flex: 1;
-      }
-      .cart-item-name {
-        font-family: "Syne", sans-serif;
-        font-weight: 700;
-        font-size: 0.9rem;
-      }
-      .cart-item-price {
-        color: var(--violet-clair);
-        font-weight: 700;
-        font-size: 0.82rem;
-        margin-top: 0.2rem;
-      }
-      .cart-item-qty {
-        display: flex;
-        align-items: center;
-        gap: 0.4rem;
-      }
-      .qty-btn {
-        background: rgba(255, 255, 255, 0.08);
-        border: none;
-        color: var(--blanc);
-        width: 26px;
-        height: 26px;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 1rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: background var(--transition);
-      }
-      .qty-btn:hover {
-        background: rgba(124, 58, 237, 0.3);
-      }
-      .qty-num {
-        font-size: 0.85rem;
-        min-width: 20px;
-        text-align: center;
-        font-weight: 700;
-      }
-      .cart-total {
-        padding: 1rem 0 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: "Syne", sans-serif;
-        font-weight: 800;
-        font-size: 1rem;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-        margin-top: 0.5rem;
-      }
-      .cart-total-amount {
-        color: var(--violet-clair);
-        font-size: 1.2rem;
-      }
-      .payment-section {
-        margin: 1.2rem 0;
-      }
-      .payment-section label {
-        font-size: 0.82rem;
-        color: #9ca3af;
-        font-weight: 500;
-        margin-bottom: 0.6rem;
-        display: block;
-      }
-      .payment-options {
-        display: flex;
-        gap: 0.75rem;
-        flex-wrap: wrap;
-      }
-      .pay-option {
-        flex: 1;
-        min-width: 120px;
-        border: 2px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        padding: 0.75rem;
-        cursor: pointer;
-        text-align: center;
-        transition: all var(--transition);
-        background: transparent;
-        color: var(--blanc);
-        font-family: "DM Sans", sans-serif;
-      }
-      .pay-option:hover,
-      .pay-option.selected {
-        border-color: var(--violet);
-        background: rgba(124, 58, 237, 0.12);
-      }
-      .pay-icon {
-        font-size: 1.5rem;
-        margin-bottom: 0.3rem;
-      }
-      .pay-label {
-        font-size: 0.78rem;
-        font-weight: 500;
-      }
-      .cart-empty {
-        text-align: center;
-        padding: 2rem;
-        color: #4b5563;
-      }
-      .cart-empty .icon {
-        font-size: 3rem;
-        margin-bottom: 0.5rem;
-      }
+/* CART MODAL */
+.modal {
+  background: #0f0f1a;
+  border-radius: 24px;
+  width: 100%;
+  max-width: 480px;
+  border: 1px solid rgba(124, 58, 237, 0.2);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.6);
+}
+.modal-header {
+  padding: 1.6rem 1.6rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.modal-header h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+.modal-close {
+  background: rgba(255,255,255,0.06);
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.modal-close:hover { background: rgba(124,58,237,0.3); color: #fff; }
+.modal-body { padding: 1.4rem 1.6rem 1.6rem; }
+.cart-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  gap: 0.75rem;
+}
+.cart-item:last-child { border-bottom: none; }
+.cart-item-info { flex: 1; }
+.cart-item-name {
+  font-family: 'Syne', sans-serif;
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: #f5f5f5;
+}
+.cart-item-price {
+  color: #a78bfa;
+  font-weight: 700;
+  font-size: 0.82rem;
+  margin-top: 0.2rem;
+}
+.cart-item-qty {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(255,255,255,0.04);
+  border-radius: 10px;
+  padding: 0.25rem 0.4rem;
+}
+.qty-btn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.2s, background 0.2s;
+}
+.qty-btn:hover { background: rgba(124,58,237,0.25); color: #fff; }
+.qty-num {
+  font-size: 0.85rem;
+  min-width: 18px;
+  text-align: center;
+  font-weight: 700;
+  color: #f5f5f5;
+}
+.cart-total {
+  padding: 0.9rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.95rem;
+  border-top: 1px solid rgba(255,255,255,0.07);
+  margin-top: 0.25rem;
+}
+.cart-total-amount { color: #a78bfa; font-size: 1.25rem; }
+.payment-section { margin: 1.2rem 0; }
+.payment-section label {
+  font-size: 0.82rem;
+  color: #9ca3af;
+  font-weight: 500;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+.payment-options { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.pay-option {
+  flex: 1;
+  min-width: 110px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 14px;
+  padding: 0.85rem 0.5rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.03);
+  color: #9ca3af;
+  font-family: 'DM Sans', sans-serif;
+}
+.pay-option:hover { border-color: rgba(124,58,237,0.4); color: #f5f5f5; }
+.pay-option.selected {
+  border-color: var(--violet);
+  background: rgba(124,58,237,0.1);
+  color: #f5f5f5;
+}
+.pay-icon { font-size: 1.4rem; margin-bottom: 0.25rem; }
+.pay-label { font-size: 0.75rem; font-weight: 600; }
+.cart-empty { text-align: center; padding: 2.5rem; color: #374151; }
+.cart-empty .icon { font-size: 2.5rem; margin-bottom: 0.5rem; display: block; }
+@keyframes pulse-order {
+  0%, 100% { box-shadow: 0 4px 20px rgba(124,58,237,0.4); }
+  50% { box-shadow: 0 4px 35px rgba(124,58,237,0.85), 0 0 0 8px rgba(124,58,237,0.1); }
+}
+#place-order-btn {
+  background: var(--violet);
+  animation: pulse-order 2s ease-in-out infinite;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+#place-order-btn:hover {
+  background: var(--violet-sombre);
+  animation: none;
+  transform: translateY(-2px);
       .added-flash {
         position: fixed;
         bottom: 5rem;
@@ -909,37 +941,7 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
       .modal-overlay.open {
         display: flex;
       }
-      .modal {
-        background: #111827;
-        border-radius: 20px;
-        width: 100%;
-        max-width: 560px;
-        border: 1px solid rgba(124, 58, 237, 0.25);
-        max-height: 90vh;
-        overflow-y: auto;
-      }
-      .modal-header {
-        padding: 1.5rem 1.5rem 0;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .modal-header h3 {
-        font-family: "Syne", sans-serif;
-        font-size: 1.2rem;
-        font-weight: 800;
-      }
-      .modal-close {
-        background: none;
-        border: none;
-        color: #9ca3af;
-        font-size: 1.4rem;
-        cursor: pointer;
-        line-height: 1;
-      }
-      .modal-body {
-        padding: 1.5rem;
-      }
+
 
       @media (max-width: 480px) {
         nav a {
@@ -978,6 +980,104 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
 }
 .wts-pulse {
   animation: pulse-wts 2s ease-in-out infinite;
+}
+/* ── HERO ANIMATION ── */
+@keyframes heroBadge {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroTitle {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroSub {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes heroStats {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes layerBuild {
+  0%   { transform: scaleX(0); opacity: 0; }
+  60%  { opacity: 1; }
+  100% { transform: scaleX(1); opacity: 0.18; }
+}
+@keyframes scanLine {
+  0%   { top: 100%; opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { top: -2px; opacity: 0; }
+}
+@keyframes nozzleDrop {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(6px); }
+}
+@keyframes printDot {
+  0%,100% { opacity: 0.2; transform: scale(0.8); }
+  50%     { opacity: 1;   transform: scale(1.2); }
+}
+
+.hero-badge    { animation: heroBadge 0.6s ease 0.1s both; }
+.hero h1       { animation: heroTitle 0.7s ease 0.3s both; }
+.hero p        { animation: heroSub   0.7s ease 0.55s both; }
+.hero-stats    { animation: heroStats 0.7s ease 0.75s both; }
+
+/* Conteneur des layers animés */
+.hero-layers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.h-layer {
+  position: absolute;
+  left: 0; right: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, transparent 0%, var(--violet) 40%, var(--violet-clair) 60%, transparent 100%);
+  transform: scaleX(0);
+  transform-origin: left center;
+  animation: layerBuild 1.8s ease-out forwards;
+}
+/* Ligne de scan (nozzle qui passe) */
+.hero-scan {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--violet-clair), transparent);
+  animation: scanLine 4s ease-in-out 1.2s infinite;
+  pointer-events: none;
+  box-shadow: 0 0 8px 2px rgba(167,139,250,0.35);
+}
+/* Icône nozzle */
+.hero-nozzle {
+  position: absolute;
+  right: 2.5rem;
+  top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  animation: nozzleDrop 3s ease-in-out 1s infinite;
+  pointer-events: none;
+}
+.nozzle-body {
+  width: 28px; height: 36px;
+  background: rgba(124,58,237,0.25);
+  border: 1px solid rgba(167,139,250,0.4);
+  border-radius: 4px 4px 8px 8px;
+  clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);
+}
+.nozzle-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--violet-clair);
+  animation: printDot 0.9s ease-in-out 1s infinite;
+  box-shadow: 0 0 6px 2px rgba(167,139,250,0.6);
+}
+@media (max-width: 480px) {
+  .hero-nozzle { display: none; }
 }
     </style>
   </head>
@@ -1032,6 +1132,14 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
 
     <!-- HERO -->
     <section class="hero">
+      <!-- Animation layers -->
+      <div class="hero-layers" id="hero-layers"></div>
+      <div class="hero-scan"></div>
+      <div class="hero-nozzle">
+        <div class="nozzle-body"></div>
+        <div class="nozzle-dot"></div>
+      </div>
+
       <div class="hero-badge">✦ Custom 3D Printing · Lebanon</div>
       <h1>Bring your<br /><em>3D ideas</em> to life</h1>
       <p>
@@ -1482,6 +1590,21 @@ oninput="validateContact(this)"
     </footer>
 
     <script>
+    // ── HERO LAYERS ANIMATION ──
+(function() {
+  const container = document.getElementById('hero-layers');
+  if (!container) return;
+  const count = 18;
+  for (let i = 0; i < count; i++) {
+    const div = document.createElement('div');
+    div.className = 'h-layer';
+    div.style.top = (10 + (i / count) * 80) + '%';
+    div.style.animationDelay = (0.2 + i * 0.12) + 's';
+    div.style.animationDuration = (1.4 + Math.random() * 0.8) + 's';
+    div.style.opacity = '0';
+    container.appendChild(div);
+  }
+})();
       // ── CART STATE ──
       let cart = [];
       let selectedPayment = "delivery";
