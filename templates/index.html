@@ -1711,6 +1711,13 @@ if (contact.length < 3) {
 myOrders.push(String(orderNum));
 localStorage.setItem('my_orders', JSON.stringify(myOrders));
 localStorage.setItem('order_placed', '1');
+if (appliedCoupon) {
+  const usedCoupons = JSON.parse(localStorage.getItem('used_coupons') || '[]');
+  if (!usedCoupons.includes(appliedCoupon)) {
+    usedCoupons.push(appliedCoupon);
+    localStorage.setItem('used_coupons', JSON.stringify(usedCoupons));
+  }
+}
 setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
 
       }
@@ -1806,26 +1813,35 @@ setTimeout(() => { flash.remove(); window.location.href = "/"; }, 4000);
         });
       });
       async function applyCoupon() {
-        const code = document.getElementById('coupon-input').value.trim().toUpperCase();
-        const msg = document.getElementById('coupon-msg');
-        if (!code) return;
-        const fd = new FormData();
-        fd.append('code', code);
-        const res = await fetch('/check-coupon', { method: 'POST', body: fd });
-        const data = await res.json();
-        if (data.valid) {
-          appliedCoupon = data.code;
-          discountPct = data.reduction;
-          msg.style.color = '#34d399';
-          msg.textContent = `✅ Coupon "${data.code}" applied! -${data.reduction}%`;
-          updateCartUI();
-        } else {
-          appliedCoupon = null;
-          discountPct = 0;
-          msg.style.color = '#f87171';
-          msg.textContent = '❌ Invalid coupon code';
-        }
-      }
+  const code = document.getElementById('coupon-input').value.trim().toUpperCase();
+  const msg = document.getElementById('coupon-msg');
+  if (!code) return;
+
+  // Vérifie si coupon déjà utilisé sur cet appareil
+  const usedCoupons = JSON.parse(localStorage.getItem('used_coupons') || '[]');
+  if (usedCoupons.includes(code)) {
+    msg.style.color = '#f87171';
+    msg.textContent = '❌ You already used this coupon!';
+    return;
+  }
+
+  const fd = new FormData();
+  fd.append('code', code);
+  const res = await fetch('/check-coupon', { method: 'POST', body: fd });
+  const data = await res.json();
+  if (data.valid) {
+    appliedCoupon = data.code;
+    discountPct = data.reduction;
+    msg.style.color = '#34d399';
+    msg.textContent = `✅ Coupon "${data.code}" applied! -${data.reduction}%`;
+    updateCartUI();
+  } else {
+    appliedCoupon = null;
+    discountPct = 0;
+    msg.style.color = '#f87171';
+    msg.textContent = '❌ Invalid coupon code';
+  }
+}
 function validateContact(input) {
   input.style.borderColor = input.value.trim().length >= 3 ? '' : '#ef4444';
 }
