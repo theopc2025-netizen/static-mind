@@ -4,7 +4,7 @@ import os
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
-app.secret_key = 'static_mind_secret_key_2026'
+app.secret_key = os.environ.get('SECRET_KEY', 'fallback_local')
 
 database_url = os.environ.get('DATABASE_URL', 'sqlite:///makermind.db')
 if database_url.startswith('postgres://'):
@@ -15,14 +15,14 @@ app.config['UPLOAD_FOLDER'] = 'static/uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'stl', 'obj', 'pdf'}
-ADMIN_USERNAME = 'Theo'
-ADMIN_PASSWORD = 'StaticMind2026'
+ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME')
+ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD')
 
 def send_telegram(message):
     try:
         import urllib.request, json
-        TOKEN = os.environ.get('TELEGRAM_TOKEN', '8872141816:AAFjxCDq8yc5GXt9BEWWWIMHvARhvPq_VzY')
-        CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID', '8251129580')
+        TOKEN = os.environ.get('TELEGRAM_TOKEN')
+        CHAT_ID = os.environ.get('TELEGRAM_CHAT_ID')
         data = json.dumps({'chat_id': CHAT_ID, 'text': message, 'parse_mode': 'HTML'}).encode()
         req = urllib.request.Request(
             f'https://api.telegram.org/bot{TOKEN}/sendMessage',
