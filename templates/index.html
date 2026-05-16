@@ -1080,6 +1080,13 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
 @media (max-width: 480px) {
   .hero-nozzle { display: none; }
 }
+@keyframes scrollReviews {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.reviews-track-wrap:hover .reviews-track {
+  animation-play-state: paused;
+}
     </style>
   </head>
 
@@ -1519,20 +1526,53 @@ oninput="validateContact(this)"
   <div class="section-header">
     <h2 class="section-title">Customer <span>Reviews</span></h2>
   </div>
+
   {% if avis %}
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem">
-    {% for a in avis %}
-    <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.2rem">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
-        <strong style="font-family:'Syne',sans-serif">{{ a.nom }}</strong>
-        <span style="color:#fbbf24">{{ '⭐' * a.etoiles }}</span>
+    {% if avis|length >= 3 %}
+    <!-- CARROUSEL AUTO-SCROLL -->
+    <div class="reviews-track-wrap" style="overflow:hidden;position:relative;margin-bottom:2rem;mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,black 8%,black 92%,transparent)">
+      <div class="reviews-track" id="reviews-track" style="display:flex;gap:1rem;width:max-content;animation:scrollReviews 30s linear infinite">
+        {% for a in avis %}
+        <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.2rem;min-width:280px;max-width:280px;flex-shrink:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+            <strong style="font-family:'Syne',sans-serif">{{ a.nom }}</strong>
+            <span style="color:#fbbf24;font-size:0.85rem">{{ '⭐' * a.etoiles }}</span>
+          </div>
+          <p style="color:#9ca3af;font-size:0.88rem;line-height:1.5">{{ a.texte }}</p>
+          <p style="color:#374151;font-size:0.75rem;margin-top:0.5rem">{{ a.created_at.strftime('%d/%m/%Y') }}</p>
+        </div>
+        {% endfor %}
+        <!-- Duplicate pour loop infini -->
+        {% for a in avis %}
+        <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.2rem;min-width:280px;max-width:280px;flex-shrink:0">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+            <strong style="font-family:'Syne',sans-serif">{{ a.nom }}</strong>
+            <span style="color:#fbbf24;font-size:0.85rem">{{ '⭐' * a.etoiles }}</span>
+          </div>
+          <p style="color:#9ca3af;font-size:0.88rem;line-height:1.5">{{ a.texte }}</p>
+          <p style="color:#374151;font-size:0.75rem;margin-top:0.5rem">{{ a.created_at.strftime('%d/%m/%Y') }}</p>
+        </div>
+        {% endfor %}
       </div>
-      <p style="color:#9ca3af;font-size:0.88rem;line-height:1.5">{{ a.texte }}</p>
-      <p style="color:#374151;font-size:0.75rem;margin-top:0.5rem">{{ a.created_at.strftime('%d/%m/%Y') }}</p>
     </div>
-    {% endfor %}
-  </div>
+    {% else %}
+    <!-- GRILLE NORMALE si moins de 3 reviews -->
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;margin-bottom:2rem">
+      {% for a in avis %}
+      <div style="background:#111827;border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:1.2rem">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem">
+          <strong style="font-family:'Syne',sans-serif">{{ a.nom }}</strong>
+          <span style="color:#fbbf24">{{ '⭐' * a.etoiles }}</span>
+        </div>
+        <p style="color:#9ca3af;font-size:0.88rem;line-height:1.5">{{ a.texte }}</p>
+        <p style="color:#374151;font-size:0.75rem;margin-top:0.5rem">{{ a.created_at.strftime('%d/%m/%Y') }}</p>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
   {% endif %}
+
+  <!-- FORM REVIEW -->
   <div style="background:linear-gradient(135deg,#111827,#1a0a3e);border-radius:20px;padding:2rem 1.5rem;border:1px solid rgba(124,58,237,0.2)">
     <h3 style="font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:0.5rem">⭐ Leave a Review</h3>
     <p style="color:#9ca3af;font-size:0.9rem;margin-bottom:1.2rem">Tried our service? Share your experience!</p>
@@ -1551,8 +1591,7 @@ oninput="validateContact(this)"
       </div>
     </form>
   </div>
-</section>
-<!-- FAQ -->
+</section><!-- FAQ -->
 <section class="section" id="faq" style="padding-bottom:0">
   <h2 class="section-title" style="margin-bottom:1.2rem">FAQ <span>❓</span></h2>
   <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:2.5rem">
