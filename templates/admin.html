@@ -671,11 +671,9 @@
       <a class="nav-item" href="/" target="_blank">
         <span class="nav-icon">🌐</span> View Site
       </a>
-      <form action="/admin/reset-orders" method="POST" onsubmit="return confirm('Delete ALL orders and reset to #1?');">
-        <button type="submit" class="nav-item" style="color: #f87171; width: 100%">
-          <span class="nav-icon">🔄</span> Reset Orders
-        </button>
-      </form>
+      <button class="nav-item" style="color:#f87171;width:100%" onclick="resetOrders()">
+  <span class="nav-icon">🔄</span> Reset Orders
+</button>
     </nav>
     <div class="sidebar-footer">
       <a href="/admin/logout" class="logout-btn">🚪 Log out</a>
@@ -1163,7 +1161,7 @@
           <h3>✨ Customizable Products</h3>
           <p style="color:#9ca3af;font-size:0.88rem;margin-bottom:1.5rem">Choose which products allow color selection
             when added to cart.</p>
-          <form action="/admin/product/set-customizable" method="POST">
+          <form onsubmit="saveAjax(event,'/admin/product/set-customizable','cust-msg')">
             <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
               {% for p in products %}
               <label
@@ -1177,6 +1175,7 @@
               {% endfor %}
             </div>
             <button type="submit" class="btn-submit">💾 Save</button>
+            <span id="cust-msg" style="margin-left:1rem;font-size:0.85rem"></span>
           </form>
         </div>
       </div>
@@ -1186,7 +1185,7 @@
           <h3>🎨🎨 Double Color Products</h3>
           <p style="color:#9ca3af;font-size:0.88rem;margin-bottom:1.5rem">Choose which products require <strong>2
               colors</strong> when added to cart.</p>
-          <form action="/admin/product/set-double-color" method="POST">
+          <form onsubmit="saveDoubleColor(event)">
             <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.5rem">
               {% for p in products %}
               <label
@@ -1199,7 +1198,8 @@
               </label>
               {% endfor %}
             </div>
-            <button type="submit" class="btn-submit">💾 Save</button>
+            <button type="submit" class="btn-submit" id="dc-save-btn">💾 Save</button>
+<span id="dc-msg" style="margin-left:1rem;font-size:0.85rem"></span>
           </form>
         </div>
       </div>
@@ -1327,7 +1327,7 @@
         ✕
       </button>
       <h3>✏️ Edit Product</h3>
-      <form id="form-edit-product" method="POST" style="display: flex; flex-direction: column; gap: 0.75rem">
+      <form id="form-edit-product" method="POST" style="display:flex;flex-direction:column;gap:0.75rem" onsubmit="saveEditProduct(event)">
         <div class="form-group">
           <label>Name *</label>
           <input type="text" name="nom" id="edit-nom" class="form-control" required />
@@ -1373,12 +1373,13 @@
         ✕
       </button>
       <h3>✏️ Edit Category</h3>
-      <form id="form-edit-category" method="POST" style="display: flex; flex-direction: column; gap: 0.75rem">
+      <form id="form-edit-category" method="POST" style="display:flex;flex-direction:column;gap:0.75rem" onsubmit="saveEditCategory(event)">
         <div class="form-group">
           <label>Category Name *</label>
           <input type="text" name="nom" id="edit-cat-nom" class="form-control" required />
         </div>
-        <button type="submit" class="btn-submit">💾 Save</button>
+        <button type="submit" class="btn-submit" id="dc-save-btn">💾 Save</button>
+<span id="dc-msg" style="margin-left:1rem;font-size:0.85rem"></span>
       </form>
     </div>
   </div>
@@ -1388,7 +1389,8 @@
       <button class="modal-close-btn"
         onclick="document.getElementById('modal-filaments').classList.remove('open')">✕</button>
       <h3>🎨 Available Colors for <span id="filament-modal-name"></span></h3>
-      <form id="form-filaments" method="POST" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem">
+<button type="button" onclick="toggleAllFilaments()" style="background:rgba(124,58,237,0.2);border:1px solid rgba(124,58,237,0.4);color:#a78bfa;padding:0.4rem 0.9rem;border-radius:8px;font-size:0.8rem;cursor:pointer;margin-bottom:0.5rem">☑ Select / Deselect All</button>
+      <form id="form-filaments" method="POST" style="display:flex;flex-direction:column;gap:1rem;margin-top:1rem" onsubmit="saveFilaments(event)">
         <div id="filament-checkboxes" style="display:flex;flex-wrap:wrap;gap:0.75rem">
           {% for f in filaments %}
           <label
@@ -1405,7 +1407,12 @@
   </div>
 
   <script>
-    function openFilamentModal(id, nom, selectedIds) {
+    function toggleAllFilaments() {
+  const cbs = document.querySelectorAll('#filament-checkboxes input[type="checkbox"]');
+  const allChecked = [...cbs].every(cb => cb.checked);
+  cbs.forEach(cb => cb.checked = !allChecked);
+}
+function openFilamentModal(id, nom, selectedIds) {
       document.getElementById('filament-modal-name').textContent = nom;
       document.getElementById('form-filaments').action = '/admin/product/filaments/' + id;
       document.querySelectorAll('[class^="filament-cb-"]').forEach(cb => {
@@ -1413,6 +1420,83 @@
       });
       document.getElementById('modal-filaments').classList.add('open');
     }
+    function showMsg(id, ok) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = ok ? '✅ Saved!' : '❌ Error';
+  el.style.color = ok ? '#34d399' : '#f87171';
+  setTimeout(() => el.textContent = '', 2500);
+}
+async function saveAjax(e, url, msgId) {
+  e.preventDefault();
+  const fd = new FormData(e.target);
+  const btn = e.target.querySelector('[type="submit"]');
+  const orig = btn.textContent;
+  btn.textContent = '⏳...';
+  const res = await fetch(url, { method: 'POST', body: fd });
+  const data = await res.json();
+  btn.textContent = orig;
+  showMsg(msgId, data.ok);
+}
+async function saveEditProduct(e) {
+  e.preventDefault();
+  const form = document.getElementById('form-edit-product');
+  const fd = new FormData(form);
+  const url = form.getAttribute('action');
+  const btn = form.querySelector('[type="submit"]');
+  btn.textContent = '⏳...';
+  const res = await fetch(url, { method: 'POST', body: fd });
+  const data = await res.json();
+  btn.textContent = '💾 Save Changes';
+  if (data.ok) document.getElementById('modal-product').classList.remove('open');
+}
+async function saveEditCategory(e) {
+  e.preventDefault();
+  const form = document.getElementById('form-edit-category');
+  const fd = new FormData(form);
+  const url = form.getAttribute('action');
+  const btn = form.querySelector('[type="submit"]');
+  btn.textContent = '⏳...';
+  const res = await fetch(url, { method: 'POST', body: fd });
+  const data = await res.json();
+  btn.textContent = '💾 Save';
+  if (data.ok) document.getElementById('modal-category').classList.remove('open');
+}
+async function saveFilaments(e) {
+  e.preventDefault();
+  const form = document.getElementById('form-filaments');
+  const fd = new FormData(form);
+  const url = form.getAttribute('action');
+  const btn = form.querySelector('[type="submit"]');
+  btn.textContent = '⏳...';
+  const res = await fetch(url, { method: 'POST', body: fd });
+  const data = await res.json();
+  btn.textContent = '💾 Save';
+  if (data.ok) document.getElementById('modal-filaments').classList.remove('open');
+}
+async function resetOrders() {
+  if (!confirm('Delete ALL orders?')) return;
+  const res = await fetch('/admin/reset-orders', { method: 'POST' });
+  const data = await res.json();
+  if (data.ok) {
+    document.querySelector('#orders-tbody').innerHTML = '<tr class="empty-row"><td colspan="8">📭 No orders yet.</td></tr>';
+    document.querySelectorAll('.stat-num').forEach(el => el.textContent = '0');
+    alert(`✅ ${data.deleted} orders deleted!`);
+  }
+}
+    async function saveDoubleColor(e) {
+  e.preventDefault();
+  const ids = [...document.querySelectorAll('#panel-double-color input[type="checkbox"]:checked')].map(cb => cb.value);
+  const fd = new FormData();
+  ids.forEach(id => fd.append('product_ids', id));
+  const btn = document.getElementById('dc-save-btn');
+  btn.textContent = '⏳ Saving...';
+  const res = await fetch('/admin/product/set-double-color', { method: 'POST', body: fd });
+  btn.textContent = '💾 Save';
+  document.getElementById('dc-msg').textContent = '✅ Saved!';
+  document.getElementById('dc-msg').style.color = '#34d399';
+  setTimeout(() => document.getElementById('dc-msg').textContent = '', 2000);
+}
   </script>
 
 </body>

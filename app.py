@@ -247,13 +247,13 @@ def admin_logout():
 @app.route('/admin/category/add', methods=['POST'])
 def add_category():
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     name = request.form.get('nom')
     if name and not Categorie.query.filter_by(nom=name).first():
         db.session.add(Categorie(nom=name))
         db.session.commit()
-        flash(f'Category "{name}" added!', 'success')
-    return redirect(url_for('admin_dashboard'))
+        return jsonify({'ok': True, 'nom': name})
+    return jsonify({'ok': False, 'error': 'Already exists'})
 
 @app.route('/admin/category/delete/<int:cat_id>')
 def delete_category(cat_id):
@@ -268,7 +268,7 @@ def delete_category(cat_id):
 @app.route('/admin/product/edit/<int:product_id>', methods=['POST'])
 def edit_product(product_id):
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     product = Product.query.get_or_404(product_id)
     product.nom = request.form.get('nom')
     product.prix = float(request.form.get('prix'))
@@ -277,27 +277,24 @@ def edit_product(product_id):
     product.notes = request.form.get('notes')
     product.needs_text = request.form.get('needs_text') == 'on'
     db.session.commit()
-    flash(f'Product updated!', 'success')
-    return redirect(url_for('admin_dashboard'))
+    return jsonify({'ok': True})
 
 @app.route('/admin/category/edit/<int:cat_id>', methods=['POST'])
 def edit_category(cat_id):
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     cat = Categorie.query.get_or_404(cat_id)
     cat.nom = request.form.get('nom')
     db.session.commit()
-    flash('Category updated!', 'success')
-    return redirect(url_for('admin_dashboard'))
+    return jsonify({'ok': True})
 
 @app.route('/admin/reset-orders', methods=['POST'])
 def reset_orders():
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
-    deleted = Order.query.filter_by(statut='Completed').delete()
+        return jsonify({'ok': False}), 403
+    deleted = Order.query.delete()
     db.session.commit()
-    flash(f'{deleted} completed order(s) deleted.', 'success')
-    return redirect(url_for('admin_dashboard'))
+    return jsonify({'ok': True, 'deleted': deleted})
 @app.route('/check-coupon', methods=['POST'])
 def check_coupon():
     code = request.form.get('code', '').strip().upper()
@@ -368,14 +365,15 @@ def manage_avis(avis_id, action):
 @app.route('/admin/filament/add', methods=['POST'])
 def add_filament():
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     nom = request.form.get('nom')
     hex_color = request.form.get('hex', '#ffffff')
     if nom:
-        db.session.add(Filament(nom=nom, hex=hex_color))
+        f = Filament(nom=nom, hex=hex_color)
+        db.session.add(f)
         db.session.commit()
-        flash(f'Color "{nom}" added!', 'success')
-    return redirect(url_for('admin_dashboard'))
+        return jsonify({'ok': True, 'id': f.id, 'nom': nom, 'hex': hex_color})
+    return jsonify({'ok': False})
 
 @app.route('/admin/filament/delete/<int:fid>')
 def delete_filament(fid):
@@ -389,36 +387,33 @@ def delete_filament(fid):
 @app.route('/admin/product/filaments/<int:product_id>', methods=['POST'])
 def set_product_filaments(product_id):
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     product = Product.query.get_or_404(product_id)
     selected_ids = request.form.getlist('filament_ids')
     product.filaments = Filament.query.filter(Filament.id.in_([int(i) for i in selected_ids])).all()
     db.session.commit()
-    flash('Colors updated!', 'success')
-    return redirect(url_for('admin_dashboard'))
+    return jsonify({'ok': True})
 @app.route('/admin/product/set-double-color', methods=['POST'])
 def set_double_color():
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     selected_ids = request.form.getlist('product_ids')
     for product in Product.query.all():
         product.double_color = str(product.id) in selected_ids
     try:
         db.session.commit()
-        flash('Double color products updated!', 'success')
+        return jsonify({'ok': True})
     except Exception as e:
         db.session.rollback()
-        flash(f'Error: {str(e)}', 'error')
-    return redirect(url_for('admin_dashboard'))
+        return jsonify({'ok': False, 'error': str(e)})
 @app.route('/admin/product/set-customizable', methods=['POST'])
 def set_customizable():
     if not session.get('admin_logged_in'):
-        return redirect(url_for('admin_login'))
+        return jsonify({'ok': False}), 403
     selected_ids = request.form.getlist('product_ids')
     for product in Product.query.all():
         product.customizable = str(product.id) in selected_ids
     db.session.commit()
-    flash('Customizable products updated!', 'success')
-    return redirect(url_for('admin_dashboard'))
+    return jsonify({'ok': True})
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
