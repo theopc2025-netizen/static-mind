@@ -65,6 +65,12 @@ def create_tables():
         pass
     try:
         with db.engine.connect() as conn:
+            conn.execute(db.text("ALTER TABLE products ADD COLUMN double_color BOOLEAN DEFAULT FALSE"))
+            conn.commit()
+    except:
+        pass
+    try:
+        with db.engine.connect() as conn:
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN one_time BOOLEAN DEFAULT FALSE"))
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN used BOOLEAN DEFAULT FALSE"))
             conn.execute(db.text("ALTER TABLE coupons ADD COLUMN product_id INTEGER REFERENCES products(id)"))
@@ -389,6 +395,16 @@ def set_product_filaments(product_id):
     product.filaments = Filament.query.filter(Filament.id.in_([int(i) for i in selected_ids])).all()
     db.session.commit()
     flash('Colors updated!', 'success')
+    return redirect(url_for('admin_dashboard'))
+@app.route('/admin/product/set-double-color', methods=['POST'])
+def set_double_color():
+    if not session.get('admin_logged_in'):
+        return redirect(url_for('admin_login'))
+    selected_ids = request.form.getlist('product_ids')
+    for product in Product.query.all():
+        product.double_color = str(product.id) in selected_ids
+    db.session.commit()
+    flash('Double color products updated!', 'success')
     return redirect(url_for('admin_dashboard'))
 @app.route('/admin/product/set-customizable', methods=['POST'])
 def set_customizable():

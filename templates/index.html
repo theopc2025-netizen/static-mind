@@ -12,6 +12,7 @@
       gtag('config', 'G-E0E5H4JD9X');
       window.customizableProducts = [{% for p in products if p.customizable %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
 window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
+window.doubleColorProducts = [{% for p in products if p.double_color %}{{ p.id }}{% if not loop.last %},{% endif %}{% endfor %}];
       window.productColors = {
   {% for p in products %}
   {{ p.id }}: [{% for f in p.filaments %}{ hex: '{{ f.hex }}', nom: '{{ f.nom }}' }{% if not loop.last %},{% endif %}{% endfor %}]{% if not loop.last %},{% endif %}
@@ -1429,7 +1430,7 @@ window.needsTextProducts = [{% for p in products if p.needs_text %}{{ p.id }}{% 
                   type="text"
                   id="cart-contact"
                   class="form-control"
-                  placeholder="+961 XX XXX XXX ou email@gmail.com"
+                  placeholder="+961 XX XXX XXX or email@gmail.com"
 oninput="validateContact(this)"
                 />
               </div>
@@ -1665,7 +1666,11 @@ oninput="validateContact(this)"
      function addToCart(name, price, productId) {
   window._cpProductId = parseInt(productId);
   const colorData = window.productColors[parseInt(productId)];
-  if (colorData && colorData.length > 0 && window.customizableProducts && window.customizableProducts.includes(parseInt(productId))) {
+  const isDouble = window.doubleColorProducts && window.doubleColorProducts.includes(parseInt(productId));
+  const isCustom = window.customizableProducts && window.customizableProducts.includes(parseInt(productId));
+  if (colorData && colorData.length > 0 && isDouble) {
+    showDoubleColorPicker(name, price, colorData);
+  } else if (colorData && colorData.length > 0 && isCustom) {
     showColorPicker(name, price, colorData);
   } else if (window.needsTextProducts && window.needsTextProducts.includes(parseInt(productId))) {
     document.getElementById('text-picker-product').textContent = name;
@@ -1678,7 +1683,35 @@ oninput="validateContact(this)"
     pushToCart(name, price, null);
   }
 }
-
+function showDoubleColorPicker(name, price, colors) {
+  document.getElementById('dcp-title').textContent = name;
+  const makeGrid = (gridId, varName) => {
+    document.getElementById(gridId).innerHTML = colors.map(c => `
+      <div onclick="selectDoubleColor(this, '${c.hex}', '${c.nom}', '${varName}')"
+        style="display:flex;flex-direction:column;align-items:center;gap:0.4rem;cursor:pointer;padding:0.5rem;border-radius:10px;border:2px solid transparent">
+        <div style="width:40px;height:40px;border-radius:50%;background:${c.hex};border:2px solid rgba(255,255,255,0.2)"></div>
+        <span style="font-size:0.75rem;color:#9ca3af">${c.nom}</span>
+      </div>`).join('');
+  };
+  makeGrid('dcp-colors-1', '_cpColor1');
+  makeGrid('dcp-colors-2', '_cpColor2');
+  window._cpName = name;
+  window._cpPrice = price;
+  window._cpColor1 = null;
+  window._cpColor2 = null;
+  document.getElementById('double-color-picker-overlay').classList.add('open');
+}
+function selectDoubleColor(el, hex, nom, varName) {
+  el.parentElement.querySelectorAll('div').forEach(d => d.style.borderColor = 'transparent');
+  el.style.borderColor = '#7c3aed';
+  window[varName] = { hex, nom };
+}
+function confirmDoubleColor() {
+  if (!window._cpColor1) { alert('Please select Color 1!'); return; }
+  if (!window._cpColor2) { alert('Please select Color 2!'); return; }
+  document.getElementById('double-color-picker-overlay').classList.remove('open');
+  pushToCart(window._cpName, window._cpPrice, window._cpColor1, null, window._cpColor2);
+}
 function showColorPicker(name, price, colors) {
   const overlay = document.getElementById('color-picker-overlay');
   document.getElementById('cp-title').textContent = name;
@@ -1720,11 +1753,11 @@ function confirmText() {
   document.getElementById('text-picker-overlay').classList.remove('open');
 }
 
-function pushToCart(name, price, color, customText) {
-  const key = name + (color ? '|' + color.nom : '') + (customText ? '|' + customText : '');
+function pushToCart(name, price, color, customText, color2) {
+  const key = name + (color ? '|' + color.nom : '') + (color2 ? '|2:' + color2.nom : '') + (customText ? '|' + customText : '');
   const existing = cart.find(i => i.key === key);
   if (existing) { existing.qty++; }
-  else { cart.push({ key, name, price, qty: 1, color, customText, productId: window._cpProductId || 0 }); }
+  else { cart.push({ key, name, price, qty: 1, color, color2, customText, productId: window._cpProductId || 0 }); }
   saveCart();
   updateCartUI();
   showAddedFlash();
@@ -1771,7 +1804,7 @@ function changeQty(key, delta) {
               (item) => `
             <div class="cart-item">
               <div class="cart-item-info">
-                <div class="cart-item-name">${item.name}${item.color ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">· <span style="width:12px;height:12px;border-radius:50%;background:${item.color.hex};display:inline-block"></span>${item.color.nom}</span>` : ''}${item.customText ? ` <span style="font-size:0.75rem;color:#a78bfa;font-weight:700">· "${item.customText}"</span>` : ''}</div>
+                <div class="cart-item-name">${item.name}${item.color ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">· <span style="width:12px;height:12px;border-radius:50%;background:${item.color.hex};display:inline-block"></span>${item.color.nom}</span>` : ''}${item.color2 ? ` <span style="display:inline-flex;align-items:center;gap:0.3rem;font-size:0.75rem;color:#9ca3af">+ <span style="width:12px;height:12px;border-radius:50%;background:${item.color2.hex};display:inline-block"></span>${item.color2.nom}</span>` : ''}${item.customText ? ` <span style="font-size:0.75rem;color:#a78bfa;font-weight:700">· "${item.customText}"</span>` : ''}</div>
 <div class="cart-item-price">$${(item.price * item.qty).toFixed(2)}</div>
               </div>
               <div class="cart-item-qty">
@@ -1822,9 +1855,12 @@ if (contact.length < 3) {
 }
         if (cart.length === 0) return;
 
-        const items = cart
-          .map((i) => `${i.name} x${i.qty} ($${(i.price * i.qty).toFixed(2)})`)
-          .join(", ");
+        const items = cart.map((i) => {
+  let colorInfo = i.color ? ` [C1:${i.color.nom}` : '';
+  if (i.color2) colorInfo += `+C2:${i.color2.nom}`;
+  if (colorInfo) colorInfo += ']';
+  return `${i.name}${colorInfo} x${i.qty} ($${(i.price * i.qty).toFixed(2)})`;
+}).join(", ");
         const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
         const totalQty = cart.reduce((s, i) => s + i.qty, 0);
         const qtyDiscount = getQuantityDiscount(totalQty);
@@ -2114,6 +2150,22 @@ function getQuantityDiscount(qty) {
     />
   </svg>
 </a>
+<div class="modal-overlay" id="double-color-picker-overlay" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-header">
+      <h3>🎨🎨 Choose 2 Colors</h3>
+      <button class="modal-close" onclick="document.getElementById('double-color-picker-overlay').classList.remove('open')">✕</button>
+    </div>
+    <div class="modal-body">
+      <p style="color:#9ca3af;font-size:0.85rem;margin-bottom:0.5rem" id="dcp-title"></p>
+      <p style="color:#a78bfa;font-size:0.82rem;font-weight:700;margin-bottom:0.5rem">🎨 Color 1 — Main</p>
+      <div id="dcp-colors-1" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.2rem"></div>
+      <p style="color:#a78bfa;font-size:0.82rem;font-weight:700;margin-bottom:0.5rem">🎨 Color 2 — Secondary</p>
+      <div id="dcp-colors-2" style="display:flex;flex-wrap:wrap;gap:0.75rem;margin-bottom:1.5rem"></div>
+      <button class="btn-primary" style="width:100%;justify-content:center" onclick="confirmDoubleColor()">✓ Confirm both colors</button>
+    </div>
+  </div>
+</div>
 <div class="modal-overlay" id="color-picker-overlay" onclick="if(event.target===this)this.classList.remove('open')">
   <div class="modal" style="max-width:400px">
     <div class="modal-header">
