@@ -65,7 +65,7 @@ def create_tables():
         pass
     try:
         with db.engine.connect() as conn:
-            conn.execute(db.text("ALTER TABLE products ADD COLUMN double_color BOOLEAN DEFAULT FALSE"))
+            conn.execute(db.text("ALTER TABLE products ADD COLUMN IF NOT EXISTS double_color BOOLEAN DEFAULT FALSE"))
             conn.commit()
     except:
         pass
