@@ -403,8 +403,12 @@ def set_double_color():
     selected_ids = request.form.getlist('product_ids')
     for product in Product.query.all():
         product.double_color = str(product.id) in selected_ids
-    db.session.commit()
-    flash('Double color products updated!', 'success')
+    try:
+        db.session.commit()
+        flash('Double color products updated!', 'success')
+    except Exception as e:
+        db.session.rollback()
+        flash(f'Error: {str(e)}', 'error')
     return redirect(url_for('admin_dashboard'))
 @app.route('/admin/product/set-customizable', methods=['POST'])
 def set_customizable():
